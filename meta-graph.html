@@ -53,6 +53,17 @@
   #hover-info.empty { color: var(--muted); }
   input[type="range"] { width: 100%; }
   #min-teams-label { color: var(--muted); font-size: 0.78rem; }
+  #selected-info { font-size: 0.78rem; line-height: 1.4; }
+  #selected-title { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 6px; }
+  #selected-title strong { font-size: 0.85rem; }
+  .close-btn { font-size: 0.7rem; padding: 2px 6px; background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; }
+  .close-btn:hover { border-color: var(--accent); }
+  #selected-info details { margin: 2px 0; }
+  #selected-info summary { cursor: pointer; }
+  #selected-info summary:hover { color: var(--accent); }
+  .team-line { margin: 4px 0 4px 4px; padding-left: 6px; border-left: 2px solid var(--border); }
+  .team-line a { color: var(--accent); }
+  .team-line .team-species, .team-line .team-archetype { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -67,6 +78,10 @@
 <div id="layout">
   <div id="sigma-container"></div>
   <div id="sidebar">
+    <div class="panel" id="selected-panel" style="display: none;">
+      <h2>Selected</h2>
+      <div id="selected-info"></div>
+    </div>
     <div class="panel">
       <h2>Hover</h2>
       <div id="hover-info" class="empty">Hover a species or an edge.</div>
@@ -95,6 +110,8 @@
   var dropZone = document.getElementById("drop-zone");
   var metaLine = document.getElementById("meta-line");
   var hoverInfo = document.getElementById("hover-info");
+  var selectedPanel = document.getElementById("selected-panel");
+  var selectedInfo = document.getElementById("selected-info");
   var legendEl = document.getElementById("legend");
   var slider = document.getElementById("min-teams-slider");
   var sliderLabel = document.getElementById("min-teams-label");
@@ -108,11 +125,14 @@
   var showNonCommunityEdges = false;
   var currentData = null;
   var drillCommunityId = null; // set to a community id while its "Drill into" view is active
+  var focusedNode = null; // set to a node id while focus mode is active (click a node / Escape / background click clears)
 
   var NONCOMMUNITY_EDGE_SIZE = 0.6;
   var NONCOMMUNITY_EDGE_COLOR = "#64748b";
   var UNCONNECTED_KEY = null; // node.community for a species outside every Louvain community (H3)
   var DRILL_OUTSIDE_COLOR = "#4b5563"; // grey for nodes/edges outside the drilled-into community
+  var FOCUS_DIM_COLOR = "#1e293b"; // darker than DRILL_OUTSIDE_COLOR, so focus reads as a further dim, not a different state
+  var SPRITE_DIM_ALPHA = 0.15; // dimmed nodes' sprites fade rather than disappear
 
   // Pokémon Showdown sprites (issue #59). No crossOrigin on the Image: Showdown sends no
   // Access-Control-Allow-Origin, so a CORS request would just fail; a plain hot-link load works
@@ -143,27 +163,44 @@
     return entry.ok ? entry.img : null;
   }
 
+  function drawSprite(ctx, node, attrs) {
+    var d = renderer.getNodeDisplayData(node);
+    if (!d || d.hidden) return;
+    var img = spriteImage(attrs.sprite);
+    if (!img) return;
+    var p = renderer.framedGraphToViewport(d);
+    var r = renderer.scaleSize(d.size);
+    if (r < SPRITE_MIN_RADIUS_PX) return;
+    var side = 2 * r * SPRITE_SCALE;
+    ctx.drawImage(img, p.x - side / 2, p.y - side / 2, side, side);
+  }
+
+  // Dimmed nodes first at SPRITE_DIM_ALPHA, then lit ones at full alpha: a focused node's sprite
+  // fades along with its colour rather than disappearing (drawSprite already skips a hidden node).
   function drawSprites() {
     if (!renderer || !graph) return;
     var ctx = renderer.canvasContexts.sprites;
     if (!ctx) return;
     ctx.clearRect(0, 0, renderer.width, renderer.height);
     ctx.imageSmoothingEnabled = false;
-    graph.forEachNode(function (node, attrs) {
-      var d = renderer.getNodeDisplayData(node);
-      if (!d || d.hidden) return;
-      var img = spriteImage(attrs.sprite);
-      if (!img) return;
-      var p = renderer.framedGraphToViewport(d);
-      var r = renderer.scaleSize(d.size);
-      if (r < SPRITE_MIN_RADIUS_PX) return;
-      var side = 2 * r * SPRITE_SCALE;
-      ctx.drawImage(img, p.x - side / 2, p.y - side / 2, side, side);
-    });
+    if (focusedNode !== null) {
+      ctx.globalAlpha = SPRITE_DIM_ALPHA;
+      graph.forEachNode(function (node, attrs) { if (!focusLit(node)) drawSprite(ctx, node, attrs); });
+      ctx.globalAlpha = 1;
+      graph.forEachNode(function (node, attrs) { if (focusLit(node)) drawSprite(ctx, node, attrs); });
+    } else {
+      graph.forEachNode(function (node, attrs) { drawSprite(ctx, node, attrs); });
+    }
   }
 
   function fmtPct(x) { return typeof x === "number" ? (x * 100).toFixed(1) + "%" : "n/a"; }
   function fmtNum(x) { return typeof x === "number" ? x.toFixed(2) : "n/a"; }
+
+  // Looks up a community by id, or null for none/not found.
+  function findCommunity(id) {
+    if (id === null || id === undefined || !currentData) return null;
+    return currentData.communities.find(function (c) { return c.id === id; }) || null;
+  }
 
   // Looks up a sub-community by its parent's id and its own id (both from the drilled-into node/legend state).
   function findSubCommunity(parentId, subId) {
@@ -211,6 +248,9 @@
         subCommunityShares: n.subCommunityShares || null,
         sprite: n.sprite === undefined ? null : n.sprite,
         items: n.items || [],
+        archetypes: n.archetypes || null,
+        sampleTeams: n.sampleTeams || null,
+        subTokens: n.subTokens || null,
       });
     });
     var maxWeight = maxLouvainWeight(data.edges);
@@ -246,6 +286,15 @@
     row.appendChild(label);
   }
 
+  // The focused node's community key (its "community" attribute, Unconnected being null), or
+  // undefined when nothing is focused: lets a checkbox tell whether hiding its own community should
+  // clear focus too.
+  function focusedCommunityKey() {
+    if (focusedNode === null || !graph || !graph.hasNode(focusedNode)) return undefined;
+    var attrs = graph.getNodeAttributes(focusedNode);
+    return attrs.community === undefined ? null : attrs.community;
+  }
+
   function communityLegendRow(label, color, detail, hideKey, community) {
     var row = document.createElement("label");
     row.className = "legend-row";
@@ -253,8 +302,16 @@
     box.type = "checkbox";
     box.checked = true;
     box.addEventListener("change", function () {
-      if (box.checked) hiddenCommunities.delete(hideKey);
-      else hiddenCommunities.add(hideKey);
+      if (box.checked) {
+        hiddenCommunities.delete(hideKey);
+      } else {
+        hiddenCommunities.add(hideKey);
+        // Unchecking the focused node's own community (incl. Unconnected, hideKey null) clears
+        // focus; unchecking another community only hides its nodes (hidden wins over focus).
+        if (focusedNode !== null && focusedCommunityKey() === hideKey) {
+          setFocus(null);
+        }
+      }
       if (renderer) renderer.refresh();
     });
     row.appendChild(box);
@@ -324,11 +381,46 @@
     return true;
   }
 
+  // The one hide predicate (hidden community, minTeams, the non-community-edges toggle), shared by
+  // edgeReducer and focusLit's neighbour test, so a filtered edge dims a neighbour the same way it
+  // hides an edge.
+  function edgeHidden(edge, attrs) {
+    var extremities = graph.extremities(edge);
+    var sourceAttrs = graph.getNodeAttributes(extremities[0]);
+    var targetAttrs = graph.getNodeAttributes(extremities[1]);
+    if (hiddenCommunities.has(sourceAttrs.community) || hiddenCommunities.has(targetAttrs.community)) return true;
+    if (!edgeVisible(attrs)) return true;
+    if (attrs.inCommunityGraph === false && !showNonCommunityEdges) return true;
+    return false;
+  }
+
+  // Whether a node reads at full colour in focus mode: the focused node itself, every node when no
+  // focus is active, or a neighbour reached only through a visible edge (a neighbour reached only
+  // through a filtered-out edge dims too, so the min-teams slider and the edge toggle still apply).
+  function focusLit(node) {
+    if (focusedNode === null || node === focusedNode) return true;
+    var e = graph.undirectedEdge(focusedNode, node);
+    return e !== undefined && !edgeHidden(e, graph.getEdgeAttributes(e));
+  }
+
   function nodeReducer(node, attrs) {
     var res = Object.assign({}, attrs);
     if (hiddenCommunities.has(attrs.community)) res.hidden = true;
     if (drillCommunityId !== null) {
       res.color = attrs.community === drillCommunityId ? subCommunityColor(drillCommunityId, attrs.subCommunity) : DRILL_OUTSIDE_COLOR;
+    }
+    // Focus mode, applied last (after hide and drill colouring) and only to a node still visible:
+    // focus never un-hides.
+    if (!res.hidden && focusedNode !== null) {
+      if (focusLit(node)) {
+        res.zIndex = 1;
+        res.forceLabel = true;
+        if (node === focusedNode) res.highlighted = true;
+      } else {
+        res.color = FOCUS_DIM_COLOR;
+        res.label = null;
+        res.zIndex = 0;
+      }
     }
     return res;
   }
@@ -337,24 +429,32 @@
     var res = Object.assign({}, attrs);
     res.size = attrs.baseSize;
     res.color = attrs.baseColor;
-    var extremities = graph.extremities(edge);
-    var sourceAttrs = graph.getNodeAttributes(extremities[0]);
-    var targetAttrs = graph.getNodeAttributes(extremities[1]);
-    if (hiddenCommunities.has(sourceAttrs.community) || hiddenCommunities.has(targetAttrs.community)) res.hidden = true;
-    if (!edgeVisible(attrs)) res.hidden = true;
-    if (attrs.inCommunityGraph === false) {
-      if (!showNonCommunityEdges) {
-        res.hidden = true;
-      } else {
-        res.size = NONCOMMUNITY_EDGE_SIZE;
-        res.color = NONCOMMUNITY_EDGE_COLOR;
-      }
+    if (edgeHidden(edge, attrs)) {
+      res.hidden = true;
+    } else if (attrs.inCommunityGraph === false) {
+      res.size = NONCOMMUNITY_EDGE_SIZE;
+      res.color = NONCOMMUNITY_EDGE_COLOR;
     }
     if (drillCommunityId !== null) {
+      var extremities = graph.extremities(edge);
+      var sourceAttrs = graph.getNodeAttributes(extremities[0]);
+      var targetAttrs = graph.getNodeAttributes(extremities[1]);
       var bothInDrill = sourceAttrs.community === drillCommunityId && targetAttrs.community === drillCommunityId;
       if (!bothInDrill) {
         res.size = NONCOMMUNITY_EDGE_SIZE;
         res.color = DRILL_OUTSIDE_COLOR;
+      }
+    }
+    // Focus mode, applied last and only to an edge still visible: never un-hides.
+    if (!res.hidden && focusedNode !== null) {
+      var ext = graph.extremities(edge);
+      var incident = ext[0] === focusedNode || ext[1] === focusedNode;
+      if (incident) {
+        res.zIndex = 1;
+      } else {
+        res.color = FOCUS_DIM_COLOR;
+        res.size = Math.min(res.size, 0.5);
+        res.zIndex = 0;
       }
     }
     return res;
@@ -446,6 +546,165 @@
     hoverInfo.textContent = "Hover a species or an edge.";
   }
 
+  // A community's label ("Community <id>" when it carries none) with its overrideNote, or
+  // "unconnected" for null/undefined.
+  function communityLabelText(communityId) {
+    if (communityId === null || communityId === undefined) return "unconnected";
+    var c = findCommunity(communityId);
+    if (!c) return "Community " + communityId;
+    return (c.label ? c.label : "Community " + c.id) + overrideNote(c);
+  }
+
+  // The label of an archetype row or a ViewerTeam (same community/subCommunity shape): "No
+  // archetype" for community null, else the community label (with its overrideNote), plus " · <sub
+  // label>" when subCommunity is a number (with the sub-community's own overrideNote) or " ·
+  // unassigned within the parent" when it is null (the key is absent for a no-pass community, so
+  // the label stops at the community).
+  function archetypeRowLabel(row) {
+    if (row.community === null || row.community === undefined) return "No archetype";
+    var label = communityLabelText(row.community);
+    if ("subCommunity" in row) {
+      label += row.subCommunity === null ? " · unassigned within the parent" : " · " + subCommunityLabel(row.community, row.subCommunity);
+      label += overrideNote(findSubCommunity(row.community, row.subCommunity) || {});
+    }
+    return label;
+  }
+
+  // The representative teams an archetype row's <details> expands to: the sub-community's when
+  // subCommunity is a number, else the community's; null when the row has no community (nothing to look up).
+  function archetypeRepresentatives(row) {
+    if (row.community === null || row.community === undefined) return null;
+    var community = findCommunity(row.community);
+    if (!community) return null;
+    if (typeof row.subCommunity === "number") {
+      var sub = (community.subCommunities || []).find(function (s) { return s.id === row.subCommunity; });
+      return sub ? sub.representativeTeams : null;
+    }
+    return community.representativeTeams || null;
+  }
+
+  // One team line: "player · placement · event · date" (a link when pasteUrl is http(s), text
+  // otherwise -- never innerHTML with data), its species, and its archetype label.
+  function teamLine(t) {
+    var row = document.createElement("div");
+    row.className = "team-line";
+    var summary = document.createElement("div");
+    var text = (t.player || "n/a") + " · " + (t.placement || "n/a") + " · " + (t.event || "n/a") + " · " + (t.date || "n/a");
+    if (/^https?:\/\//i.test(t.pasteUrl)) {
+      var link = document.createElement("a");
+      link.href = t.pasteUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = text;
+      summary.appendChild(link);
+    } else {
+      summary.textContent = text;
+    }
+    row.appendChild(summary);
+    var species = document.createElement("div");
+    species.className = "team-species";
+    species.textContent = (t.species || []).join(" / ");
+    row.appendChild(species);
+    var archetype = document.createElement("div");
+    archetype.className = "team-archetype";
+    archetype.textContent = archetypeRowLabel(t);
+    row.appendChild(archetype);
+    return row;
+  }
+
+  // One "On teams of" row: a plain line for "No archetype" (community null, nothing to expand);
+  // otherwise a native <details> (an id to look up) whose body lists that archetype's
+  // representative teams.
+  function archetypeRow(row) {
+    var summary = archetypeRowLabel(row) + " — " + fmtPct(row.share) + ", " + row.teams + " team" + (row.teams === 1 ? "" : "s");
+    if (row.community === null || row.community === undefined) {
+      var div = document.createElement("div");
+      div.className = "legend-row";
+      div.textContent = summary;
+      return div;
+    }
+    var details = document.createElement("details");
+    var summaryEl = document.createElement("summary");
+    summaryEl.textContent = summary;
+    details.appendChild(summaryEl);
+    (archetypeRepresentatives(row) || []).forEach(function (t) { details.appendChild(teamLine(t)); });
+    return details;
+  }
+
+  // "Node of": swatch + community label with its overrideNote, or "unconnected"; then, when this
+  // community has a sub-community pass and the node carries variant tokens, one line per token.
+  function nodeOfSection(attrs) {
+    var wrap = document.createElement("div");
+    var communityId = attrs.community === undefined ? null : attrs.community;
+    var community = findCommunity(communityId);
+    var row = document.createElement("div");
+    row.className = "legend-row";
+    if (community) {
+      appendSwatchText(row, community.color, (community.label || "Community " + community.id) + overrideNote(community));
+    } else {
+      appendSwatchText(row, "#888888", "unconnected");
+    }
+    wrap.appendChild(row);
+    if (attrs.subTokens) {
+      attrs.subTokens.forEach(function (t) {
+        var line = document.createElement("div");
+        line.textContent = t.token + " → " + subCommunityLabel(communityId, t.subCommunity) + " (" + t.teams + " team" + (t.teams === 1 ? "" : "s") + ")";
+        wrap.appendChild(line);
+      });
+    }
+    return wrap;
+  }
+
+  // The Selected panel (above Hover): hidden while nothing is focused. Older viewer JSON (no
+  // archetypes/sampleTeams) degrades to the "Node of" line only. DOM built with textContent/element
+  // methods throughout, never innerHTML with data.
+  function renderSelected() {
+    selectedInfo.textContent = "";
+    if (focusedNode === null || !graph || !graph.hasNode(focusedNode)) {
+      selectedPanel.style.display = "none";
+      return;
+    }
+    var attrs = graph.getNodeAttributes(focusedNode);
+    selectedPanel.style.display = "";
+
+    var titleRow = document.createElement("div");
+    titleRow.id = "selected-title";
+    var title = document.createElement("strong");
+    title.textContent = focusedNode;
+    titleRow.appendChild(title);
+    var closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.className = "close-btn";
+    closeBtn.textContent = "Close";
+    closeBtn.addEventListener("click", function () { setFocus(null); });
+    titleRow.appendChild(closeBtn);
+    selectedInfo.appendChild(titleRow);
+
+    selectedInfo.appendChild(nodeOfSection(attrs));
+
+    if (attrs.archetypes) {
+      var archHeading = document.createElement("div");
+      archHeading.className = "drill-heading";
+      archHeading.textContent = "On teams of (primary archetype, share of its weighted teams)";
+      selectedInfo.appendChild(archHeading);
+      attrs.archetypes.forEach(function (row) { selectedInfo.appendChild(archetypeRow(row)); });
+    }
+
+    if (attrs.sampleTeams && attrs.sampleTeams.length > 0) {
+      var samplesHeading = document.createElement("div");
+      samplesHeading.className = "drill-heading";
+      samplesHeading.textContent = "Sample teams";
+      selectedInfo.appendChild(samplesHeading);
+      attrs.sampleTeams.forEach(function (t) { selectedInfo.appendChild(teamLine(t)); });
+    }
+  }
+
+  function setFocus(node) {
+    focusedNode = node;
+    renderSelected();
+    if (renderer) renderer.refresh();
+  }
+
   function initSlider(data) {
     var maxTeams = data.edges.reduce(function (m, e) { return Math.max(m, e.teams || 0); }, 1);
     slider.min = 1;
@@ -465,14 +724,21 @@
     if (renderer) renderer.refresh();
   });
 
+  // Registered once (not per loadJson, since it doesn't depend on the renderer): Escape clears focus.
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setFocus(null);
+  });
+
   function loadJson(text) {
     var data = JSON.parse(text);
     currentData = data;
     drillCommunityId = null;
     hiddenCommunities = new Set();
+    focusedNode = null;
     graph = buildGraph(data);
     if (renderer) renderer.kill();
-    renderer = new Sigma(graph, container, { nodeReducer: nodeReducer, edgeReducer: edgeReducer });
+    // zIndex: true, so nodeReducer/edgeReducer's zIndex (focus mode) actually reorders the draw.
+    renderer = new Sigma(graph, container, { nodeReducer: nodeReducer, edgeReducer: edgeReducer, zIndex: true });
     renderer.createCanvasContext("sprites", { afterLayer: "hoverNodes" });
     renderer.resize(true);
     renderer.on("afterRender", drawSprites);
@@ -481,8 +747,12 @@
     renderer.on("leaveNode", clearHover);
     renderer.on("enterEdge", function (ev) { showEdge(ev.edge, graph.getEdgeAttributes(ev.edge)); });
     renderer.on("leaveEdge", clearHover);
+    // clickEdge: nothing. clickNode toggles focus on/off; clickStage (background) clears it.
+    renderer.on("clickNode", function (ev) { setFocus(ev.node === focusedNode ? null : ev.node); });
+    renderer.on("clickStage", function () { setFocus(null); });
     renderLegend(data);
     initSlider(data);
+    renderSelected();
     showNonCommunityEdges = false;
     nonCommunityToggle.checked = false;
     metaLine.textContent =
