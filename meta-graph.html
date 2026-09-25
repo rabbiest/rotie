@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Meta-graph Viewer</title>
+
+<!--
+  Pinned CDN builds (no bundler, opened via file://):
+  - graphology 0.26.0 (matches engine/package.json's devDependency) UMD build: a plain <script>
+    load, not a fetch, so it works from a file:// page. Exposes the global `graphology`, whose
+    default export is the Graph constructor itself (also reachable as `graphology.Graph`).
+  - sigma 3.0.3: its only browser-ready build under dist/ is `sigma.min.js` (a UMD bundle
+    exposing the global `Sigma`); `sigma.cjs.min.js` and `sigma.esm.min.js` are CJS/ESM-only and
+    do not work from a plain <script> tag, so this is the one that loads over file://.
+-->
+<script src="https://cdn.jsdelivr.net/npm/graphology@0.26.0/dist/graphology.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sigma@3.0.3/dist/sigma.min.js"></script>
+
+<style>
+  :root { --bg: #0b0f19; --panel: #131b2e; --border: #28354d; --text: #f8fafc; --muted: #94a3b8; --accent: #38bdf8; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  header { padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  header h1 { font-size: 1rem; margin: 0; }
+  #drop-zone { border: 1px dashed var(--border); border-radius: 6px; padding: 6px 10px; color: var(--muted); font-size: 0.8rem; }
+  #drop-zone.dragover { border-color: var(--accent); color: var(--text); }
+  #meta-line { color: var(--muted); font-size: 0.8rem; }
+  #layout { display: flex; height: calc(100vh - 52px); }
+  #sigma-container { flex: 1; background: #05070c; }
+  #sidebar { width: 300px; border-left: 1px solid var(--border); padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .panel h2 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0 0 6px 0; }
+  .legend-row { display: flex; align-items: center; gap: 6px; margin: 3px 0; font-size: 0.78rem; }
+  .legend-row span.label-text { flex: 1; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .drill-btn, .back-btn { font-size: 0.7rem; padding: 2px 6px; background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; }
+  .drill-btn { margin-left: auto; }
+  .back-btn { margin-bottom: 6px; }
+  .drill-btn:hover, .back-btn:hover { border-color: var(--accent); }
+  .drill-heading { color: var(--muted); font-size: 0.75rem; margin-bottom: 4px; }
+  #hover-info { font-size: 0.78rem; line-height: 1.4; white-space: pre-line; color: var(--text); }
+  #hover-info.empty { color: var(--muted); }
+  input[type="range"] { width: 100%; }
+  #min-teams-label { color: var(--muted); font-size: 0.78rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Meta-graph Viewer</h1>
+  <input type="file" id="file-input" accept="application/json,.json">
+  <div id="drop-zone">or drag a meta-graph.json here</div>
+  <div id="meta-line">No graph loaded.</div>
+</header>
+
+<div id="layout">
+  <div id="sigma-container"></div>
+  <div id="sidebar">
+    <div class="panel">
+      <h2>Hover</h2>
+      <div id="hover-info" class="empty">Hover a species or an edge.</div>
+    </div>
+    <div class="panel">
+      <h2>Min teams: <span id="min-teams-label">1</span></h2>
+      <input type="range" id="min-teams-slider" min="1" max="1" value="1" step="1">
+    </div>
+    <div class="panel">
+      <h2>Edges</h2>
+      <label class="legend-row"><input type="checkbox" id="show-noncommunity-edges">Show edges outside the community graph (thin, grey)</label>
+    </div>
+    <div class="panel">
+      <h2>Communities</h2>
+      <div id="legend"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var fileInput = document.getElementById("file-input");
+  var dropZone = document.getElementById("drop-zone");
+  var metaLine = document.getElementById("meta-line");
+  var hoverInfo = document.getElementById("hover-info");
+  var legendEl = document.getElementById("legend");
+  var slider = document.getElementById("min-teams-slider");
+  var sliderLabel = document.getElementById("min-teams-label");
+  var container = document.getElementById("sigma-container");
+  var nonCommunityToggle = document.getElementById("show-noncommunity-edges");
+
+  var renderer = null;
+  var graph = null;
+  var hiddenCommunities = new Set();
+  var minTeams = 1;
+  var showNonCommunityEdges = false;
+  var currentData = null;
+  var drillCommunityId = null; // set to a community id while its "Drill into" view is active
+
+  var NONCOMMUNITY_EDGE_SIZE = 0.6;
+  var NONCOMMUNITY_EDGE_COLOR = "#64748b";
+  var UNCONNECTED_KEY = null; // node.community for a species outside every Louvain community (H3)
+  var DRILL_OUTSIDE_COLOR = "#4b5563"; // grey for nodes/edges outside the drilled-into community
+
+  function fmtPct(x) { return typeof x === "number" ? (x * 100).toFixed(1) + "%" : "n/a"; }
+  function fmtNum(x) { return typeof x === "number" ? x.toFixed(2) : "n/a"; }
+
+  // Looks up a sub-community by its parent's id and its own id (both from the drilled-into node/legend state).
+  function findSubCommunity(parentId, subId) {
+    if (subId === null || subId === undefined || !currentData) return null;
+    var parent = currentData.communities.find(function (c) { return c.id === parentId; });
+    return (parent && parent.subCommunities || []).find(function (s) { return s.id === Number(subId); }) || null;
+  }
+
+  function subCommunityColor(parentId, subId) { var s = findSubCommunity(parentId, subId); return s ? s.color : DRILL_OUTSIDE_COLOR; }
+  function subCommunityLabel(parentId, subId) { var s = findSubCommunity(parentId, subId); return s ? (s.label || "Sub-community " + s.id) : "Sub-community " + subId; }
+
+  // Edges keep every pair (incl. lift < 1); only inCommunityGraph edges fed Louvain/layout (M6).
+  // louvainWeight sizes an edge when the producer supplies it; older JSON without it (or a
+  // non-community edge, always drawn thin) falls back to a constant by isCore.
+  function maxLouvainWeight(edges) {
+    var max = 0;
+    edges.forEach(function (e) {
+      if (typeof e.louvainWeight === "number" && e.louvainWeight > max) max = e.louvainWeight;
+    });
+    return max;
+  }
+
+  function baseEdgeSize(e, maxWeight) {
+    if (typeof e.louvainWeight === "number" && maxWeight > 0) {
+      return 0.6 + (Math.max(0, e.louvainWeight) / maxWeight) * 4.4;
+    }
+    return e.isCore ? 2.5 : 1.4;
+  }
+
+  function buildGraph(data) {
+    var g = new graphology.Graph();
+    data.nodes.forEach(function (n) {
+      g.addNode(n.id, {
+        label: n.label,
+        x: n.x,
+        y: n.y,
+        size: n.size,
+        color: n.color,
+        community: n.community === undefined ? null : n.community,
+        variants: n.variants || [],
+        roles: n.roles || {},
+        teams: n.teams,
+        weightedSupport: n.weightedSupport,
+        subCommunity: n.subCommunity === undefined ? null : n.subCommunity,
+        subCommunityShares: n.subCommunityShares || null,
+      });
+    });
+    var maxWeight = maxLouvainWeight(data.edges);
+    data.edges.forEach(function (e) {
+      if (!g.hasNode(e.source) || !g.hasNode(e.target)) return;
+      if (g.hasUndirectedEdge(e.source, e.target)) return;
+      g.addUndirectedEdge(e.source, e.target, {
+        teams: e.teams,
+        weightedSupport: e.weightedSupport,
+        lift: e.lift,
+        confidenceAGivenB: e.confidenceAGivenB,
+        confidenceBGivenA: e.confidenceBGivenA,
+        isCore: e.isCore,
+        louvainWeight: e.louvainWeight,
+        inCommunityGraph: e.inCommunityGraph,
+        conditional: e.conditional,
+        conditionalReverse: e.conditionalReverse,
+        baseSize: baseEdgeSize(e, maxWeight),
+        baseColor: e.isCore ? "#f59e0b" : "#334155",
+      });
+    });
+    return g;
+  }
+
+  function appendSwatchText(row, color, text) {
+    var swatch = document.createElement("span");
+    swatch.className = "swatch";
+    swatch.style.background = color;
+    var label = document.createElement("span");
+    label.className = "label-text";
+    label.textContent = text;
+    row.appendChild(swatch);
+    row.appendChild(label);
+  }
+
+  function communityLegendRow(label, color, detail, hideKey, community) {
+    var row = document.createElement("label");
+    row.className = "legend-row";
+    var box = document.createElement("input");
+    box.type = "checkbox";
+    box.checked = true;
+    box.addEventListener("change", function () {
+      if (box.checked) hiddenCommunities.delete(hideKey);
+      else hiddenCommunities.add(hideKey);
+      if (renderer) renderer.refresh();
+    });
+    row.appendChild(box);
+    appendSwatchText(row, color, label + " " + detail);
+    if (community && community.subCommunities && community.subCommunities.length > 0) {
+      var drillBtn = document.createElement("button");
+      drillBtn.type = "button";
+      drillBtn.className = "drill-btn";
+      drillBtn.textContent = "Drill into";
+      drillBtn.addEventListener("click", function () { setDrill(community.id); });
+      row.appendChild(drillBtn);
+    }
+    return row;
+  }
+
+  function subCommunityLegendRow(sub) {
+    var row = document.createElement("div");
+    row.className = "legend-row";
+    var label = sub.label ? sub.label : "Sub-community " + sub.id;
+    appendSwatchText(row, sub.color, label + " (" + sub.memberCount + " tokens, " + fmtPct(sub.primaryShareOfParent) +
+      " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent)");
+    return row;
+  }
+
+  function setDrill(communityId) {
+    drillCommunityId = communityId;
+    renderLegend(currentData);
+    if (renderer) renderer.refresh();
+  }
+
+  function renderLegend(data) {
+    legendEl.innerHTML = "";
+    var drilled = drillCommunityId !== null && data.communities.find(function (c) { return c.id === drillCommunityId && c.subCommunities; });
+    if (drilled) {
+      var backBtn = document.createElement("button");
+      backBtn.type = "button";
+      backBtn.className = "back-btn";
+      backBtn.textContent = "← Back";
+      backBtn.addEventListener("click", function () { setDrill(null); });
+      legendEl.appendChild(backBtn);
+      var heading = document.createElement("div");
+      heading.className = "drill-heading";
+      heading.textContent = "Drilled into: " + (drilled.label ? drilled.label : "Community " + drilled.id);
+      legendEl.appendChild(heading);
+      drilled.subCommunities.forEach(function (s) { legendEl.appendChild(subCommunityLegendRow(s)); });
+      return;
+    }
+    drillCommunityId = null;
+    data.communities.forEach(function (c) {
+      var label = c.label ? c.label : "Community " + c.id;
+      var detail = "(" + c.memberCount + " species, " + fmtPct(c.primaryShare) + " + " + fmtPct(c.hybridShare) + " hybrid)";
+      legendEl.appendChild(communityLegendRow(label, c.color, detail, c.id, c));
+    });
+    var unconnected = data.nodes.filter(function (n) { return n.community === null || n.community === undefined; });
+    if (unconnected.length > 0) {
+      legendEl.appendChild(communityLegendRow("Unconnected", "#888888", "(" + unconnected.length + " species)", UNCONNECTED_KEY));
+    }
+  }
+
+  function edgeVisible(attrs) {
+    if ((attrs.teams || 0) < minTeams) return false;
+    return true;
+  }
+
+  function nodeReducer(node, attrs) {
+    var res = Object.assign({}, attrs);
+    if (hiddenCommunities.has(attrs.community)) res.hidden = true;
+    if (drillCommunityId !== null) {
+      res.color = attrs.community === drillCommunityId ? subCommunityColor(drillCommunityId, attrs.subCommunity) : DRILL_OUTSIDE_COLOR;
+    }
+    return res;
+  }
+
+  function edgeReducer(edge, attrs) {
+    var res = Object.assign({}, attrs);
+    res.size = attrs.baseSize;
+    res.color = attrs.baseColor;
+    var extremities = graph.extremities(edge);
+    var sourceAttrs = graph.getNodeAttributes(extremities[0]);
+    var targetAttrs = graph.getNodeAttributes(extremities[1]);
+    if (hiddenCommunities.has(sourceAttrs.community) || hiddenCommunities.has(targetAttrs.community)) res.hidden = true;
+    if (!edgeVisible(attrs)) res.hidden = true;
+    if (attrs.inCommunityGraph === false) {
+      if (!showNonCommunityEdges) {
+        res.hidden = true;
+      } else {
+        res.size = NONCOMMUNITY_EDGE_SIZE;
+        res.color = NONCOMMUNITY_EDGE_COLOR;
+      }
+    }
+    if (drillCommunityId !== null) {
+      var bothInDrill = sourceAttrs.community === drillCommunityId && targetAttrs.community === drillCommunityId;
+      if (!bothInDrill) {
+        res.size = NONCOMMUNITY_EDGE_SIZE;
+        res.color = DRILL_OUTSIDE_COLOR;
+      }
+    }
+    return res;
+  }
+
+  function showNode(id, attrs) {
+    var variants = (attrs.variants || [])
+      .map(function (v) { return "  " + v.signature + " (" + fmtPct(v.weightedShare) + ")"; })
+      .join("\n") || "  none";
+    var roles = Object.keys(attrs.roles || {})
+      .filter(function (r) { return attrs.roles[r] > 0; })
+      .map(function (r) { return r + " " + fmtPct(attrs.roles[r]); })
+      .join(", ") || "none";
+    var subShares = "";
+    if (attrs.subCommunityShares) {
+      subShares = "\nsub-communities:\n" + Object.keys(attrs.subCommunityShares)
+        .map(function (k) { return "  " + subCommunityLabel(attrs.community, k) + ": " + fmtPct(attrs.subCommunityShares[k]); })
+        .join("\n");
+    }
+    hoverInfo.className = "";
+    hoverInfo.textContent =
+      id + "\n" +
+      "community: " + (attrs.community === null || attrs.community === undefined ? "unconnected" : attrs.community) + "\n" +
+      "teams: " + attrs.teams + ", support: " + fmtPct(attrs.weightedSupport) + "\n" +
+      "roles: " + roles + "\n" +
+      "variants:\n" + variants +
+      subShares;
+  }
+
+  function fmtConditional(c) {
+    if (!c) return "n/a (below conditionalMinTeams)";
+    var items = Object.keys(c.items || {}).map(function (k) { return k + " " + fmtPct(c.items[k]); }).join(", ") || "none";
+    var spreads = Object.keys(c.spreadTags || {}).map(function (k) { return k + " " + fmtPct(c.spreadTags[k]); }).join(", ") || "none";
+    var moves = Object.keys(c.moveShifts || {}).map(function (k) { return k + " " + (c.moveShifts[k] >= 0 ? "+" : "") + c.moveShifts[k].toFixed(0) + "pp"; }).join(", ") || "none";
+    return "items: " + items + "\nspreads: " + spreads + "\nmoves: " + moves;
+  }
+
+  // conditional is source's distribution given target, conditionalReverse the other way (report.ts).
+  function showEdge(id, attrs) {
+    var extremities = graph.extremities(id);
+    var source = extremities[0];
+    var target = extremities[1];
+    hoverInfo.className = "";
+    hoverInfo.textContent =
+      source + " + " + target + "\n" +
+      "teams: " + attrs.teams + ", support: " + fmtPct(attrs.weightedSupport) + "\n" +
+      "lift: " + fmtNum(attrs.lift) + ", core: " + (attrs.isCore ? "yes" : "no") + "\n" +
+      "conf(A|B): " + fmtNum(attrs.confidenceAGivenB) + ", conf(B|A): " + fmtNum(attrs.confidenceBGivenA) + "\n" +
+      (attrs.inCommunityGraph === false ? "outside community graph\n" : "") +
+      source + " given " + target + ":\n" + fmtConditional(attrs.conditional) + "\n" +
+      target + " given " + source + ":\n" + fmtConditional(attrs.conditionalReverse);
+  }
+
+  function clearHover() {
+    hoverInfo.className = "empty";
+    hoverInfo.textContent = "Hover a species or an edge.";
+  }
+
+  function initSlider(data) {
+    var maxTeams = data.edges.reduce(function (m, e) { return Math.max(m, e.teams || 0); }, 1);
+    slider.min = 1;
+    slider.max = maxTeams;
+    slider.value = 1;
+    minTeams = 1;
+    sliderLabel.textContent = "1";
+    slider.oninput = function () {
+      minTeams = Number(slider.value);
+      sliderLabel.textContent = String(minTeams);
+      if (renderer) renderer.refresh();
+    };
+  }
+
+  nonCommunityToggle.addEventListener("change", function () {
+    showNonCommunityEdges = nonCommunityToggle.checked;
+    if (renderer) renderer.refresh();
+  });
+
+  function loadJson(text) {
+    var data = JSON.parse(text);
+    currentData = data;
+    drillCommunityId = null;
+    hiddenCommunities = new Set();
+    graph = buildGraph(data);
+    if (renderer) renderer.kill();
+    renderer = new Sigma(graph, container, { nodeReducer: nodeReducer, edgeReducer: edgeReducer });
+    renderer.on("enterNode", function (ev) { showNode(ev.node, graph.getNodeAttributes(ev.node)); });
+    renderer.on("leaveNode", clearHover);
+    renderer.on("enterEdge", function (ev) { showEdge(ev.edge, graph.getEdgeAttributes(ev.edge)); });
+    renderer.on("leaveEdge", clearHover);
+    renderLegend(data);
+    initSlider(data);
+    showNonCommunityEdges = false;
+    nonCommunityToggle.checked = false;
+    metaLine.textContent =
+      data.regulation + " · as of " + data.asOf + " · " + data.days + "d window · " +
+      data.teamsAnalyzed + " teams · " + data.nodes.length + " species · " + data.edges.length + " pairs";
+  }
+
+  fileInput.addEventListener("change", function () {
+    var file = fileInput.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () { loadJson(reader.result); };
+    reader.readAsText(file);
+  });
+
+  ["dragenter", "dragover"].forEach(function (evt) {
+    document.addEventListener(evt, function (e) {
+      e.preventDefault();
+      dropZone.classList.add("dragover");
+    });
+  });
+  ["dragleave", "drop"].forEach(function (evt) {
+    document.addEventListener(evt, function (e) {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+    });
+  });
+  document.addEventListener("drop", function (e) {
+    var file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () { loadJson(reader.result); };
+    reader.readAsText(file);
+  });
+
+  // Served over http(s) (e.g. `npx serve viewer`): fetch the JSON next to this page automatically.
+  // Over file://, fetch always fails (ADR 0017), so the file picker and drag-and-drop stay the only paths.
+  function loadFromServer() {
+    metaLine.textContent = "Loading meta-graph.json…";
+    fetch("./meta-graph.json")
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.text();
+      })
+      .then(loadJson)
+      .catch(function (err) {
+        metaLine.textContent = "Could not load meta-graph.json (" + err.message + "). Use the file picker or drag a file here.";
+      });
+  }
+
+  if (location.protocol.indexOf("http") === 0) loadFromServer();
+})();
+</script>
+
+</body>
+</html>
