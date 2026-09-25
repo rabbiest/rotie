@@ -209,12 +209,17 @@
     return row;
   }
 
+  // Set only in a sync:archetypes run with overrides (ADR 0018): a minor flag, or the label of the entry this one was merged into.
+  function overrideNote(entry) {
+    return (entry.minor ? " (minor)" : "") + (entry.mergedInto ? " merged into " + entry.mergedInto : "");
+  }
+
   function subCommunityLegendRow(sub) {
     var row = document.createElement("div");
     row.className = "legend-row";
     var label = sub.label ? sub.label : "Sub-community " + sub.id;
     appendSwatchText(row, sub.color, label + " (" + sub.memberCount + " tokens, " + fmtPct(sub.primaryShareOfParent) +
-      " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent)");
+      " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent)" + overrideNote(sub));
     return row;
   }
 
@@ -244,7 +249,7 @@
     drillCommunityId = null;
     data.communities.forEach(function (c) {
       var label = c.label ? c.label : "Community " + c.id;
-      var detail = "(" + c.memberCount + " species, " + fmtPct(c.primaryShare) + " + " + fmtPct(c.hybridShare) + " hybrid)";
+      var detail = "(" + c.memberCount + " species, " + fmtPct(c.primaryShare) + " + " + fmtPct(c.hybridShare) + " hybrid)" + overrideNote(c);
       legendEl.appendChild(communityLegendRow(label, c.color, detail, c.id, c));
     });
     var unconnected = data.nodes.filter(function (n) { return n.community === null || n.community === undefined; });
