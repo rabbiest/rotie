@@ -9,12 +9,14 @@
 - **Community**: Louvain communities (resolution `louvainResolution`, seed `louvainSeed`) over the species pairs with at least `minPairTeams` teams and lift above `communityMinLift`, each weighted by its Louvain weight (`louvainWeightMode`). A species with no such pair is unconnected and belongs to no community. A community is named by its three members with the highest in-community support.
 - **Primary, hybrid, unassigned**: a team scores against each community the summed Louvain weight of the cores it contains, counting only the strongest core per species pair, and a core counts toward the communities of both its species. The best-scoring community is the team's primary; a runner-up scoring at least `hybridRunnerUpRatio` of the best is its hybrid. A team with no core is unassigned. Primary shares plus the unassigned share make up the whole team weight; hybrid shares are counted apart.
 - **Sub-communities**: a community whose primary share is at least `subPassMinParentShare` gets a second Louvain pass (resolution `subLouvainResolution`) over its primary teams alone; the teams for which it is only the hybrid are left out. Its nodes are species@item tokens: a set whose item is on fewer than `subMinTokenTeams` of those teams, or that holds no item, counts as its bare species, shown as "(other item)" with the most common of those items and how many of the bare species' teams hold it. Support, lift, cores, and the primary, hybrid, and unassigned split are computed within those teams by the rules above, two species@item tokens can form a core there, and a sub-community's shares are of its parent community's primary team weight. Each sub-community is headed by its primary teams and distinct builds (teams with the same tokens, or of one variant family, are one build), the Megas those teams carry, and its most common species; one with fewer than `subMinDistinctBuilds` distinct builds is listed as minor on one line, and its teams count as minor in the cluster comparison. With `subMegaPairToken`, a team carrying exactly two Mega Stones also yields one Mega-pair token when that pair is on at least `subMinTokenTeams` of the parent's teams; it pairs with every set of the team but its two Mega holders and is left out of labels, species counts, and distinct builds.
+- **Sheet vs. ladder**: the tournament sample compared with the ladder snapshot nearest and at or before the as-of date in this regulation, over its top `ladderTopSpecies` species by usage rank; the ladder items held by at least `ladderItemMinShare` of a species' sets on the ladder, more than in the sheet, on fewer than `minNodeTeams` sheet teams; the species the two rank most differently (each list capped at `ladderBiasListSize`); and each species' ladder teammate list against its sheet partners by P(B|A). Since the ladder gives usage and teammates as ranks and lists with no shares, every comparison here is by rank or list membership, never a share derived from a rank.
 
 ## 1. Window & Applied Defaults
 - Regulation: Regulation M-C
 - As of: 2026-09-25, window: 16 days
 - Date range: 2026-09-09 to 2026-09-22
 - Teams analyzed: 395 (total weight 236.08)
+- Ladder snapshot: 2026-09-24 (M6, M-C)
 - Placement: 308 of 395 teams have no tournament placement and weigh placementDefaultWeight, so the placement tiers move few teams. The tiers ignore event size (a small cup's winner weighs like a large event's top cut), and Seniors teams are not separated.
 - Applied defaults:
   - placementTopRank: 8
@@ -58,6 +60,9 @@
   - conditionalTablePartnersCount: 5
   - knownCoreChecks: Salamence+Rillaboom, Sneasler+Rillaboom, Tyranitar+Excadrill, Gardevoir+Indeedee-F
   - archetypeMatchDepth: 5
+  - ladderTopSpecies: 60
+  - ladderItemMinShare: 0.15
+  - ladderBiasListSize: 15
 
 ## 2. Known-Core Check
 Species pairs A + B from knownCoreChecks, with their best species@item + species pair (highest lift) beside them: an item can carry a synergy the species-level pair does not show.
@@ -2050,3 +2055,198 @@ Rows: each of the community's primary teams by its primary sub-community (minor 
 | Salamence | 42 | 9.9% | 1.166 | 4 (Salamence in Basculegion's) | items: Life Orb 50.0%, Choice Scarf 30.3%, Focus Sash 10.2%, Mystic Water 7.2%, Sitrus Berry 2.2%; spreads: fast 77.0%, offensive 10.4%, bulky 7.8%, mixed 4.7% |
 | Kingambit | 33 | 7.9% | 1.270 | 3 (Kingambit in Basculegion's) | items: Life Orb 51.3%, Choice Scarf 19.1%, Mystic Water 12.6%, Focus Sash 10.7%, Sitrus Berry 6.2%; spreads: fast 68.0%, mixed 16.0%, offensive 10.1%, bulky 5.9%; moves: Protect +20pp, Flip Turn -16pp |
 | Incineroar | 27 | 6.3% | 0.818 | 6 (Incineroar in Basculegion's) | items: Life Orb 51.2%, Choice Scarf 32.5%, Focus Sash 9.8%, Mystic Water 6.6%; spreads: fast 82.7%, offensive 7.3%, bulky 6.1%, mixed 3.9% |
+
+## 12. Sheet vs. Ladder
+Ladder snapshot: 2026-09-24 (M6, M-C, Doubles).
+Sheet = shared teams (87 of 395 placed; of the window's teams, only those with a placement are results; the rest are social shares, videos, and ladder pastes), not only Bo3 open-sheet results.
+Ladder teammates: the site's top 8 in its order (metric unstated); absence means not in the top 8, not rare.
+
+### 12.1 Coverage
+Ladder top 60 species by rank: 59 node, 1 thin (fewer than minNodeTeams sheet teams), 0 absent from the sheet.
+| Ladder rank | Ladder species | Sheet species | Sheet teams | Weighted support | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | Rillaboom | Rillaboom | 220 | 56.6% | node |
+| 2 | Sneasler | Sneasler | 195 | 47.1% | node |
+| 3 | Salamence | Salamence | 159 | 39.5% | node |
+| 4 | Incineroar | Incineroar | 139 | 35.8% | node |
+| 5 | Indeedee-F | Indeedee-F | 100 | 24.2% | node |
+| 6 | Kingambit | Kingambit | 115 | 29.0% | node |
+| 7 | Basculegion | Basculegion | 89 | 21.5% | node |
+| 8 | Golisopod | Golisopod | 66 | 16.2% | node |
+| 9 | Garchomp | Garchomp | 54 | 14.5% | node |
+| 10 | Gholdengo | Gholdengo | 87 | 24.1% | node |
+| 11 | Pelipper | Pelipper | 39 | 10.4% | node |
+| 12 | Archaludon | Archaludon | 37 | 10.3% | node |
+| 13 | Milotic | Milotic | 63 | 15.6% | node |
+| 14 | Farigiraf | Farigiraf | 40 | 10.0% | node |
+| 15 | Charizard | Charizard | 33 | 8.6% | node |
+| 16 | Gardevoir | Gardevoir | 34 | 7.7% | node |
+| 17 | Raichu | Raichu | 40 | 11.7% | node |
+| 18 | Arcanine-Hisui | Arcanine-Hisui | 52 | 14.0% | node |
+| 19 | Sylveon | Sylveon | 43 | 11.1% | node |
+| 20 | Tyranitar | Tyranitar | 39 | 9.0% | node |
+| 21 | Whimsicott | Whimsicott | 15 | 4.1% | node |
+| 22 | Armarouge | Armarouge | 37 | 9.3% | node |
+| 23 | Staraptor | Staraptor | 18 | 4.6% | node |
+| 24 | Torkoal | Torkoal | 26 | 6.2% | node |
+| 25 | Sinistcha | Sinistcha | 21 | 5.2% | node |
+| 26 | Metagross | Metagross | 20 | 5.0% | node |
+| 27 | Indeedee | Indeedee | 23 | 5.4% | node |
+| 28 | Floette-Eternal | Floette-Eternal | 69 | 16.6% | node |
+| 29 | Excadrill | Excadrill | 32 | 7.2% | node |
+| 30 | Volcarona | Volcarona | 18 | 4.8% | node |
+| 31 | Politoed | Politoed | 14 | 3.7% | node |
+| 32 | Lucario | Lucario | 27 | 6.7% | node |
+| 33 | Grimmsnarl | Grimmsnarl | 13 | 3.1% | node |
+| 34 | Swampert | Swampert | 12 | 3.4% | node |
+| 35 | Froslass | Froslass | 14 | 4.6% | node |
+| 36 | Baxcalibur | Baxcalibur | 27 | 5.9% | node |
+| 37 | Gengar | Gengar | 18 | 5.3% | node |
+| 38 | Ninetales-Alola | Ninetales-Alola | 11 | 2.6% | node |
+| 39 | Dragonite | Dragonite | 10 | 2.9% | node |
+| 40 | Glimmora | Glimmora | 19 | 5.3% | node |
+| 41 | Pawmot | Pawmot | 19 | 4.6% | node |
+| 42 | Aerodactyl | Aerodactyl | 11 | 2.9% | node |
+| 43 | Venusaur | Venusaur | 9 | 2.2% | node |
+| 44 | Primarina | Primarina | 6 | 2.2% | node |
+| 45 | Sableye | Sableye | 2 | 0.5% | thin |
+| 46 | Hatterene | Hatterene | 11 | 2.7% | node |
+| 47 | Blastoise | Blastoise | 9 | 2.2% | node |
+| 48 | Delphox | Delphox | 9 | 2.7% | node |
+| 49 | Annihilape | Annihilape | 5 | 1.4% | node |
+| 50 | Absol | Absol | 14 | 3.7% | node |
+| 51 | Corviknight | Corviknight | 7 | 1.5% | node |
+| 52 | Maushold-Four | Maushold | 3 | 0.9% | node |
+| 53 | Talonflame | Talonflame | 8 | 1.8% | node |
+| 54 | Kommo-o | Kommo-o | 8 | 2.4% | node |
+| 55 | Ceruledge | Ceruledge | 7 | 1.6% | node |
+| 56 | Dragapult | Dragapult | 8 | 1.9% | node |
+| 57 | Camerupt | Camerupt | 4 | 1.2% | node |
+| 58 | Hydreigon | Hydreigon | 6 | 1.4% | node |
+| 59 | Blaziken | Blaziken | 9 | 2.3% | node |
+| 60 | Mawile | Mawile | 6 | 1.4% | node |
+Sheet-only (no ladder entry, or ranked below 60): Sirfetch’d, Toxtricity, Scrafty, Meowstic, Pyroar, Klefki, Gallade, Vanilluxe, Aegislash, Tsareena, Alakazam, Altaria, Pincurchin, Lycanroc-Dusk, Zoroark-Hisui, Typhlosion-Hisui, Scizor
+
+### 12.2 Item Gaps
+Ladder items on a top-60 species held by at least ladderItemMinShare of the species on the ladder -- a higher share than in the sheet -- that have fewer than minNodeTeams sheet teams.
+| Ladder rank | Species | Item | Ladder share | Sheet share | Sheet teams |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 23 | Staraptor | Choice Scarf | 16.8% | 4.4% | 1 |
+| 30 | Volcarona | Sitrus Berry | 15.3% | 12.3% | 2 |
+| 31 | Politoed | Life Orb | 17.0% | 5.5% | 1 |
+| 38 | Ninetales-Alola | Focus Sash | 20.5% | 0.0% | 0 |
+| 43 | Venusaur | Life Orb | 17.7% | 9.5% | 1 |
+| 43 | Venusaur | Venusaurite | 16.7% | 0.0% | 0 |
+| 44 | Primarina | Life Orb | 29.5% | 19.2% | 1 |
+| 44 | Primarina | Mystic Water | 16.2% | 0.0% | 0 |
+| 49 | Annihilape | Leftovers | 22.3% | 15.4% | 1 |
+| 51 | Corviknight | Leftovers | 31.6% | 28.1% | 2 |
+| 52 | Maushold | Focus Sash | 15.7% | 0.0% | 0 |
+| 53 | Talonflame | Focus Sash | 27.2% | 0.0% | 0 |
+| 54 | Kommo-o | Life Orb | 32.1% | 17.7% | 1 |
+| 55 | Ceruledge | Colbur Berry | 27.2% | 17.4% | 1 |
+| 56 | Dragapult | Focus Sash | 24.9% | 24.6% | 2 |
+| 58 | Hydreigon | Life Orb | 15.6% | 0.0% | 0 |
+| 59 | Blaziken | Focus Sash | 24.6% | 23.7% | 2 |
+
+### 12.3 Bias
+#### By usage rank
+Over-represented in the sheet vs. the ladder (sheet nodes, ladder rank within the top 60, score above zero, highest first):
+| Species | Sheet rank | Ladder rank | Sheet teams | Score (log2) |
+| :--- | :--- | :--- | :--- | :--- |
+| Floette-Eternal | 9 | 28 | 69 | 1.64 |
+| Gholdengo | 7 | 10 | 87 | 0.51 |
+| Glimmora | 28 | 40 | 19 | 0.51 |
+| Arcanine-Hisui | 13 | 18 | 52 | 0.47 |
+| Baxcalibur | 26 | 36 | 27 | 0.47 |
+| Absol | 37 | 50 | 14 | 0.43 |
+| Lucario | 24 | 32 | 27 | 0.42 |
+| Gengar | 29 | 37 | 18 | 0.35 |
+| Sylveon | 15 | 19 | 43 | 0.34 |
+| Excadrill | 23 | 29 | 32 | 0.33 |
+| Blaziken | 47 | 59 | 9 | 0.33 |
+| Raichu | 14 | 17 | 40 | 0.28 |
+| Pawmot | 34 | 41 | 19 | 0.27 |
+| Kingambit | 5 | 6 | 115 | 0.26 |
+| Milotic | 11 | 13 | 63 | 0.24 |
+
+Under-represented in the sheet (ladder rank within the top 60, score below zero, lowest first):
+| Species | Sheet rank | Ladder rank | Sheet teams | Score (log2) |
+| :--- | :--- | :--- | :--- | :--- |
+| Sableye | 80 | 45 | 2 | -0.83 |
+| Whimsicott | 36 | 21 | 15 | -0.78 |
+| Pelipper | 16 | 11 | 39 | -0.54 |
+| Staraptor | 33 | 23 | 18 | -0.52 |
+| Archaludon | 17 | 12 | 37 | -0.50 |
+| Charizard | 21 | 15 | 33 | -0.49 |
+| Gardevoir | 22 | 16 | 34 | -0.46 |
+| Garchomp | 12 | 9 | 54 | -0.42 |
+| Farigiraf | 18 | 14 | 40 | -0.36 |
+| Golisopod | 10 | 8 | 66 | -0.32 |
+| Maushold | 64 | 52 | 3 | -0.30 |
+| Politoed | 38 | 31 | 14 | -0.29 |
+| Grimmsnarl | 40 | 33 | 13 | -0.28 |
+| Indeedee-F | 6 | 5 | 100 | -0.26 |
+| Sinistcha | 30 | 25 | 21 | -0.26 |
+
+#### By teammate list
+Mean overlap between a species' ladder teammate list and its sheet partners by P(B|A), over the species compared: 64.7%.
+- Rillaboom 7/8 shared. Ladder adds Milotic (#8; sheet P=18%, 40 teams). Sheet adds Floette-Eternal (P=24%, 58 teams; Floette-Eternal's own ladder list includes Rillaboom).
+- Sneasler 7/8 shared. Ladder adds Gardevoir (#7; sheet P=12%, 25 teams). Sheet adds Floette-Eternal (P=25%, 52 teams; Floette-Eternal's own ladder list includes Sneasler).
+- Salamence 6/8 shared. Ladder adds Milotic (#7; sheet P=19%, 29 teams), Tyranitar (#8; sheet P=18%, 30 teams). Sheet adds Arcanine-Hisui (P=21%, 30 teams; Arcanine-Hisui's own ladder list includes Salamence), Floette-Eternal (P=19%, 36 teams; Floette-Eternal's own ladder list includes Salamence).
+- Incineroar 7/8 shared. Ladder adds Golisopod (#8; sheet P=10%, 14 teams). Sheet adds Floette-Eternal (P=35%, 52 teams; Floette-Eternal's own ladder list includes Incineroar).
+- Indeedee-F 7/8 shared. Ladder adds Pelipper (#8; sheet P=14%, 13 teams). Sheet adds Salamence (P=15%, 15 teams; Salamence's own ladder list does not include Indeedee-F).
+- Kingambit 6/8 shared. Ladder adds Garchomp (#6; sheet P=13%, 16 teams), Charizard (#8; sheet P=8%, 9 teams). Sheet adds Floette-Eternal (P=27%, 33 teams; Floette-Eternal's own ladder list includes Kingambit), Arcanine-Hisui (P=16%, 15 teams; Arcanine-Hisui's own ladder list includes Kingambit).
+- Basculegion 6/8 shared. Ladder adds Gardevoir (#7; sheet P=15%, 14 teams), Pelipper (#8; sheet P=12%, 9 teams). Sheet adds Floette-Eternal (P=22%, 21 teams; Floette-Eternal's own ladder list includes Basculegion), Lucario (P=16%, 13 teams; Lucario's own ladder list includes Basculegion).
+- Golisopod 7/8 shared. Ladder adds Basculegion (#8; sheet P=19%, 12 teams). Sheet adds Armarouge (P=20%, 12 teams; Armarouge's own ladder list includes Golisopod).
+- Garchomp 5/8 shared. Ladder adds Basculegion (#6; sheet P=16%, 8 teams), Whimsicott (#7; sheet P=10%, 5 teams), Farigiraf (#8; sheet P=14%, 6 teams). Sheet adds Floette-Eternal (P=22%, 11 teams; Floette-Eternal's own ladder list includes Garchomp), Gholdengo (P=21%, 9 teams; Gholdengo's own ladder list does not include Garchomp), Milotic (P=19%, 11 teams; Milotic's own ladder list does not include Garchomp).
+- Gholdengo 7/8 shared. Ladder adds Tyranitar (#8; sheet P=15%, 14 teams). Sheet adds Floette-Eternal (P=23%, 22 teams; Floette-Eternal's own ladder list includes Gholdengo).
+- Pelipper 7/8 shared. Ladder adds Grimmsnarl (#8; sheet P=19%, 7 teams). Sheet adds Incineroar (P=20%, 8 teams; Incineroar's own ladder list does not include Pelipper).
+- Archaludon 6/8 shared. Ladder adds Grimmsnarl (#7; sheet P=21%, 9 teams), Charizard (#8; sheet P=14%, 6 teams). Sheet adds Basculegion (P=25%, 9 teams; Basculegion's own ladder list does not include Archaludon), Gengar (P=22%, 7 teams; Gengar's own ladder list includes Archaludon).
+- Milotic 7/8 shared. Ladder adds Indeedee-F (#8; sheet P=10%, 7 teams). Sheet adds Arcanine-Hisui (P=23%, 14 teams; Arcanine-Hisui's own ladder list does not include Milotic).
+- Farigiraf 6/8 shared. Ladder adds Pelipper (#6; sheet P=18%, 8 teams), Sylveon (#7; sheet P=14%, 5 teams). Sheet adds Salamence (P=29%, 12 teams; Salamence's own ladder list does not include Farigiraf), Torkoal (P=20%, 8 teams; Torkoal's own ladder list includes Farigiraf).
+- Charizard 5/8 shared. Ladder adds Whimsicott (#5; <4 sheet teams), Basculegion (#6; sheet P=20%, 6 teams), Archaludon (#8; sheet P=17%, 6 teams). Sheet adds Indeedee-F (P=27%, 10 teams; Indeedee-F's own ladder list does not include Charizard), Floette-Eternal (P=25%, 7 teams; Floette-Eternal's own ladder list does not include Charizard), Venusaur (P=24%, 8 teams; Venusaur's own ladder list includes Charizard).
+- Gardevoir 7/8 shared. Ladder adds Golisopod (#7; sheet P=13%, 4 teams). Sheet adds Salamence (P=20%, 6 teams; Salamence's own ladder list does not include Gardevoir).
+- Raichu 8/8 shared.
+- Arcanine-Hisui 7/8 shared. Ladder adds Basculegion (#7; sheet P=14%, 8 teams). Sheet adds Milotic (P=25%, 14 teams; Milotic's own ladder list does not include Arcanine-Hisui).
+- Sylveon 7/8 shared. Ladder adds Farigiraf (#8; sheet P=13%, 5 teams). Sheet adds Basculegion (P=27%, 13 teams; Basculegion's own ladder list does not include Sylveon).
+- Tyranitar 8/8 shared.
+- Whimsicott 4/8 shared. Ladder adds Charizard (#1; <4 sheet teams), Sneasler (#4; sheet P=22%, 4 teams), Rillaboom (#6; <4 sheet teams), Staraptor (#8; <4 sheet teams). Sheet adds Floette-Eternal (P=31%, 4 teams; Floette-Eternal's own ladder list does not include Whimsicott), Salamence (P=29%, 5 teams; Salamence's own ladder list does not include Whimsicott), Glimmora (P=27%, 4 teams; Glimmora's own ladder list includes Whimsicott), Indeedee-F (P=26%, 4 teams; Indeedee-F's own ladder list does not include Whimsicott).
+- Armarouge 7/8 shared. Ladder adds Milotic (#8; <4 sheet teams). Sheet adds Hatterene (P=11%, 4 teams; Hatterene's own ladder list includes Armarouge).
+- Staraptor 6/8 shared. Ladder adds Kingambit (#6; <4 sheet teams), Whimsicott (#8; <4 sheet teams).
+- Torkoal 7/8 shared. Ladder adds Incineroar (#8; <4 sheet teams). Sheet adds Hatterene (P=26%, 7 teams; Hatterene's own ladder list includes Torkoal).
+- Sinistcha 6/8 shared. Ladder adds Pelipper (#3; sheet P=21%, 4 teams), Grimmsnarl (#8; <4 sheet teams). Sheet adds Salamence (P=36%, 8 teams; Salamence's own ladder list does not include Sinistcha), Kingambit (P=24%, 5 teams; Kingambit's own ladder list does not include Sinistcha).
+- Metagross 7/8 shared. Ladder adds Salamence (#4; <4 sheet teams). Sheet adds Basculegion (P=22%, 4 teams; Basculegion's own ladder list does not include Metagross).
+- Indeedee 6/8 shared. Ladder adds Kingambit (#7; <4 sheet teams), Metagross (#8; <4 sheet teams). Sheet adds Arcanine-Hisui (P=23%, 4 teams; Arcanine-Hisui's own ladder list does not include Indeedee), Garchomp (P=21%, 5 teams; Garchomp's own ladder list does not include Indeedee).
+- Floette-Eternal 8/8 shared.
+- Excadrill 8/8 shared.
+- Volcarona 5/8 shared. Ladder adds Incineroar (#3; sheet P=20%, 4 teams), Gholdengo (#7; <4 sheet teams), Raichu (#8; <4 sheet teams). Sheet adds Glimmora (P=50%, 8 teams; Glimmora's own ladder list includes Volcarona), Basculegion (P=29%, 6 teams; Basculegion's own ladder list does not include Volcarona), Baxcalibur (P=24%, 5 teams; Baxcalibur's own ladder list does not include Volcarona).
+- Politoed 6/8 shared. Ladder adds Kingambit (#7; <4 sheet teams), Staraptor (#8; <4 sheet teams).
+- Lucario 7/8 shared. Ladder adds Indeedee-F (#6; sheet P=19%, 5 teams). Sheet adds Aerodactyl (P=21%, 6 teams; Aerodactyl's own ladder list does not include Lucario).
+- Grimmsnarl 4/8 shared. Ladder adds Swampert (#5; <4 sheet teams), Rillaboom (#6; <4 sheet teams), Sinistcha (#7; <4 sheet teams), Venusaur (#8; <4 sheet teams). Sheet adds Farigiraf (P=23%, 4 teams; Farigiraf's own ladder list does not include Grimmsnarl).
+- Swampert 5/8 shared. Ladder adds Grimmsnarl (#4; <4 sheet teams), Rillaboom (#5; <4 sheet teams), Sinistcha (#7; <4 sheet teams). Sheet adds Indeedee-F (P=37%, 4 teams; Indeedee-F's own ladder list does not include Swampert).
+- Froslass 5/8 shared. Ladder adds Incineroar (#4; <4 sheet teams), Archaludon (#6; <4 sheet teams), Politoed (#8; <4 sheet teams). Sheet adds Salamence (P=40%, 6 teams; Salamence's own ladder list does not include Froslass).
+- Baxcalibur 7/8 shared. Ladder adds Gholdengo (#6; sheet P=16%, 4 teams). Sheet adds Volcarona (P=19%, 5 teams; Volcarona's own ladder list does not include Baxcalibur).
+- Gengar 5/8 shared. Ladder adds Froslass (#5; <4 sheet teams), Vivillon (#6; <4 sheet teams), Swampert (#8; <4 sheet teams). Sheet adds Kingambit (P=22%, 4 teams; Kingambit's own ladder list does not include Gengar).
+- Ninetales-Alola 4/8 shared. Ladder adds Milotic (#5; <4 sheet teams), Gholdengo (#6; <4 sheet teams), Kingambit (#7; <4 sheet teams), Basculegion (#8; <4 sheet teams).
+- Dragonite 3/8 shared. Ladder adds Basculegion (#4; <4 sheet teams), Kingambit (#5; <4 sheet teams), Archaludon (#6; <4 sheet teams), Pelipper (#7; <4 sheet teams), Gholdengo (#8; <4 sheet teams). Sheet adds Indeedee-F (P=39%, 5 teams; Indeedee-F's own ladder list does not include Dragonite).
+- Glimmora 6/8 shared. Ladder adds Incineroar (#5; <4 sheet teams), Golisopod (#8; <4 sheet teams). Sheet adds Pawmot (P=17%, 4 teams; Pawmot's own ladder list does not include Glimmora), Indeedee-F (P=17%, 4 teams; Indeedee-F's own ladder list does not include Glimmora).
+- Pawmot 4/8 shared. Ladder adds Golisopod (#1; <4 sheet teams), Farigiraf (#4; <4 sheet teams), Politoed (#7; <4 sheet teams), Staraptor (#8; <4 sheet teams). Sheet adds Basculegion (P=38%, 7 teams; Basculegion's own ladder list does not include Pawmot), Glimmora (P=20%, 4 teams; Glimmora's own ladder list does not include Pawmot), Garchomp (P=20%, 4 teams; Garchomp's own ladder list does not include Pawmot).
+- Aerodactyl 4/8 shared. Ladder adds Garchomp (#1; <4 sheet teams), Charizard (#2; <4 sheet teams), Kingambit (#3; <4 sheet teams), Farigiraf (#8; <4 sheet teams). Sheet adds Lucario (P=49%, 6 teams; Lucario's own ladder list does not include Aerodactyl), Basculegion (P=41%, 5 teams; Basculegion's own ladder list does not include Aerodactyl).
+- Venusaur 2/8 shared. Ladder adds Archaludon (#2; <4 sheet teams), Pelipper (#3; <4 sheet teams), Grimmsnarl (#4; <4 sheet teams), Sneasler (#6; <4 sheet teams), Basculegion (#7; <4 sheet teams), Golisopod (#8; <4 sheet teams). Sheet adds Indeedee-F (P=49%, 5 teams; Indeedee-F's own ladder list does not include Venusaur).
+- Primarina 2/8 shared. Ladder adds Incineroar (#2; <4 sheet teams), Farigiraf (#4; <4 sheet teams), Golisopod (#5; <4 sheet teams), Sneasler (#6; <4 sheet teams), Indeedee-F (#7; <4 sheet teams), Kingambit (#8; <4 sheet teams).
+- Hatterene 4/8 shared. Ladder adds Camerupt (#5; <4 sheet teams), Incineroar (#6; <4 sheet teams), Kingambit (#7; <4 sheet teams), Farigiraf (#8; <4 sheet teams).
+- Blastoise 4/8 shared. Ladder adds Farigiraf (#4; <4 sheet teams), Sinistcha (#5; <4 sheet teams), Incineroar (#6; <4 sheet teams), Pelipper (#8; <4 sheet teams).
+- Delphox 5/8 shared. Ladder adds Garchomp (#6; <4 sheet teams), Sinistcha (#7; <4 sheet teams), Whimsicott (#8; <4 sheet teams). Sheet adds Floette-Eternal (P=53%, 4 teams; Floette-Eternal's own ladder list does not include Delphox).
+- Annihilape 0/8 shared. Ladder adds Rillaboom (#1; <4 sheet teams), Indeedee-F (#2; <4 sheet teams), Incineroar (#3; <4 sheet teams), Golisopod (#4; <4 sheet teams), Salamence (#5; <4 sheet teams), Pelipper (#6; <4 sheet teams), Archaludon (#7; <4 sheet teams), Armarouge (#8; <4 sheet teams).
+- Absol 7/8 shared. Ladder adds Salamence (#6; <4 sheet teams).
+- Corviknight 4/8 shared. Ladder adds Salamence (#4; <4 sheet teams), Garchomp (#6; <4 sheet teams), Rillaboom (#7; <4 sheet teams), Indeedee-F (#8; <4 sheet teams).
+- Talonflame 3/8 shared. Ladder adds Rillaboom (#1; <4 sheet teams), Garchomp (#2; <4 sheet teams), Sneasler (#3; <4 sheet teams), Kingambit (#6; <4 sheet teams), Milotic (#8; <4 sheet teams).
+- Kommo-o 4/8 shared. Ladder adds Indeedee-F (#3; <4 sheet teams), Gardevoir (#6; <4 sheet teams), Basculegion (#7; <4 sheet teams), Sneasler (#8; <4 sheet teams).
+- Ceruledge 2/8 shared. Ladder adds Raichu (#3; <4 sheet teams), Sneasler (#4; <4 sheet teams), Gholdengo (#5; <4 sheet teams), Salamence (#6; <4 sheet teams), Staraptor (#7; <4 sheet teams), Kingambit (#8; <4 sheet teams).
+- Dragapult 2/8 shared. Ladder adds Rillaboom (#3; <4 sheet teams), Metagross (#4; <4 sheet teams), Incineroar (#5; <4 sheet teams), Sneasler (#6; <4 sheet teams), Salamence (#7; <4 sheet teams), Staraptor (#8; <4 sheet teams). Sheet adds Arcanine-Hisui (P=38%, 4 teams; Arcanine-Hisui's own ladder list does not include Dragapult).
+- Camerupt 0/8 shared. Ladder adds Indeedee-F (#1; <4 sheet teams), Farigiraf (#2; <4 sheet teams), Hatterene (#3; <4 sheet teams), Kingambit (#4; <4 sheet teams), Rillaboom (#5; <4 sheet teams), Golisopod (#6; <4 sheet teams), Incineroar (#7; <4 sheet teams), Torkoal (#8; <4 sheet teams).
+- Hydreigon 0/8 shared. Ladder adds Rillaboom (#1; <4 sheet teams), Sneasler (#2; <4 sheet teams), Metagross (#3; <4 sheet teams), Indeedee-F (#4; <4 sheet teams), Incineroar (#5; <4 sheet teams), Charizard (#6; <4 sheet teams), Golisopod (#7; <4 sheet teams), Salamence (#8; <4 sheet teams).
+- Blaziken 3/8 shared. Ladder adds Metagross (#4; <4 sheet teams), Salamence (#5; <4 sheet teams), Basculegion (#6; <4 sheet teams), Farigiraf (#7; <4 sheet teams), Milotic (#8; <4 sheet teams).
+- Mawile 1/8 shared. Ladder adds Farigiraf (#1; <4 sheet teams), Torkoal (#2; <4 sheet teams), Incineroar (#4; <4 sheet teams), Rillaboom (#5; <4 sheet teams), Armarouge (#6; <4 sheet teams), Sneasler (#7; <4 sheet teams), Hatterene (#8; <4 sheet teams).
+Too few sheet teams to compare: Maushold.
