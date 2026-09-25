@@ -477,7 +477,7 @@ Connected communities only: unconnected species are outside the graph Louvain ru
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | Sub-communities (modularity) | 4 (0.59) | 5 (0.52) | 7 (0.47) | 9 (0.42) | 9 (0.37) |
 
-#### Community 0 / Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb (66 primary teams, 59 distinct builds)
+#### Community 0 / Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) (66 primary teams, 59 distinct builds)
 - Megas on member teams: Salamence 28, Floette 21, Garchomp-Z 13, Lucario-Z 11, Raichu-Y 11, Metagross 8
 - Top species by team share: Rillaboom 94%, Incineroar 76%, Sneasler 61%, Salamence 42%, Gholdengo 41%, Floette-Eternal 32%
 - Primary teams: 66 (32.9% of the community's primary weight), hybrid teams: 25 (12.5%)
@@ -616,12 +616,12 @@ Connected communities only: unconnected species are outside the graph Louvain ru
 Species whose variants fall in at least two sub-communities: each variant's home (the sub-community its token belongs to), its team count, and the primary sub-community of each of those teams (id: teams).
 | Species | Variant | Home sub-community | Teams | Teams by sub-community |
 | :--- | :--- | :--- | :--- | :--- |
-| Rillaboom | Rillaboom@Miracle Seed | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 110 | 0: 59 · 2: 20 · 1: 15 · 3: 12 · 4: 3 · 5: 1 · unassigned: 0 |
+| Rillaboom | Rillaboom@Miracle Seed | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 110 | 0: 59 · 2: 20 · 1: 15 · 3: 12 · 4: 3 · 5: 1 · unassigned: 0 |
 | Rillaboom | Rillaboom@Life Orb | Sub-community 4: Rillaboom@Life Orb / Milotic@Leftovers / Kingambit@Focus Sash | 15 | 4: 6 · 1: 4 · 2: 2 · 0: 1 · 3: 1 · unassigned: 1 |
 | Rillaboom | Rillaboom@Occa Berry | Sub-community 2: Floette-Eternal@Floettite / Sneasler@Grassy Seed / Sneasler@Focus Sash | 15 | 2: 13 · 0: 1 · 3: 1 · unassigned: 0 |
 | Rillaboom | Rillaboom@Sitrus Berry | Sub-community 1: Salamence@Salamencite / Kingambit@Chople Berry / Sneasler@White Herb | 13 | 1: 8 · 2: 5 · unassigned: 0 |
 | Rillaboom | Rillaboom (other item; Eject Button 4/10) | Sub-community 6: Gengar@Gengarite / Rillaboom (other item; Eject Button 4/10) | 10 | 6: 5 · 3: 3 · 0: 1 · 1: 1 · unassigned: 0 |
-| Incineroar | Incineroar@Sitrus Berry | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 85 | 0: 48 · 2: 17 · 3: 9 · 1: 5 · 6: 3 · 4: 1 · unassigned: 2 |
+| Incineroar | Incineroar@Sitrus Berry | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 85 | 0: 48 · 2: 17 · 3: 9 · 1: 5 · 6: 3 · 4: 1 · unassigned: 2 |
 | Incineroar | Incineroar (other item; Leftovers 4/14) | Sub-community 2: Floette-Eternal@Floettite / Sneasler@Grassy Seed / Sneasler@Focus Sash | 14 | 2: 8 · 0: 1 · 1: 1 · 4: 1 · 5: 1 · 6: 1 · unassigned: 1 |
 | Incineroar | Incineroar@Chople Berry | Sub-community 2: Floette-Eternal@Floettite / Sneasler@Grassy Seed / Sneasler@Focus Sash | 11 | 2: 7 · 0: 1 · 3: 1 · 4: 1 · 5: 1 · unassigned: 0 |
 | Sneasler | Sneasler@Grassy Seed | Sub-community 2: Floette-Eternal@Floettite / Sneasler@Grassy Seed / Sneasler@Focus Sash | 59 | 0: 23 · 2: 23 · 1: 9 · 3: 3 · 4: 1 · unassigned: 0 |
@@ -638,15 +638,15 @@ Species whose variants fall in at least two sub-communities: each variant's home
 | Basculegion | Basculegion@Focus Sash | Sub-community 1: Salamence@Salamencite / Kingambit@Chople Berry / Sneasler@White Herb | 5 | 3: 2 · 0: 1 · 1: 1 · 2: 1 · unassigned: 0 |
 | Basculegion | Basculegion@Mystic Water | none | 5 | 0: 2 · 1: 2 · 2: 1 · unassigned: 0 |
 | Basculegion | Basculegion (other item; Sitrus Berry 2/2) | none | 2 | 1: 2 · unassigned: 0 |
-| Gholdengo | Gholdengo@Life Orb | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 35 | 0: 26 · 2: 4 · 1: 3 · 3: 1 · 5: 1 · unassigned: 0 |
+| Gholdengo | Gholdengo@Life Orb | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 35 | 0: 26 · 2: 4 · 1: 3 · 3: 1 · 5: 1 · unassigned: 0 |
 | Gholdengo | Gholdengo (other item; Grassy Seed 3/9) | Sub-community 2: Floette-Eternal@Floettite / Sneasler@Grassy Seed / Sneasler@Focus Sash | 9 | 2: 6 · 1: 2 · 0: 1 · unassigned: 0 |
-| Garchomp | Garchomp@Garchompite Z | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 23 | 0: 13 · 2: 6 · 4: 2 · 3: 1 · unassigned: 1 |
+| Garchomp | Garchomp@Garchompite Z | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 23 | 0: 13 · 2: 6 · 4: 2 · 3: 1 · unassigned: 1 |
 | Garchomp | Garchomp@Choice Scarf | Sub-community 5: Charizard@Charizardite Y / Garchomp@Choice Scarf | 7 | 1: 2 · 2: 2 · 5: 2 · 0: 1 · unassigned: 0 |
 | Garchomp | Garchomp (other item; Life Orb 3/4) | none | 4 | 1: 1 · 2: 1 · 6: 1 · unassigned: 1 |
 | Milotic | Milotic@Leftovers | Sub-community 4: Rillaboom@Life Orb / Milotic@Leftovers / Kingambit@Focus Sash | 18 | 0: 6 · 4: 6 · 2: 3 · 1: 2 · 3: 1 · unassigned: 0 |
-| Milotic | Milotic (other item; Sitrus Berry 2/4) | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 4 | 0: 4 · unassigned: 0 |
+| Milotic | Milotic (other item; Sitrus Berry 2/4) | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 4 | 0: 4 · unassigned: 0 |
 | Volcarona | Volcarona@Rocky Helmet | Sub-community 1: Salamence@Salamencite / Kingambit@Chople Berry / Sneasler@White Herb | 7 | 1: 4 · 2: 2 · unassigned: 1 |
-| Volcarona | Volcarona@Grassy Seed | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 6 | 0: 3 · 3: 2 · 1: 1 · unassigned: 0 |
+| Volcarona | Volcarona@Grassy Seed | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 6 | 0: 3 · 3: 2 · 1: 1 · unassigned: 0 |
 | Volcarona | Volcarona (other item; Focus Sash 1/3) | none | 3 | 1: 2 · 2: 1 · unassigned: 0 |
 
 ### Community 1: Indeedee-F / Armarouge / Gardevoir
@@ -943,7 +943,7 @@ Rows: each team's primary community (or unassigned); columns: its cluster_teams 
 Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster_teams cluster. The majority is over each cluster's teams inside the community.
 | Sub-community | cluster-1 (Mega Salamence + Rillaboom/Sneasler Balance) | cluster-2 (Mega Salamence Balance) | cluster-4 (Mega Tyranitar + Excadrill/Sneasler Sand Balance) | cluster-5 (Mega Floette-Eternal + Incineroar/Rillaboom Balance) | cluster-6 (Mega Gardevoir Psyspam Offense) | cluster-7 (Mega Gengar + Incineroar/Rillaboom Rain) | cluster-9 (Mega Golisopod + Rillaboom/Milotic Trick Room) | cluster-10 (Mega Lucario + Rillaboom Tailwind Offense) | cluster-12 (Mega Salamence + Volcarona/Glimmora Tailwind Offense) | cluster-14 (Mega Golisopod + Rillaboom/Farigiraf Trick Room) | unclustered |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 31 | 8 | 1 | 13 | 0 | 2 | 3 | 3 | 0 | 0 | 5 |
+| Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 31 | 8 | 1 | 13 | 0 | 2 | 3 | 3 | 0 | 0 | 5 |
 | Sub-community 1: Salamence@Salamencite / Kingambit@Chople Berry / Sneasler@White Herb | 32 | 2 | 0 | 0 | 1 | 0 | 0 | 0 | 6 | 1 | 2 |
 | Sub-community 2: Floette-Eternal@Floettite / Sneasler@Grassy Seed / Sneasler@Focus Sash | 32 | 0 | 0 | 10 | 0 | 0 | 0 | 0 | 1 | 0 | 3 |
 | Sub-community 3: Sylveon@Fairy Feather / Lucario@Lucarionite Z / Basculegion@Life Orb | 9 | 0 | 0 | 1 | 1 | 0 | 0 | 6 | 1 | 0 | 5 |
@@ -955,12 +955,12 @@ Rows: each of the community's primary teams by its primary sub-community (minor 
 | Cluster | Archetype | Majority sub-community | % |
 | :--- | :--- | :--- | :--- |
 | cluster-1 | Mega Salamence + Rillaboom/Sneasler Balance | Sub-community 1: Salamence@Salamencite / Kingambit@Chople Berry / Sneasler@White Herb | 29.4% |
-| cluster-2 | Mega Salamence Balance | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 80.0% |
-| cluster-4 | Mega Tyranitar + Excadrill/Sneasler Sand Balance | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 100.0% |
-| cluster-5 | Mega Floette-Eternal + Incineroar/Rillaboom Balance | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 50.0% |
+| cluster-2 | Mega Salamence Balance | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 80.0% |
+| cluster-4 | Mega Tyranitar + Excadrill/Sneasler Sand Balance | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 100.0% |
+| cluster-5 | Mega Floette-Eternal + Incineroar/Rillaboom Balance | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 50.0% |
 | cluster-6 | Mega Gardevoir Psyspam Offense | Sub-community 1: Salamence@Salamencite / Kingambit@Chople Berry / Sneasler@White Herb | 25.0% |
 | cluster-7 | Mega Gengar + Incineroar/Rillaboom Rain | Sub-community 6: Gengar@Gengarite / Rillaboom (other item; Eject Button 4/10) | 57.1% |
-| cluster-9 | Mega Golisopod + Rillaboom/Milotic Trick Room | Sub-community 0: Rillaboom@Miracle Seed / Incineroar@Sitrus Berry / Gholdengo@Life Orb | 42.9% |
+| cluster-9 | Mega Golisopod + Rillaboom/Milotic Trick Room | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 42.9% |
 | cluster-10 | Mega Lucario + Rillaboom Tailwind Offense | Sub-community 3: Sylveon@Fairy Feather / Lucario@Lucarionite Z / Basculegion@Life Orb | 66.7% |
 | cluster-12 | Mega Salamence + Volcarona/Glimmora Tailwind Offense | Sub-community 1: Salamence@Salamencite / Kingambit@Chople Berry / Sneasler@White Herb | 66.7% |
 | cluster-14 | Mega Golisopod + Rillaboom/Farigiraf Trick Room | Sub-community 1: Salamence@Salamencite / Kingambit@Chople Berry / Sneasler@White Herb | 50.0% |
