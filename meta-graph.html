@@ -14,6 +14,14 @@
   - sigma 3.0.3: its only browser-ready build under dist/ is `sigma.min.js` (a UMD bundle
     exposing the global `Sigma`); `sigma.cjs.min.js` and `sigma.esm.min.js` are CJS/ESM-only and
     do not work from a plain <script> tag, so this is the one that loads over file://.
+
+  Sprites (issue #59): Pokémon Showdown (play.pokemonshowdown.com) sends no
+  Access-Control-Allow-Origin, so a WebGL texture (sigma's node-image program) can't load one —
+  the browser refuses to hand a tainted texture to the GPU. Drawing instead onto a plain 2D
+  <canvas> layer (via sigma's createCanvasContext) needs no CORS: drawImage never reads the
+  pixels back, it just composites, and a 2D canvas tainted by a cross-origin image only blocks
+  getImageData/toDataURL, both unused here. The layer sits above sigma's own canvases (afterLayer:
+  "hoverNodes") and is redrawn on sigma's "afterRender" so it tracks pan/zoom/hide exactly.
 -->
 <script src="https://cdn.jsdelivr.net/npm/graphology@0.26.0/dist/graphology.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sigma@3.0.3/dist/sigma.min.js"></script>
@@ -75,6 +83,9 @@
       <h2>Communities</h2>
       <div id="legend"></div>
     </div>
+    <div class="panel" id="sprite-credit" style="color: var(--muted); font-size: 0.72rem;">
+      Sprites: Pokémon Showdown. Pokémon © Nintendo, Creatures, GAME FREAK.
+    </div>
   </div>
 </div>
 
@@ -102,6 +113,54 @@
   var NONCOMMUNITY_EDGE_COLOR = "#64748b";
   var UNCONNECTED_KEY = null; // node.community for a species outside every Louvain community (H3)
   var DRILL_OUTSIDE_COLOR = "#4b5563"; // grey for nodes/edges outside the drilled-into community
+
+  // Pokémon Showdown sprites (issue #59). No crossOrigin on the Image: Showdown sends no
+  // Access-Control-Allow-Origin, so a CORS request would just fail; a plain hot-link load works
+  // and a 2D canvas drawImage never reads the pixels back, so the canvas taint doesn't matter.
+  var SPRITE_BASE = "https://play.pokemonshowdown.com/sprites/gen5/";
+  var SPRITE_MIN_RADIUS_PX = 4; // below this, the coloured disc alone is legible; skip the draw
+  var SPRITE_SCALE = 1.3; // sprite square side = 2 * viewport radius * SPRITE_SCALE
+  var ITEM_SHEET = "https://play.pokemonshowdown.com/sprites/itemicons-sheet.png";
+  var ITEM_ICON_SIZE = 24;
+  var ITEM_ICON_COLUMNS = 16;
+
+  var spriteCache = {}; // spriteId -> { img: Image, ok: boolean (loaded) }
+
+  // Returns the loaded Image for a spriteId, or null (not requested yet, still loading, or the
+  // id/image failed) so the caller just skips drawing; the coloured disc stays underneath either way.
+  function spriteImage(id) {
+    if (!id) return null;
+    var entry = spriteCache[id];
+    if (!entry) {
+      entry = { img: new Image(), ok: false };
+      spriteCache[id] = entry;
+      entry.img.onload = function () {
+        entry.ok = true;
+        if (renderer) renderer.scheduleRender();
+      };
+      entry.img.src = SPRITE_BASE + id + ".png";
+    }
+    return entry.ok ? entry.img : null;
+  }
+
+  function drawSprites() {
+    if (!renderer || !graph) return;
+    var ctx = renderer.canvasContexts.sprites;
+    if (!ctx) return;
+    ctx.clearRect(0, 0, renderer.width, renderer.height);
+    ctx.imageSmoothingEnabled = false;
+    graph.forEachNode(function (node, attrs) {
+      var d = renderer.getNodeDisplayData(node);
+      if (!d || d.hidden) return;
+      var img = spriteImage(attrs.sprite);
+      if (!img) return;
+      var p = renderer.framedGraphToViewport(d);
+      var r = renderer.scaleSize(d.size);
+      if (r < SPRITE_MIN_RADIUS_PX) return;
+      var side = 2 * r * SPRITE_SCALE;
+      ctx.drawImage(img, p.x - side / 2, p.y - side / 2, side, side);
+    });
+  }
 
   function fmtPct(x) { return typeof x === "number" ? (x * 100).toFixed(1) + "%" : "n/a"; }
   function fmtNum(x) { return typeof x === "number" ? x.toFixed(2) : "n/a"; }
@@ -150,6 +209,8 @@
         weightedSupport: n.weightedSupport,
         subCommunity: n.subCommunity === undefined ? null : n.subCommunity,
         subCommunityShares: n.subCommunityShares || null,
+        sprite: n.sprite === undefined ? null : n.sprite,
+        items: n.items || [],
       });
     });
     var maxWeight = maxLouvainWeight(data.edges);
@@ -321,6 +382,39 @@
       "roles: " + roles + "\n" +
       "variants:\n" + variants +
       subShares;
+    hoverInfo.appendChild(itemsRow(attrs.items));
+  }
+
+  // The node's top items: an icon (the Showdown item-icon sheet, cropped by background-position)
+  // beside "Item 42.0%" when the JSON gave it an icon index, text only otherwise.
+  function itemsRow(items) {
+    var row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.flexWrap = "wrap";
+    row.style.gap = "6px";
+    row.style.marginTop = "6px";
+    (items || []).forEach(function (it) {
+      var entry = document.createElement("span");
+      entry.style.display = "inline-flex";
+      entry.style.alignItems = "center";
+      entry.style.gap = "3px";
+      if (typeof it.icon === "number") {
+        var icon = document.createElement("span");
+        icon.style.display = "inline-block";
+        icon.style.width = ITEM_ICON_SIZE + "px";
+        icon.style.height = ITEM_ICON_SIZE + "px";
+        icon.style.flexShrink = "0";
+        icon.style.backgroundImage = "url(" + ITEM_SHEET + ")";
+        icon.style.backgroundRepeat = "no-repeat";
+        icon.style.backgroundPosition = "-" + (it.icon % ITEM_ICON_COLUMNS) * ITEM_ICON_SIZE + "px -" + Math.floor(it.icon / ITEM_ICON_COLUMNS) * ITEM_ICON_SIZE + "px";
+        entry.appendChild(icon);
+      }
+      var label = document.createElement("span");
+      label.textContent = it.item + " " + fmtPct(it.share);
+      entry.appendChild(label);
+      row.appendChild(entry);
+    });
+    return row;
   }
 
   function fmtConditional(c) {
@@ -379,6 +473,10 @@
     graph = buildGraph(data);
     if (renderer) renderer.kill();
     renderer = new Sigma(graph, container, { nodeReducer: nodeReducer, edgeReducer: edgeReducer });
+    renderer.createCanvasContext("sprites", { afterLayer: "hoverNodes" });
+    renderer.resize(true);
+    renderer.on("afterRender", drawSprites);
+    renderer.scheduleRender(); // the sprites layer was created after Sigma's own initial render, so kick off the first sprite paint
     renderer.on("enterNode", function (ev) { showNode(ev.node, graph.getNodeAttributes(ev.node)); });
     renderer.on("leaveNode", clearHover);
     renderer.on("enterEdge", function (ev) { showEdge(ev.edge, graph.getEdgeAttributes(ev.edge)); });
