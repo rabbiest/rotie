@@ -760,7 +760,7 @@
     renderer.on("clickStage", function () { setFocus(null); });
     renderLegend(data);
     if (data.ladder) {
-      ladderCreditEl.textContent = "Ladder calibration (λ " + data.ladder.ladderBlend + "), snapshot " + data.ladder.date + ": " + data.ladder.credit;
+      ladderCreditEl.textContent = "Ladder calibration (λ " + data.ladder.ladderBlend + "), median rank over " + data.ladder.snapshots + " daily snapshot" + (data.ladder.snapshots === 1 ? "" : "s") + ", " + data.ladder.since + " to " + data.ladder.date + ": " + data.ladder.credit;
       ladderCreditEl.hidden = false;
     } else {
       ladderCreditEl.textContent = "";
