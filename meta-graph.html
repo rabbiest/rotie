@@ -27,7 +27,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sigma@3.0.3/dist/sigma.min.js"></script>
 
 <style>
-  :root { --bg: #0b0f19; --panel: #131b2e; --border: #28354d; --text: #f8fafc; --muted: #94a3b8; --accent: #38bdf8; }
+  :root { --bg: #0b0f19; --panel: #131b2e; --border: #28354d; --text: #f8fafc; --muted: #94a3b8; --accent: #38bdf8;
+    --fs-panel: 0.93rem; --fs-panel-small: 0.82rem; --fs-panel-head: 0.8rem; }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: var(--bg); color: var(--text); font-size: 14px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
@@ -37,27 +38,29 @@
   #drop-zone.dragover { border-color: var(--accent); color: var(--text); }
   #meta-line { color: var(--muted); font-size: 0.8rem; }
   #layout { display: flex; height: calc(100vh - 52px); }
-  #sigma-container { flex: 1; background: #05070c; }
-  #sidebar { width: 300px; border-left: 1px solid var(--border); padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
-  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
-  .panel h2 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0 0 6px 0; }
-  .legend-row { display: flex; align-items: center; gap: 6px; margin: 3px 0; font-size: 0.78rem; }
+  #sigma-container { flex: 1 1 auto; min-width: 0; position: relative; overflow: hidden; background: #05070c; }
+  #sidebar-resizer { flex: 0 0 auto; width: 6px; cursor: col-resize; touch-action: none; background: var(--border); }
+  #sidebar-resizer:hover, #sidebar-resizer.dragging { background: var(--accent); }
+  #sidebar { flex: 0 0 auto; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+  body.resizing { user-select: none; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .panel h2 { font-size: var(--fs-panel-head); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0 0 6px 0; }
+  .legend-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: var(--fs-panel); }
   .legend-row span.label-text { flex: 1; }
-  .swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-  .drill-btn, .back-btn { font-size: 0.7rem; padding: 2px 6px; background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; }
+  .swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+  .drill-btn, .back-btn, .close-btn { font-size: var(--fs-panel-head); padding: 3px 8px; background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; }
   .drill-btn { margin-left: auto; }
   .back-btn { margin-bottom: 6px; }
-  .drill-btn:hover, .back-btn:hover { border-color: var(--accent); }
-  .drill-heading { color: var(--muted); font-size: 0.75rem; margin-bottom: 4px; }
-  #hover-info { font-size: 0.78rem; line-height: 1.4; white-space: pre-line; color: var(--text); }
+  .drill-btn:hover, .back-btn:hover, .close-btn:hover { border-color: var(--accent); }
+  .drill-heading { color: var(--muted); font-size: 0.86rem; margin-bottom: 4px; }
+  #hover-info { font-size: var(--fs-panel); line-height: 1.45; white-space: pre-line; color: var(--text); }
   #hover-info.empty { color: var(--muted); }
   input[type="range"] { width: 100%; }
-  #min-teams-label { color: var(--muted); font-size: 0.78rem; }
-  #selected-info { font-size: 0.78rem; line-height: 1.4; }
+  #min-teams-label { color: var(--muted); font-size: var(--fs-panel); }
+  #selected-info { font-size: var(--fs-panel); line-height: 1.45; }
   #selected-title { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 6px; }
-  #selected-title strong { font-size: 0.85rem; }
-  .close-btn { font-size: 0.7rem; padding: 2px 6px; background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; }
-  .close-btn:hover { border-color: var(--accent); }
+  #selected-title strong { font-size: 1.05rem; }
+  .credit { color: var(--muted); font-size: var(--fs-panel-small); }
   #selected-info details { margin: 2px 0; }
   #selected-info summary { cursor: pointer; }
   #selected-info summary:hover { color: var(--accent); }
@@ -77,6 +80,7 @@
 
 <div id="layout">
   <div id="sigma-container"></div>
+  <div id="sidebar-resizer" role="separator" aria-orientation="vertical" aria-label="Resize panel"></div>
   <div id="sidebar">
     <div class="panel" id="selected-panel" style="display: none;">
       <h2>Selected</h2>
@@ -98,10 +102,10 @@
       <h2>Communities</h2>
       <div id="legend"></div>
     </div>
-    <div class="panel" id="sprite-credit" style="color: var(--muted); font-size: 0.72rem;">
+    <div class="panel credit" id="sprite-credit">
       Sprites: Pokémon Showdown. Pokémon © Nintendo, Creatures, GAME FREAK.
     </div>
-    <div class="panel" id="ladder-credit" style="color: var(--muted); font-size: 0.72rem;" hidden></div>
+    <div class="panel credit" id="ladder-credit" hidden></div>
   </div>
 </div>
 
@@ -119,6 +123,8 @@
   var container = document.getElementById("sigma-container");
   var nonCommunityToggle = document.getElementById("show-noncommunity-edges");
   var ladderCreditEl = document.getElementById("ladder-credit");
+  var sidebar = document.getElementById("sidebar");
+  var sidebarResizer = document.getElementById("sidebar-resizer");
 
   var renderer = null;
   var graph = null;
@@ -135,6 +141,13 @@
   var DRILL_OUTSIDE_COLOR = "#4b5563"; // grey for nodes/edges outside the drilled-into community
   var FOCUS_DIM_COLOR = "#1e293b"; // darker than DRILL_OUTSIDE_COLOR, so focus reads as a further dim, not a different state
   var SPRITE_DIM_ALPHA = 0.15; // dimmed nodes' sprites fade rather than disappear
+
+  var SIDEBAR_DEFAULT = 440;
+  var SIDEBAR_MIN = 320;
+  var GRAPH_MIN = 480;
+  var SIDEBAR_KEY = "vgc-coach.meta-graph.sidebarWidth";
+  var sidebarWidth = SIDEBAR_DEFAULT;
+  var sidebarDragging = false;
 
   // Pokémon Showdown sprites (issue #59). No crossOrigin on the Image: Showdown sends no
   // Access-Control-Allow-Origin, so a CORS request would just fail; a plain hot-link load works
@@ -736,6 +749,63 @@
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") setFocus(null);
   });
+
+  // Keeps the panel between SIDEBAR_MIN and window.innerWidth - GRAPH_MIN, so the graph always
+  // keeps a usable minimum even on a narrow window.
+  function clampWidth(w) {
+    return Math.max(SIDEBAR_MIN, Math.min(w, window.innerWidth - GRAPH_MIN));
+  }
+
+  // Sigma's own render() calls resize(), which re-reads container.offsetWidth and resizes every
+  // canvas layer (incl. the "sprites" 2D context) -- scheduleRefresh() is what sigma's own
+  // window-resize handler calls, so a drag follows the same path instead of a synchronous
+  // resize(true)/refresh() per pointermove.
+  function applySidebarWidth(px, save) {
+    sidebarWidth = px;
+    sidebar.style.width = px + "px";
+    if (renderer) renderer.scheduleRefresh();
+    if (save) {
+      try { localStorage.setItem(SIDEBAR_KEY, String(Math.round(px))); } catch (e) { /* storage disabled */ }
+    }
+  }
+
+  sidebarResizer.addEventListener("pointerdown", function (e) {
+    if (e.button !== 0) return;
+    sidebarDragging = true;
+    sidebarResizer.setPointerCapture(e.pointerId);
+    sidebarResizer.classList.add("dragging");
+    document.body.classList.add("resizing");
+    e.preventDefault();
+  });
+  sidebarResizer.addEventListener("pointermove", function (e) {
+    if (!sidebarDragging) return;
+    applySidebarWidth(clampWidth(window.innerWidth - e.clientX - 3), false);
+  });
+  function endSidebarDrag(e) {
+    if (!sidebarDragging) return;
+    sidebarDragging = false;
+    sidebarResizer.classList.remove("dragging");
+    document.body.classList.remove("resizing");
+    try { sidebarResizer.releasePointerCapture(e.pointerId); } catch (err) { /* already released */ }
+    applySidebarWidth(sidebarWidth, true);
+  }
+  sidebarResizer.addEventListener("pointerup", endSidebarDrag);
+  sidebarResizer.addEventListener("pointercancel", endSidebarDrag);
+
+  // Re-clamp without saving: a narrower window shouldn't overwrite the width the player chose.
+  window.addEventListener("resize", function () {
+    applySidebarWidth(clampWidth(sidebarWidth), false);
+  });
+
+  (function initSidebarWidth() {
+    var stored = SIDEBAR_DEFAULT;
+    try {
+      var raw = localStorage.getItem(SIDEBAR_KEY);
+      var parsed = parseInt(raw, 10);
+      if (!isNaN(parsed) && parsed > 0) stored = parsed;
+    } catch (e) { /* storage disabled */ }
+    applySidebarWidth(clampWidth(stored), false);
+  })();
 
   function loadJson(text) {
     var data = JSON.parse(text);
