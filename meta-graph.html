@@ -64,9 +64,23 @@
   #selected-info details { margin: 2px 0; }
   #selected-info summary { cursor: pointer; }
   #selected-info summary:hover { color: var(--accent); }
-  .team-line { margin: 4px 0 4px 4px; padding-left: 6px; border-left: 2px solid var(--border); }
-  .team-line a { color: var(--accent); }
-  .team-line .team-species, .team-line .team-archetype { color: var(--muted); }
+  .sprite-img { object-fit: contain; image-rendering: pixelated; }
+  .sprite-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px;
+    padding: 0 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.68rem; color: var(--muted); text-align: center; }
+  .team-row { margin: 6px 0; border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; }
+  .team-row > summary { cursor: pointer; list-style: none; }
+  .team-row > summary::-webkit-details-marker { display: none; }
+  .team-row-summary { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .team-sprites { display: flex; gap: 2px; flex-shrink: 0; }
+  .team-meta { color: var(--muted); font-size: var(--fs-panel-small); }
+  .team-row-body { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+  .team-row-body a { color: var(--accent); }
+  .set-block { padding-top: 6px; border-top: 1px dashed var(--border); }
+  .set-block:first-child { border-top: none; padding-top: 0; }
+  .set-head { display: flex; align-items: center; gap: 6px; font-weight: 600; margin-bottom: 2px; }
+  .set-item { display: flex; align-items: center; gap: 4px; }
+  .illegal-move-note { color: var(--muted); }
+  .group-heading { color: var(--muted); font-size: 0.86rem; margin: 8px 0 4px 0; }
 </style>
 </head>
 <body>
@@ -88,7 +102,7 @@
     </div>
     <div class="panel">
       <h2>Hover</h2>
-      <div id="hover-info" class="empty">Hover a species or an edge.</div>
+      <div id="hover-info" class="empty">Hover a species.</div>
     </div>
     <div class="panel">
       <h2>Min teams: <span id="min-teams-label">1</span></h2>
@@ -133,7 +147,11 @@
   var showNonCommunityEdges = false;
   var currentData = null;
   var drillCommunityId = null; // set to a community id while its "Drill into" view is active
-  var focusedNode = null; // set to a node id while focus mode is active (click a node / Escape / background click clears)
+  // selection: {kind:"species", id} | {kind:"archetype", community, sub?} | null. species selection
+  // drives focus mode (dimming); archetype selection never does. Close/Escape/background click clear
+  // either. focusedNode is kept in lockstep (derived by setSelection) since the graph reducers key off it.
+  var selection = null;
+  var focusedNode = null; // set to a node id while focus mode is active; mirrors selection.id for kind:"species"
 
   var NONCOMMUNITY_EDGE_SIZE = 0.6;
   var NONCOMMUNITY_EDGE_COLOR = "#64748b";
@@ -158,6 +176,8 @@
   var ITEM_SHEET = "https://play.pokemonshowdown.com/sprites/itemicons-sheet.png";
   var ITEM_ICON_SIZE = 24;
   var ITEM_ICON_COLUMNS = 16;
+  var TEAM_SPRITE_SIZE = 40; // roster-row and set-block sprite side, in px (plan #104 §2)
+  var TEAMS_PER_GROUP = 10; // team rows shown before "Show all"/"Show fewer" (plan #104 §2)
 
   var spriteCache = {}; // spriteId -> { img: Image, ok: boolean (loaded) }
 
@@ -209,7 +229,6 @@
   }
 
   function fmtPct(x) { return typeof x === "number" ? (x * 100).toFixed(1) + "%" : "n/a"; }
-  function fmtNum(x) { return typeof x === "number" ? x.toFixed(2) : "n/a"; }
 
   // Looks up a community by id, or null for none/not found.
   function findCommunity(id) {
@@ -255,17 +274,12 @@
         size: n.size,
         color: n.color,
         community: n.community === undefined ? null : n.community,
-        variants: n.variants || [],
         roles: n.roles || {},
         teams: n.teams,
-        weightedSupport: n.weightedSupport,
         subCommunity: n.subCommunity === undefined ? null : n.subCommunity,
-        subCommunityShares: n.subCommunityShares || null,
         sprite: n.sprite === undefined ? null : n.sprite,
         items: n.items || [],
         archetypes: n.archetypes || null,
-        sampleTeams: n.sampleTeams || null,
-        subTokens: n.subTokens || null,
       });
     });
     var maxWeight = maxLouvainWeight(data.edges);
@@ -274,15 +288,9 @@
       if (g.hasUndirectedEdge(e.source, e.target)) return;
       g.addUndirectedEdge(e.source, e.target, {
         teams: e.teams,
-        weightedSupport: e.weightedSupport,
-        lift: e.lift,
-        confidenceAGivenB: e.confidenceAGivenB,
-        confidenceBGivenA: e.confidenceBGivenA,
         isCore: e.isCore,
         louvainWeight: e.louvainWeight,
         inCommunityGraph: e.inCommunityGraph,
-        conditional: e.conditional,
-        conditionalReverse: e.conditionalReverse,
         baseSize: baseEdgeSize(e, maxWeight),
         baseColor: e.isCore ? "#f59e0b" : "#334155",
       });
@@ -324,13 +332,15 @@
         // Unchecking the focused node's own community (incl. Unconnected, hideKey null) clears
         // focus; unchecking another community only hides its nodes (hidden wins over focus).
         if (focusedNode !== null && focusedCommunityKey() === hideKey) {
-          setFocus(null);
+          setSelection(null);
         }
       }
       if (renderer) renderer.refresh();
     });
     row.appendChild(box);
     appendSwatchText(row, color, label + " " + detail);
+    // Unconnected (community undefined here) gets no Teams button: it's a species grouping, not an archetype.
+    if (community) row.appendChild(teamsButton(community.id));
     if (community && community.subCommunities && community.subCommunities.length > 0) {
       var drillBtn = document.createElement("button");
       drillBtn.type = "button";
@@ -340,6 +350,18 @@
       row.appendChild(drillBtn);
     }
     return row;
+  }
+
+  // Opens the archetype panel for a community (subId undefined) or one of its sub-communities.
+  function teamsButton(communityId, subId) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "drill-btn";
+    btn.textContent = "Teams";
+    btn.addEventListener("click", function () {
+      setSelection(subId === undefined ? { kind: "archetype", community: communityId } : { kind: "archetype", community: communityId, sub: subId });
+    });
+    return btn;
   }
 
   // Set only in a sync:archetypes run with overrides (ADR 0018): a minor flag, or the label of the entry this one was merged into.
@@ -352,12 +374,13 @@
     return typeof share === "number" ? " · ladder-calibrated " + fmtPct(share) : "";
   }
 
-  function subCommunityLegendRow(sub) {
+  function subCommunityLegendRow(sub, parentId) {
     var row = document.createElement("div");
     row.className = "legend-row";
     var label = sub.label ? sub.label : "Sub-community " + sub.id;
     appendSwatchText(row, sub.color, label + " (" + sub.memberCount + " tokens, " + fmtPct(sub.primaryShareOfParent) +
       " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent" + calibratedNote(sub.calibratedPrimaryShareOfParent) + ")" + overrideNote(sub));
+    row.appendChild(teamsButton(parentId, sub.id));
     return row;
   }
 
@@ -381,7 +404,7 @@
       heading.className = "drill-heading";
       heading.textContent = "Drilled into: " + (drilled.label ? drilled.label : "Community " + drilled.id);
       legendEl.appendChild(heading);
-      drilled.subCommunities.forEach(function (s) { legendEl.appendChild(subCommunityLegendRow(s)); });
+      drilled.subCommunities.forEach(function (s) { legendEl.appendChild(subCommunityLegendRow(s, drilled.id)); });
       return;
     }
     drillCommunityId = null;
@@ -481,33 +504,37 @@
     return res;
   }
 
+  // Hover: species name, "N teams", roles above 0, top items with icons. Nothing else (no edge
+  // hover, no community/support/variants/sub-share detail: plan #104 §2).
   function showNode(id, attrs) {
-    var variants = (attrs.variants || [])
-      .map(function (v) { return "  " + v.signature + " (" + fmtPct(v.weightedShare) + ")"; })
-      .join("\n") || "  none";
     var roles = Object.keys(attrs.roles || {})
       .filter(function (r) { return attrs.roles[r] > 0; })
       .map(function (r) { return r + " " + fmtPct(attrs.roles[r]); })
       .join(", ") || "none";
-    var subShares = "";
-    if (attrs.subCommunityShares) {
-      subShares = "\nsub-communities:\n" + Object.keys(attrs.subCommunityShares)
-        .map(function (k) { return "  " + subCommunityLabel(attrs.community, k) + ": " + fmtPct(attrs.subCommunityShares[k]); })
-        .join("\n");
-    }
     hoverInfo.className = "";
     hoverInfo.textContent =
       id + "\n" +
-      "community: " + (attrs.community === null || attrs.community === undefined ? "unconnected" : attrs.community) + "\n" +
-      "teams: " + attrs.teams + ", support: " + fmtPct(attrs.weightedSupport) + "\n" +
-      "roles: " + roles + "\n" +
-      "variants:\n" + variants +
-      subShares;
+      attrs.teams + " team" + (attrs.teams === 1 ? "" : "s") + "\n" +
+      "roles: " + roles;
     hoverInfo.appendChild(itemsRow(attrs.items));
   }
 
-  // The node's top items: an icon (the Showdown item-icon sheet, cropped by background-position)
-  // beside "Item 42.0%" when the JSON gave it an icon index, text only otherwise.
+  // The Showdown item-icon sheet, cropped to one icon by background-position (shared by the hover
+  // item row and every set block).
+  function itemIcon(index) {
+    var icon = document.createElement("span");
+    icon.style.display = "inline-block";
+    icon.style.width = ITEM_ICON_SIZE + "px";
+    icon.style.height = ITEM_ICON_SIZE + "px";
+    icon.style.flexShrink = "0";
+    icon.style.backgroundImage = "url(" + ITEM_SHEET + ")";
+    icon.style.backgroundRepeat = "no-repeat";
+    icon.style.backgroundPosition = "-" + (index % ITEM_ICON_COLUMNS) * ITEM_ICON_SIZE + "px -" + Math.floor(index / ITEM_ICON_COLUMNS) * ITEM_ICON_SIZE + "px";
+    return icon;
+  }
+
+  // The node's top items: an icon (itemIcon) beside "Item 42.0%" when the JSON gave it an icon
+  // index, text only otherwise.
   function itemsRow(items) {
     var row = document.createElement("div");
     row.style.display = "flex";
@@ -519,17 +546,7 @@
       entry.style.display = "inline-flex";
       entry.style.alignItems = "center";
       entry.style.gap = "3px";
-      if (typeof it.icon === "number") {
-        var icon = document.createElement("span");
-        icon.style.display = "inline-block";
-        icon.style.width = ITEM_ICON_SIZE + "px";
-        icon.style.height = ITEM_ICON_SIZE + "px";
-        icon.style.flexShrink = "0";
-        icon.style.backgroundImage = "url(" + ITEM_SHEET + ")";
-        icon.style.backgroundRepeat = "no-repeat";
-        icon.style.backgroundPosition = "-" + (it.icon % ITEM_ICON_COLUMNS) * ITEM_ICON_SIZE + "px -" + Math.floor(it.icon / ITEM_ICON_COLUMNS) * ITEM_ICON_SIZE + "px";
-        entry.appendChild(icon);
-      }
+      if (typeof it.icon === "number") entry.appendChild(itemIcon(it.icon));
       var label = document.createElement("span");
       label.textContent = it.item + " " + fmtPct(it.share);
       entry.appendChild(label);
@@ -538,33 +555,9 @@
     return row;
   }
 
-  function fmtConditional(c) {
-    if (!c) return "n/a (below conditionalMinTeams)";
-    var items = Object.keys(c.items || {}).map(function (k) { return k + " " + fmtPct(c.items[k]); }).join(", ") || "none";
-    var spreads = Object.keys(c.spreadTags || {}).map(function (k) { return k + " " + fmtPct(c.spreadTags[k]); }).join(", ") || "none";
-    var moves = Object.keys(c.moveShifts || {}).map(function (k) { return k + " " + (c.moveShifts[k] >= 0 ? "+" : "") + c.moveShifts[k].toFixed(0) + "pp"; }).join(", ") || "none";
-    return "items: " + items + "\nspreads: " + spreads + "\nmoves: " + moves;
-  }
-
-  // conditional is source's distribution given target, conditionalReverse the other way (report.ts).
-  function showEdge(id, attrs) {
-    var extremities = graph.extremities(id);
-    var source = extremities[0];
-    var target = extremities[1];
-    hoverInfo.className = "";
-    hoverInfo.textContent =
-      source + " + " + target + "\n" +
-      "teams: " + attrs.teams + ", support: " + fmtPct(attrs.weightedSupport) + "\n" +
-      "lift: " + fmtNum(attrs.lift) + ", core: " + (attrs.isCore ? "yes" : "no") + "\n" +
-      "conf(A|B): " + fmtNum(attrs.confidenceAGivenB) + ", conf(B|A): " + fmtNum(attrs.confidenceBGivenA) + "\n" +
-      (attrs.inCommunityGraph === false ? "outside community graph\n" : "") +
-      source + " given " + target + ":\n" + fmtConditional(attrs.conditional) + "\n" +
-      target + " given " + source + ":\n" + fmtConditional(attrs.conditionalReverse);
-  }
-
   function clearHover() {
     hoverInfo.className = "empty";
-    hoverInfo.textContent = "Hover a species or an edge.";
+    hoverInfo.textContent = "Hover a species.";
   }
 
   // A community's label ("Community <id>" when it carries none) with its overrideNote, or
@@ -576,7 +569,7 @@
     return (c.label ? c.label : "Community " + c.id) + overrideNote(c);
   }
 
-  // The label of an archetype row or a ViewerTeam (same community/subCommunity shape): "No
+  // The label of an archetype row (node.archetypes shape: community, optional subCommunity): "No
   // archetype" for community null, else the community label (with its overrideNote), plus " · <sub
   // label>" when subCommunity is a number (with the sub-community's own overrideNote) or " ·
   // unassigned within the parent" when it is null (the key is absent for a no-pass community, so
@@ -591,137 +584,349 @@
     return label;
   }
 
-  // The representative teams an archetype row's <details> expands to: the sub-community's when
-  // subCommunity is a number, else the community's; null when the row has no community (nothing to look up).
-  function archetypeRepresentatives(row) {
-    if (row.community === null || row.community === undefined) return null;
-    var community = findCommunity(row.community);
-    if (!community) return null;
-    if (typeof row.subCommunity === "number") {
-      var sub = (community.subCommunities || []).find(function (s) { return s.id === row.subCommunity; });
-      return sub ? sub.representativeTeams : null;
-    }
-    return community.representativeTeams || null;
+  // An <img> sprite (loading="lazy", alt/title = label) that swaps itself for a text chip on a
+  // null id or a failed load -- never left blank.
+  function spriteEl(id, label, sizePx) {
+    sizePx = sizePx || TEAM_SPRITE_SIZE;
+    if (!id) return spriteChip(label, sizePx);
+    var img = document.createElement("img");
+    img.className = "sprite-img";
+    img.src = SPRITE_BASE + id + ".png";
+    img.alt = label;
+    img.title = label;
+    img.loading = "lazy";
+    img.width = sizePx;
+    img.height = sizePx;
+    img.addEventListener("error", function () {
+      if (img.parentNode) img.parentNode.replaceChild(spriteChip(label, sizePx), img);
+    });
+    return img;
   }
 
-  // One team line: "player · placement · event · date" (a link when pasteUrl is http(s), text
-  // otherwise -- never innerHTML with data), its species, and its archetype label.
-  function teamLine(t) {
-    var row = document.createElement("div");
-    row.className = "team-line";
-    var summary = document.createElement("div");
-    var text = (t.player || "n/a") + " · " + (t.placement || "n/a") + " · " + (t.event || "n/a") + " · " + (t.date || "n/a");
-    if (/^https?:\/\//i.test(t.pasteUrl)) {
+  function spriteChip(label, sizePx) {
+    var span = document.createElement("span");
+    span.className = "sprite-chip";
+    span.style.minWidth = sizePx + "px";
+    span.style.height = sizePx + "px";
+    span.textContent = label;
+    return span;
+  }
+
+  // The paste link, as teamLine used to build it: http(s) only, new tab, never innerHTML with data.
+  function pasteLinkEl(t) {
+    var wrap = document.createElement("div");
+    if (/^https?:\/\//i.test(t.pasteUrl || "")) {
       var link = document.createElement("a");
       link.href = t.pasteUrl;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      link.textContent = text;
-      summary.appendChild(link);
+      link.textContent = t.pasteUrl;
+      wrap.appendChild(link);
     } else {
-      summary.textContent = text;
-    }
-    row.appendChild(summary);
-    var species = document.createElement("div");
-    species.className = "team-species";
-    species.textContent = (t.species || []).join(" / ");
-    row.appendChild(species);
-    var archetype = document.createElement("div");
-    archetype.className = "team-archetype";
-    archetype.textContent = archetypeRowLabel(t);
-    row.appendChild(archetype);
-    return row;
-  }
-
-  // One "On teams of" row: a plain line for "No archetype" (community null, nothing to expand);
-  // otherwise a native <details> (an id to look up) whose body lists that archetype's
-  // representative teams.
-  function archetypeRow(row) {
-    var summary = archetypeRowLabel(row) + " — " + fmtPct(row.share) + ", " + row.teams + " team" + (row.teams === 1 ? "" : "s");
-    if (row.community === null || row.community === undefined) {
-      var div = document.createElement("div");
-      div.className = "legend-row";
-      div.textContent = summary;
-      return div;
-    }
-    var details = document.createElement("details");
-    var summaryEl = document.createElement("summary");
-    summaryEl.textContent = summary;
-    details.appendChild(summaryEl);
-    (archetypeRepresentatives(row) || []).forEach(function (t) { details.appendChild(teamLine(t)); });
-    return details;
-  }
-
-  // "Node of": swatch + community label with its overrideNote, or "unconnected"; then, when this
-  // community has a sub-community pass and the node carries variant tokens, one line per token.
-  function nodeOfSection(attrs) {
-    var wrap = document.createElement("div");
-    var communityId = attrs.community === undefined ? null : attrs.community;
-    var community = findCommunity(communityId);
-    var row = document.createElement("div");
-    row.className = "legend-row";
-    if (community) {
-      appendSwatchText(row, community.color, (community.label || "Community " + community.id) + overrideNote(community));
-    } else {
-      appendSwatchText(row, "#888888", "unconnected");
-    }
-    wrap.appendChild(row);
-    if (attrs.subTokens) {
-      attrs.subTokens.forEach(function (t) {
-        var line = document.createElement("div");
-        line.textContent = t.token + " → " + subCommunityLabel(communityId, t.subCommunity) + " (" + t.teams + " team" + (t.teams === 1 ? "" : "s") + ")";
-        wrap.appendChild(line);
-      });
+      wrap.textContent = t.pasteUrl || "no paste";
     }
     return wrap;
   }
 
-  // The Selected panel (above Hover): hidden while nothing is focused. Older viewer JSON (no
-  // archetypes/sampleTeams) degrades to the "Node of" line only. DOM built with textContent/element
-  // methods throughout, never innerHTML with data.
-  function renderSelected() {
-    selectedInfo.textContent = "";
-    if (focusedNode === null || !graph || !graph.hasNode(focusedNode)) {
-      selectedPanel.style.display = "none";
-      return;
+  var STAT_ORDER = [["hp", "HP"], ["atk", "Atk"], ["def", "Def"], ["spa", "SpA"], ["spd", "SpD"], ["spe", "Spe"]];
+
+  function statPointsText(evs) {
+    evs = evs || {};
+    return STAT_ORDER.map(function (p) { return p[1] + " " + (evs[p[0]] || 0); }).join(" / ");
+  }
+
+  // How many of a team's sets carry a Mega stone (megaAbility set): with two or more, no single one
+  // of them is guaranteed to be the one that actually Mega Evolves in a given game.
+  function teamMegaSetCount(team) {
+    return (team.sets || []).filter(function (x) { return !!x.megaAbility; }).length;
+  }
+
+  // A set's moves, comma-separated; a move the JSON flags as illegalMoves (not learnable in
+  // Champions, kept because the source published it) gets a muted marker and a matching title
+  // tooltip, so a source error next to it is never mistaken for a playable set.
+  function movesRow(s) {
+    var row = document.createElement("div");
+    var illegal = s.illegalMoves || [];
+    (s.moves || []).forEach(function (m, i) {
+      if (i > 0) row.appendChild(document.createTextNode(", "));
+      if (illegal.indexOf(m) === -1) {
+        row.appendChild(document.createTextNode(m));
+        return;
+      }
+      var wrap = document.createElement("span");
+      wrap.title = "Not learnable in Champions, as published";
+      wrap.appendChild(document.createTextNode(m));
+      var note = document.createElement("span");
+      note.className = "illegal-move-note";
+      note.textContent = " (not learnable in Champions, as published)";
+      wrap.appendChild(note);
+      row.appendChild(wrap);
+    });
+    return row;
+  }
+
+  // One set block: sprite, species, item icon + item, ability (flagged when inferred from a held
+  // Mega stone, with the Mega's own ability alongside), nature, stat points (prefixed so it never
+  // reads as EVs; "not published" when the team didn't) and moves (illegalMoves flagged).
+  function setBlock(team, s) {
+    var block = document.createElement("div");
+    block.className = "set-block";
+    var head = document.createElement("div");
+    head.className = "set-head";
+    head.appendChild(spriteEl(s.sprite, s.species, 32));
+    var name = document.createElement("span");
+    name.textContent = s.species;
+    head.appendChild(name);
+    block.appendChild(head);
+
+    var itemRow = document.createElement("div");
+    itemRow.className = "set-item";
+    if (typeof s.itemIcon === "number") itemRow.appendChild(itemIcon(s.itemIcon));
+    var itemLabel = document.createElement("span");
+    itemLabel.textContent = s.item || "no item";
+    itemRow.appendChild(itemLabel);
+    block.appendChild(itemRow);
+
+    var ability = document.createElement("div");
+    var abilityText = "Ability: " + (s.ability || "n/a");
+    if (s.abilityInferred) abilityText += " (not published; inferred from the Mega)";
+    if (s.megaAbility) {
+      abilityText += (teamMegaSetCount(team) > 1 ? " · if it Mega Evolves: " : " · Mega: ") + s.megaAbility;
     }
-    var attrs = graph.getNodeAttributes(focusedNode);
+    ability.textContent = abilityText;
+    block.appendChild(ability);
+
+    var nature = document.createElement("div");
+    nature.textContent = "Nature: " + (s.nature || "n/a");
+    block.appendChild(nature);
+
+    var stats = document.createElement("div");
+    stats.textContent = "Stat points: " + (team.hasStatPoints ? statPointsText(s.evs) : "not published");
+    block.appendChild(stats);
+
+    block.appendChild(movesRow(s));
+
+    return block;
+  }
+
+  // One team row: a collapsed <details> whose summary is up to six roster sprites (from the team's
+  // own sets, not a node lookup: a species on too few teams to clear minNodeTeams has no node, but
+  // its set still carries a sprite) and a muted player · placement · event · date line. The body
+  // (paste link + one block per set) builds lazily, once, the first time the row is opened, since a
+  // group can list hundreds of these.
+  function teamRow(t) {
+    var details = document.createElement("details");
+    details.className = "team-row";
+    var summary = document.createElement("summary");
+    summary.className = "team-row-summary";
+    var sprites = document.createElement("span");
+    sprites.className = "team-sprites";
+    (t.sets || []).slice(0, 6).forEach(function (s) {
+      sprites.appendChild(spriteEl(s.sprite, s.species, TEAM_SPRITE_SIZE));
+    });
+    summary.appendChild(sprites);
+    var meta = document.createElement("span");
+    meta.className = "team-meta";
+    meta.textContent = (t.player || "n/a") + " · " + (t.placement || "n/a") + " · " + (t.event || "n/a") + " · " + (t.date || "n/a");
+    summary.appendChild(meta);
+    details.appendChild(summary);
+
+    var built = false;
+    details.addEventListener("toggle", function () {
+      if (!details.open || built) return;
+      built = true;
+      var body = document.createElement("div");
+      body.className = "team-row-body";
+      body.appendChild(pasteLinkEl(t));
+      (t.sets || []).forEach(function (s) { body.appendChild(setBlock(t, s)); });
+      details.appendChild(body);
+    });
+    return details;
+  }
+
+  // Appends a list of team rows to container: the first TEAMS_PER_GROUP always shown, the rest
+  // rendered but hidden behind a "Show all N" / "Show fewer" toggle.
+  function appendTeamList(container, teams) {
+    var shown = teams.slice(0, TEAMS_PER_GROUP);
+    var rest = teams.slice(TEAMS_PER_GROUP);
+    shown.forEach(function (t) { container.appendChild(teamRow(t)); });
+    if (rest.length === 0) return;
+    var restEls = rest.map(function (t) { return teamRow(t); });
+    restEls.forEach(function (el) { el.hidden = true; container.appendChild(el); });
+    var toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "back-btn";
+    toggle.textContent = "Show all " + teams.length;
+    toggle.addEventListener("click", function () {
+      var expanding = toggle.textContent.indexOf("Show all") === 0;
+      restEls.forEach(function (el) { el.hidden = !expanding; });
+      toggle.textContent = expanding ? "Show fewer" : "Show all " + teams.length;
+    });
+    container.appendChild(toggle);
+  }
+
+  // The teams of a species panel group (one of the node's archetypes rows): every team of
+  // currentData.teams carrying nodeId whose (community, subCommunity) matches the row -- the
+  // subCommunity key (and its filter) is present only when the row carries one, same convention as
+  // archetypeRowLabel.
+  function teamsForNodeRow(nodeId, row) {
+    if (!currentData.teams) return [];
+    var communityId = row.community === null || row.community === undefined ? null : row.community;
+    var hasSubKey = "subCommunity" in row;
+    return currentData.teams.filter(function (t) {
+      if ((t.species || []).indexOf(nodeId) === -1) return false;
+      var tCommunity = t.community === undefined ? null : t.community;
+      if (tCommunity !== communityId) return false;
+      if (hasSubKey) {
+        var tSub = t.subCommunity === undefined ? null : t.subCommunity;
+        if (tSub !== row.subCommunity) return false;
+      }
+      return true;
+    });
+  }
+
+  // The teams of an archetype panel group: every team whose primary community is communityId, and
+  // (when subId isn't undefined) whose primary sub-community is subId (null for "unassigned within
+  // the parent"); subId undefined counts every team of the community regardless of sub-community.
+  function teamsForArchetype(communityId, subId) {
+    if (!currentData.teams) return [];
+    return currentData.teams.filter(function (t) {
+      var tCommunity = t.community === undefined ? null : t.community;
+      if (tCommunity !== communityId) return false;
+      if (subId === undefined) return true;
+      var tSub = t.subCommunity === undefined ? null : t.subCommunity;
+      return tSub === subId;
+    });
+  }
+
+  function closeButton() {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "close-btn";
+    btn.textContent = "Close";
+    btn.addEventListener("click", function () { setSelection(null); });
+    return btn;
+  }
+
+  // "regenerate for team lists": what a group shows in place of its team list when the loaded JSON
+  // predates the `teams` field (older viewer JSON, plan #104 §2) -- headers still render, nothing crashes.
+  function regenerateNote() {
+    var note = document.createElement("div");
+    note.className = "credit";
+    note.textContent = "regenerate for team lists";
+    return note;
+  }
+
+  // Species panel: title (sprite + name + "N teams"), then one group per node.archetypes row, in
+  // row order, each a heading (archetypeRowLabel + share + team count) and its team list.
+  function renderSpeciesPanel(sel) {
+    if (!graph || !graph.hasNode(sel.id)) { selectedPanel.style.display = "none"; return; }
+    var attrs = graph.getNodeAttributes(sel.id);
     selectedPanel.style.display = "";
 
-    var titleRow = document.createElement("div");
-    titleRow.id = "selected-title";
-    var title = document.createElement("strong");
-    title.textContent = focusedNode;
-    titleRow.appendChild(title);
-    var closeBtn = document.createElement("button");
-    closeBtn.type = "button";
-    closeBtn.className = "close-btn";
-    closeBtn.textContent = "Close";
-    closeBtn.addEventListener("click", function () { setFocus(null); });
-    titleRow.appendChild(closeBtn);
-    selectedInfo.appendChild(titleRow);
+    var head = document.createElement("div");
+    head.id = "selected-title";
+    var left = document.createElement("span");
+    left.style.display = "inline-flex";
+    left.style.alignItems = "center";
+    left.style.gap = "6px";
+    left.appendChild(spriteEl(attrs.sprite, sel.id, 28));
+    var strong = document.createElement("strong");
+    strong.textContent = sel.id + " — " + attrs.teams + " team" + (attrs.teams === 1 ? "" : "s");
+    left.appendChild(strong);
+    head.appendChild(left);
+    head.appendChild(closeButton());
+    selectedInfo.appendChild(head);
 
-    selectedInfo.appendChild(nodeOfSection(attrs));
+    (attrs.archetypes || []).forEach(function (row) {
+      var heading = document.createElement("div");
+      heading.className = "group-heading";
+      heading.textContent = archetypeRowLabel(row) + " — " + fmtPct(row.share) + ", " + row.teams + " team" + (row.teams === 1 ? "" : "s");
+      selectedInfo.appendChild(heading);
+      if (currentData.teams) {
+        appendTeamList(selectedInfo, teamsForNodeRow(sel.id, row));
+      } else {
+        selectedInfo.appendChild(regenerateNote());
+      }
+    });
+  }
 
-    if (attrs.archetypes) {
-      var archHeading = document.createElement("div");
-      archHeading.className = "drill-heading";
-      archHeading.textContent = "On teams of (primary archetype, share of its weighted teams)";
-      selectedInfo.appendChild(archHeading);
-      attrs.archetypes.forEach(function (row) { selectedInfo.appendChild(archetypeRow(row)); });
+  // Archetype panel: opened via a "Teams" button on a community legend row (sel.sub undefined) or
+  // a drilled-down sub row (sel.sub is that row's sub id). Header: label, override notes, share,
+  // team count. The community-level panel (sel.sub undefined) groups by sub-community
+  // (subCommunities order) then adds an "unassigned within the parent" group; a community without a
+  // pass, or a panel opened from a sub row, is one flat list.
+  function renderArchetypePanel(sel) {
+    var community = findCommunity(sel.community);
+    if (!community) { selectedPanel.style.display = "none"; return; }
+    selectedPanel.style.display = "";
+
+    var head = document.createElement("div");
+    head.id = "selected-title";
+    var strong = document.createElement("strong");
+    var shareText;
+    if (sel.sub !== undefined) {
+      var sub = findSubCommunity(sel.community, sel.sub);
+      strong.textContent = (sub ? (sub.label || "Sub-community " + sub.id) : "Sub-community " + sel.sub) + overrideNote(sub || {});
+      shareText = fmtPct(sub ? sub.primaryShareOfParent : undefined);
+    } else {
+      strong.textContent = communityLabelText(sel.community);
+      shareText = fmtPct(community.primaryShare);
+    }
+    head.appendChild(strong);
+    head.appendChild(closeButton());
+    selectedInfo.appendChild(head);
+
+    var count = teamsForArchetype(sel.community, sel.sub).length;
+    var meta = document.createElement("div");
+    meta.className = "group-heading";
+    meta.textContent = shareText + " · " + count + " team" + (count === 1 ? "" : "s");
+    selectedInfo.appendChild(meta);
+
+    if (!currentData.teams) { selectedInfo.appendChild(regenerateNote()); return; }
+
+    if (sel.sub !== undefined) {
+      appendTeamList(selectedInfo, teamsForArchetype(sel.community, sel.sub));
+      return;
     }
 
-    if (attrs.sampleTeams && attrs.sampleTeams.length > 0) {
-      var samplesHeading = document.createElement("div");
-      samplesHeading.className = "drill-heading";
-      samplesHeading.textContent = "Sample teams";
-      selectedInfo.appendChild(samplesHeading);
-      attrs.sampleTeams.forEach(function (t) { selectedInfo.appendChild(teamLine(t)); });
+    if (community.subCommunities && community.subCommunities.length > 0) {
+      community.subCommunities.forEach(function (s) {
+        var teams = teamsForArchetype(sel.community, s.id);
+        if (teams.length === 0) return;
+        var heading = document.createElement("div");
+        heading.className = "group-heading";
+        heading.textContent = (s.label || "Sub-community " + s.id) + overrideNote(s) + ", " + teams.length + " team" + (teams.length === 1 ? "" : "s");
+        selectedInfo.appendChild(heading);
+        appendTeamList(selectedInfo, teams);
+      });
+      var unassigned = teamsForArchetype(sel.community, null);
+      if (unassigned.length > 0) {
+        var unassignedHeading = document.createElement("div");
+        unassignedHeading.className = "group-heading";
+        unassignedHeading.textContent = "unassigned within the parent, " + unassigned.length + " team" + (unassigned.length === 1 ? "" : "s");
+        selectedInfo.appendChild(unassignedHeading);
+        appendTeamList(selectedInfo, unassigned);
+      }
+    } else {
+      appendTeamList(selectedInfo, teamsForArchetype(sel.community, undefined));
     }
   }
 
-  function setFocus(node) {
-    focusedNode = node;
+  // The Selected panel (above Hover): hidden while nothing is selected. DOM built with
+  // textContent/element methods throughout, never innerHTML with data.
+  function renderSelected() {
+    selectedInfo.textContent = "";
+    if (!selection) { selectedPanel.style.display = "none"; return; }
+    if (selection.kind === "species") renderSpeciesPanel(selection);
+    else renderArchetypePanel(selection);
+  }
+
+  // Species selection drives focus mode (dimming); archetype selection never does, and clears any
+  // node focus. Close/Escape/background click clear either (setSelection(null)).
+  function setSelection(sel) {
+    selection = sel;
+    focusedNode = sel && sel.kind === "species" ? sel.id : null;
     renderSelected();
     if (renderer) renderer.refresh();
   }
@@ -745,9 +950,10 @@
     if (renderer) renderer.refresh();
   });
 
-  // Registered once (not per loadJson, since it doesn't depend on the renderer): Escape clears focus.
+  // Registered once (not per loadJson, since it doesn't depend on the renderer): Escape clears
+  // either selection kind.
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") setFocus(null);
+    if (e.key === "Escape") setSelection(null);
   });
 
   // Keeps the panel between SIDEBAR_MIN and window.innerWidth - GRAPH_MIN, so the graph always
@@ -812,6 +1018,7 @@
     currentData = data;
     drillCommunityId = null;
     hiddenCommunities = new Set();
+    selection = null;
     focusedNode = null;
     graph = buildGraph(data);
     if (renderer) renderer.kill();
@@ -823,11 +1030,13 @@
     renderer.scheduleRender(); // the sprites layer was created after Sigma's own initial render, so kick off the first sprite paint
     renderer.on("enterNode", function (ev) { showNode(ev.node, graph.getNodeAttributes(ev.node)); });
     renderer.on("leaveNode", clearHover);
-    renderer.on("enterEdge", function (ev) { showEdge(ev.edge, graph.getEdgeAttributes(ev.edge)); });
-    renderer.on("leaveEdge", clearHover);
-    // clickEdge: nothing. clickNode toggles focus on/off; clickStage (background) clears it.
-    renderer.on("clickNode", function (ev) { setFocus(ev.node === focusedNode ? null : ev.node); });
-    renderer.on("clickStage", function () { setFocus(null); });
+    // clickEdge and edge hover: nothing (raw edge detail isn't shown, plan #104 §2). clickNode
+    // toggles species selection on/off; clickStage (background) clears either selection kind.
+    renderer.on("clickNode", function (ev) {
+      var isSame = selection && selection.kind === "species" && selection.id === ev.node;
+      setSelection(isSame ? null : { kind: "species", id: ev.node });
+    });
+    renderer.on("clickStage", function () { setSelection(null); });
     renderLegend(data);
     if (data.ladder) {
       ladderCreditEl.textContent = "Ladder calibration (λ " + data.ladder.ladderBlend + "), median rank over " + data.ladder.snapshots + " daily snapshot" + (data.ladder.snapshots === 1 ? "" : "s") + ", " + data.ladder.since + " to " + data.ladder.date + ": " + data.ladder.credit;
