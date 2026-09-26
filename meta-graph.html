@@ -101,6 +101,7 @@
     <div class="panel" id="sprite-credit" style="color: var(--muted); font-size: 0.72rem;">
       Sprites: Pokémon Showdown. Pokémon © Nintendo, Creatures, GAME FREAK.
     </div>
+    <div class="panel" id="ladder-credit" style="color: var(--muted); font-size: 0.72rem;" hidden></div>
   </div>
 </div>
 
@@ -117,6 +118,7 @@
   var sliderLabel = document.getElementById("min-teams-label");
   var container = document.getElementById("sigma-container");
   var nonCommunityToggle = document.getElementById("show-noncommunity-edges");
+  var ladderCreditEl = document.getElementById("ladder-credit");
 
   var renderer = null;
   var graph = null;
@@ -332,12 +334,17 @@
     return (entry.minor ? " (minor)" : "") + (entry.mergedInto ? " merged into " + entry.mergedInto : "");
   }
 
+  // Report §12.4's share under the ladder-calibrated team weights, present only in a run with ladderBlend above 0.
+  function calibratedNote(share) {
+    return typeof share === "number" ? " · ladder-calibrated " + fmtPct(share) : "";
+  }
+
   function subCommunityLegendRow(sub) {
     var row = document.createElement("div");
     row.className = "legend-row";
     var label = sub.label ? sub.label : "Sub-community " + sub.id;
     appendSwatchText(row, sub.color, label + " (" + sub.memberCount + " tokens, " + fmtPct(sub.primaryShareOfParent) +
-      " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent)" + overrideNote(sub));
+      " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent" + calibratedNote(sub.calibratedPrimaryShareOfParent) + ")" + overrideNote(sub));
     return row;
   }
 
@@ -367,7 +374,8 @@
     drillCommunityId = null;
     data.communities.forEach(function (c) {
       var label = c.label ? c.label : "Community " + c.id;
-      var detail = "(" + c.memberCount + " species, " + fmtPct(c.primaryShare) + " + " + fmtPct(c.hybridShare) + " hybrid)" + overrideNote(c);
+      var detail = "(" + c.memberCount + " species, " + fmtPct(c.primaryShare) + " + " + fmtPct(c.hybridShare) + " hybrid" +
+        calibratedNote(c.calibratedPrimaryShare) + ")" + overrideNote(c);
       legendEl.appendChild(communityLegendRow(label, c.color, detail, c.id, c));
     });
     var unconnected = data.nodes.filter(function (n) { return n.community === null || n.community === undefined; });
@@ -751,6 +759,13 @@
     renderer.on("clickNode", function (ev) { setFocus(ev.node === focusedNode ? null : ev.node); });
     renderer.on("clickStage", function () { setFocus(null); });
     renderLegend(data);
+    if (data.ladder) {
+      ladderCreditEl.textContent = "Ladder calibration (λ " + data.ladder.ladderBlend + "), snapshot " + data.ladder.date + ": " + data.ladder.credit;
+      ladderCreditEl.hidden = false;
+    } else {
+      ladderCreditEl.textContent = "";
+      ladderCreditEl.hidden = true;
+    }
     initSlider(data);
     renderSelected();
     showNonCommunityEdges = false;
