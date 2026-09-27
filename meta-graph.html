@@ -364,8 +364,10 @@
     return btn;
   }
 
-  // Set only in a sync:archetypes run with overrides (ADR 0018): a minor flag, or the label of the entry this one was merged into.
-  function overrideNote(entry) {
+  // minor: the entry is minor (computed by the engine, or set by an override). mergedInto (the
+  // label of the entry this one was merged into): set only in a sync:archetypes run with
+  // overrides (ADR 0018).
+  function entryNote(entry) {
     return (entry.minor ? " (minor)" : "") + (entry.mergedInto ? " merged into " + entry.mergedInto : "");
   }
 
@@ -379,7 +381,7 @@
     row.className = "legend-row";
     var label = sub.label ? sub.label : "Sub-community " + sub.id;
     appendSwatchText(row, sub.color, label + " (" + sub.memberCount + " tokens, " + fmtPct(sub.primaryShareOfParent) +
-      " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent" + calibratedNote(sub.calibratedPrimaryShareOfParent) + ")" + overrideNote(sub));
+      " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent" + calibratedNote(sub.calibratedPrimaryShareOfParent) + ")" + entryNote(sub));
     row.appendChild(teamsButton(parentId, sub.id));
     return row;
   }
@@ -411,7 +413,7 @@
     data.communities.forEach(function (c) {
       var label = c.label ? c.label : "Community " + c.id;
       var detail = "(" + c.memberCount + " species, " + fmtPct(c.primaryShare) + " + " + fmtPct(c.hybridShare) + " hybrid" +
-        calibratedNote(c.calibratedPrimaryShare) + ")" + overrideNote(c);
+        calibratedNote(c.calibratedPrimaryShare) + ")" + entryNote(c);
       legendEl.appendChild(communityLegendRow(label, c.color, detail, c.id, c));
     });
     var unconnected = data.nodes.filter(function (n) { return n.community === null || n.community === undefined; });
@@ -560,18 +562,18 @@
     hoverInfo.textContent = "Hover a species.";
   }
 
-  // A community's label ("Community <id>" when it carries none) with its overrideNote, or
+  // A community's label ("Community <id>" when it carries none) with its entryNote, or
   // "unconnected" for null/undefined.
   function communityLabelText(communityId) {
     if (communityId === null || communityId === undefined) return "unconnected";
     var c = findCommunity(communityId);
     if (!c) return "Community " + communityId;
-    return (c.label ? c.label : "Community " + c.id) + overrideNote(c);
+    return (c.label ? c.label : "Community " + c.id) + entryNote(c);
   }
 
   // The label of an archetype row (node.archetypes shape: community, optional subCommunity): "No
-  // archetype" for community null, else the community label (with its overrideNote), plus " · <sub
-  // label>" when subCommunity is a number (with the sub-community's own overrideNote) or " ·
+  // archetype" for community null, else the community label (with its entryNote), plus " · <sub
+  // label>" when subCommunity is a number (with the sub-community's own entryNote) or " ·
   // unassigned within the parent" when it is null (the key is absent for a no-pass community, so
   // the label stops at the community).
   function archetypeRowLabel(row) {
@@ -579,7 +581,7 @@
     var label = communityLabelText(row.community);
     if ("subCommunity" in row) {
       label += row.subCommunity === null ? " · unassigned within the parent" : " · " + subCommunityLabel(row.community, row.subCommunity);
-      label += overrideNote(findSubCommunity(row.community, row.subCommunity) || {});
+      label += entryNote(findSubCommunity(row.community, row.subCommunity) || {});
     }
     return label;
   }
@@ -957,7 +959,7 @@
     var shareText;
     if (sel.sub !== undefined) {
       var sub = findSubCommunity(sel.community, sel.sub);
-      strong.textContent = (sub ? (sub.label || "Sub-community " + sub.id) : "Sub-community " + sel.sub) + overrideNote(sub || {});
+      strong.textContent = (sub ? (sub.label || "Sub-community " + sub.id) : "Sub-community " + sel.sub) + entryNote(sub || {});
       shareText = fmtPct(sub ? sub.primaryShareOfParent : undefined);
     } else {
       strong.textContent = communityLabelText(sel.community);
@@ -987,7 +989,7 @@
         if (teams.length === 0) return;
         var heading = document.createElement("div");
         heading.className = "group-heading";
-        heading.textContent = (s.label || "Sub-community " + s.id) + overrideNote(s) + ", " + teams.length + " team" + (teams.length === 1 ? "" : "s");
+        heading.textContent = (s.label || "Sub-community " + s.id) + entryNote(s) + ", " + teams.length + " team" + (teams.length === 1 ? "" : "s");
         selectedInfo.appendChild(heading);
         appendTeamList(selectedInfo, teams);
       });
