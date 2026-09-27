@@ -799,6 +799,90 @@
     });
   }
 
+  // The teams of a hybrid archetype group: for a community (subId undefined) every team whose
+  // hybridCommunities lists communityId; for a sub-community, every team whose primary community
+  // is communityId and whose hybridSubCommunities lists subId. A missing hybridCommunities /
+  // hybridSubCommunities (older JSON) reads as []. nodeId, when given, further restricts to teams
+  // carrying that species (same species filter as teamsForNodeRow).
+  function teamsForHybrid(communityId, subId, nodeId) {
+    if (!currentData.teams) return [];
+    return currentData.teams.filter(function (t) {
+      if (nodeId && (t.species || []).indexOf(nodeId) === -1) return false;
+      if (subId === undefined) return (t.hybridCommunities || []).indexOf(communityId) !== -1;
+      var tCommunity = t.community === undefined ? null : t.community;
+      if (tCommunity !== communityId) return false;
+      return (t.hybridSubCommunities || []).indexOf(subId) !== -1;
+    });
+  }
+
+  // The hybrid archetypes among the teams of currentData.teams carrying nodeId: one entry per
+  // community id found in their hybridCommunities, and one per (primary community, sub id) found
+  // in their hybridSubCommunities, each with its teamsForHybrid team list (species-filtered),
+  // empty entries dropped, ordered by team count desc then community id asc then sub id asc (no
+  // sub sorts before any sub of the same community).
+  function hybridArchetypesForSpecies(nodeId) {
+    var seen = {};
+    var list = [];
+    (currentData.teams || []).forEach(function (t) {
+      if ((t.species || []).indexOf(nodeId) === -1) return;
+      (t.hybridCommunities || []).forEach(function (c) {
+        var key = "c:" + c;
+        if (seen[key]) return;
+        seen[key] = true;
+        list.push({ community: c });
+      });
+      var tCommunity = t.community === undefined ? null : t.community;
+      (t.hybridSubCommunities || []).forEach(function (s) {
+        var key = "s:" + tCommunity + ":" + s;
+        if (seen[key]) return;
+        seen[key] = true;
+        list.push({ community: tCommunity, sub: s });
+      });
+    });
+    list.forEach(function (entry) { entry.teams = teamsForHybrid(entry.community, entry.sub, nodeId); });
+    list = list.filter(function (entry) { return entry.teams.length > 0; });
+    list.sort(function (a, b) {
+      if (b.teams.length !== a.teams.length) return b.teams.length - a.teams.length;
+      if (a.community !== b.community) return a.community - b.community;
+      var as = a.sub === undefined ? -1 : a.sub;
+      var bs = b.sub === undefined ? -1 : b.sub;
+      return as - bs;
+    });
+    return list;
+  }
+
+  // Appends the "also fits (hybrid)" heading and one group per hybrid archetype to selectedInfo,
+  // skipping the whole heading when nodeId carries none.
+  function appendHybridArchetypeGroups(nodeId) {
+    var hybrids = hybridArchetypesForSpecies(nodeId);
+    if (hybrids.length === 0) return;
+    var outer = document.createElement("div");
+    outer.className = "group-heading";
+    outer.textContent = "also fits (hybrid)";
+    selectedInfo.appendChild(outer);
+    hybrids.forEach(function (entry) {
+      var row = { community: entry.community };
+      if (entry.sub !== undefined) row.subCommunity = entry.sub;
+      var heading = document.createElement("div");
+      heading.className = "group-heading";
+      heading.textContent = archetypeRowLabel(row) + " — " + entry.teams.length + " team" + (entry.teams.length === 1 ? "" : "s");
+      selectedInfo.appendChild(heading);
+      appendTeamList(selectedInfo, entry.teams);
+    });
+  }
+
+  // Appends a single "also fits (hybrid)" group (the teams for which (communityId, subId) is a
+  // hybrid) to the archetype panel, or nothing when there are none.
+  function appendHybridGroup(communityId, subId) {
+    var teams = teamsForHybrid(communityId, subId, undefined);
+    if (teams.length === 0) return;
+    var heading = document.createElement("div");
+    heading.className = "group-heading";
+    heading.textContent = "also fits (hybrid)";
+    selectedInfo.appendChild(heading);
+    appendTeamList(selectedInfo, teams);
+  }
+
   function closeButton() {
     var btn = document.createElement("button");
     btn.type = "button";
@@ -818,7 +902,9 @@
   }
 
   // Species panel: title (sprite + name + "N teams"), then one group per node.archetypes row, in
-  // row order, each a heading (archetypeRowLabel + share + team count) and its team list.
+  // row order, each a heading (archetypeRowLabel + share + team count) and its team list, then,
+  // when teams are present, an "also fits (hybrid)" heading with one group per hybrid archetype
+  // among the teams carrying the species (appendHybridArchetypeGroups).
   function renderSpeciesPanel(sel) {
     if (!graph || !graph.hasNode(sel.id)) { selectedPanel.style.display = "none"; return; }
     var attrs = graph.getNodeAttributes(sel.id);
@@ -849,13 +935,17 @@
         selectedInfo.appendChild(regenerateNote());
       }
     });
+
+    if (currentData.teams) appendHybridArchetypeGroups(sel.id);
   }
 
   // Archetype panel: opened via a "Teams" button on a community legend row (sel.sub undefined) or
   // a drilled-down sub row (sel.sub is that row's sub id). Header: label, override notes, share,
   // team count. The community-level panel (sel.sub undefined) groups by sub-community
   // (subCommunities order) then adds an "unassigned within the parent" group; a community without a
-  // pass, or a panel opened from a sub row, is one flat list.
+  // pass, or a panel opened from a sub row, is one flat list. Then an "also fits (hybrid)" group of
+  // the teams listing it among their hybrids (appendHybridGroup); the header count stays
+  // primary-only.
   function renderArchetypePanel(sel) {
     var community = findCommunity(sel.community);
     if (!community) { selectedPanel.style.display = "none"; return; }
@@ -887,6 +977,7 @@
 
     if (sel.sub !== undefined) {
       appendTeamList(selectedInfo, teamsForArchetype(sel.community, sel.sub));
+      appendHybridGroup(sel.community, sel.sub);
       return;
     }
 
@@ -911,6 +1002,7 @@
     } else {
       appendTeamList(selectedInfo, teamsForArchetype(sel.community, undefined));
     }
+    appendHybridGroup(sel.community, undefined);
   }
 
   // The Selected panel (above Hover): hidden while nothing is selected. DOM built with
