@@ -14,10 +14,10 @@
 
 ## 1. Window & Applied Defaults
 - Regulation: Regulation M-C
-- As of: 2026-09-26, window: 17 days
+- As of: 2026-09-28, window: 19 days
 - Date range: 2026-09-09 to 2026-09-22
-- Teams analyzed: 395 (total weight 224.67)
-- Ladder: 2026-09-11 to 2026-09-25, median rank over 15 daily snapshots (M6, M-C). Battle data provided by Pokémon Champions Battle Data (https://championsbattledata.com); only figures derived from these snapshots are shown.
+- Teams analyzed: 395 (total weight 203.49)
+- Ladder: 2026-09-13 to 2026-09-27, median rank over 15 daily snapshots (M6, M-C). Battle data provided by Pokémon Champions Battle Data (https://championsbattledata.com); only figures derived from these snapshots are shown.
 - Placement: 308 of 395 teams have no tournament placement and weigh placementDefaultWeight, so the placement tiers move few teams. The tiers ignore event size (a small cup's winner weighs like a large event's top cut), and Seniors teams are not separated.
 - Applied defaults:
   - placementTopRank: 8
@@ -93,7 +93,7 @@ Species pairs A + B from knownCoreChecks, with their best species@item + species
 | Pelipper | Swampert | 11 | 3.1% | 8.906 | 0.928 | 0.93 | 0.30 | yes | 7 |
 | Archaludon | Swampert | 10 | 2.9% | 8.332 | 0.862 | 0.86 | 0.28 | yes | 5 |
 | Baxcalibur | Ninetales-Alola | 6 | 1.3% | 8.182 | 0.481 | 0.48 | 0.22 | yes | 4 |
-| Excadrill | Indeedee | 14 | 2.9% | 7.513 | 0.540 | 0.54 | 0.41 | yes | 5 |
+| Excadrill | Indeedee | 14 | 2.9% | 7.513 | 0.540 | 0.54 | 0.41 | yes | 4 |
 | Aerodactyl | Lucario | 6 | 1.4% | 7.305 | 0.487 | 0.21 | 0.49 | yes | n/a |
 | Archaludon | Grimmsnarl | 9 | 2.2% | 6.839 | 0.708 | 0.71 | 0.21 | yes | 7 |
 | Archaludon | Politoed | 10 | 2.5% | 6.627 | 0.686 | 0.69 | 0.24 | yes | 6 |
@@ -189,9 +189,9 @@ Species pairs A + B from knownCoreChecks, with their best species@item + species
 | Gholdengo@Life Orb | Salamence@Salamencite | 45 | 12.3% | 1.523 | 0.602 | 0.31 | 0.60 | no | 2 |
 | Sneasler | Floette-Eternal@Floettite | 52 | 12.0% | 1.525 | 0.719 | 0.72 | 0.25 | yes | n/a |
 | Incineroar | Salamence@Salamencite | 48 | 11.3% | 0.802 | 0.317 | 0.29 | 0.32 | no | 3 |
-| Rillaboom | Raichu@Raichunite Y | 37 | 10.9% | 1.654 | 0.936 | 0.94 | 0.19 | yes | 8 |
+| Rillaboom | Raichu@Raichunite Y | 37 | 10.9% | 1.654 | 0.936 | 0.94 | 0.19 | yes | 6 |
 | Kingambit | Rillaboom@Miracle Seed | 42 | 10.6% | 0.977 | 0.368 | 0.28 | 0.37 | no | 2 |
-| Rillaboom | Arcanine-Hisui@Focus Sash | 37 | 10.5% | 1.389 | 0.786 | 0.79 | 0.19 | yes | 7 |
+| Rillaboom | Arcanine-Hisui@Focus Sash | 37 | 10.5% | 1.389 | 0.786 | 0.79 | 0.19 | yes | 8 |
 | Salamence | Incineroar@Sitrus Berry | 42 | 10.1% | 1.007 | 0.398 | 0.40 | 0.26 | no | 5 |
 
 ## 4. Item Synergies
@@ -448,7 +448,7 @@ Connected communities only: unconnected species are outside the graph Louvain ru
 ### Community 0: Rillaboom / Sneasler / Incineroar
 - Primary teams: 202 (primary share 51.7%), hybrid teams: 74 (hybrid share 19.1%)
 - Date range: 2026-09-09 to 2026-09-22
-- Core pairs: Gengar+Rillaboom@Eject Button, Baxcalibur+Ninetales-Alola@Light Clay, Glimmora+Volcarona@Rocky Helmet, Politoed+Incineroar@Passho Berry, Volcarona+Glimmora@Glimmoranite, Gengar+Incineroar@Passho Berry, Ninetales-Alola+Baxcalibur@Baxcalibrite, Lucario+Aerodactyl@Aerodactylite, Glimmora+Volcarona, Baxcalibur+Ninetales-Alola, Aerodactyl+Lucario, Aerodactyl+Lucario@Lucarionite Z, Pawmot+Glimmora@Glimmoranite, Indeedee+Sneasler@Psychic Seed, Froslass+Kingambit@Black Glasses, Aerodactyl+Sylveon@Fairy Feather, Archaludon+Incineroar@Passho Berry, Gardevoir+Sneasler@Psychic Seed, Aerodactyl+Sylveon, Archaludon+Rillaboom@Eject Button, Glimmora+Whimsicott, Volcarona+Baxcalibur@Baxcalibrite, Baxcalibur+Incineroar@Chople Berry, Floette-Eternal+Delphox@Delphoxite, Glimmora+Pawmot@Focus Sash, Baxcalibur+Volcarona, Charizard+Rillaboom@Occa Berry, Froslass+Sneasler@White Herb, Glimmora+Pawmot, Volcarona+Kingambit@Focus Sash, Floette-Eternal+Rillaboom@Occa Berry, Kingambit+Volcarona@Rocky Helmet, Floette-Eternal+Sneasler@Focus Sash, Basculegion+Talonflame, Delphox+Floette-Eternal, Delphox+Floette-Eternal@Floettite, Lucario+Basculegion@Life Orb, Arcanine-Hisui+Rillaboom@Sitrus Berry, Lucario+Sylveon@Fairy Feather, Indeedee-F+Sneasler@Psychic Seed, Whimsicott+Kingambit@Chople Berry, Incineroar+Rillaboom@Eject Button, Lucario+Sylveon, Sylveon+Lucario@Lucarionite Z, Pawmot+Basculegion@Choice Scarf, Armarouge+Sneasler@Psychic Seed, Gardevoir+Basculegion@Choice Scarf, Froslass+Kingambit, Kingambit+Froslass@Froslassite, Floette-Eternal+Garchomp@Choice Scarf, Pelipper+Basculegion@Choice Scarf, Farigiraf+Incineroar@Chople Berry, Incineroar+Politoed@Sitrus Berry, Charizard+Incineroar@Chople Berry, Froslass+Arcanine-Hisui@Focus Sash, Salamence+Rillaboom@Expert Belt, Kommo-o+Incineroar@Sitrus Berry, Archaludon+Basculegion@Choice Scarf, Incineroar+Kommo-o@Leftovers, Floette-Eternal+Sneasler@Grassy Seed, Arcanine-Hisui+Froslass, Arcanine-Hisui+Froslass@Froslassite, Garchomp+Whimsicott, Kingambit+Rillaboom@Life Orb, Excadrill+Sneasler@Psychic Seed, Basculegion+Lucario, Basculegion+Lucario@Lucarionite Z, Glimmora+Basculegion@Life Orb, Baxcalibur+Basculegion@Life Orb, Gengar+Incineroar, Incineroar+Gengar@Gengarite, Whimsicott+Basculegion@Life Orb, Floette-Eternal+Incineroar@Chople Berry, Baxcalibur+Sneasler@Focus Sash, Pawmot+Garchomp@Garchompite Z, Basculegion+Whimsicott@Focus Sash, Incineroar+Delphox@Delphoxite, Raichu+Rillaboom@Miracle Seed, Floette-Eternal+Kingambit@Life Orb, Floette-Eternal+Basculegion@Life Orb, Floette-Eternal+Incineroar, Incineroar+Floette-Eternal@Floettite, Floette-Eternal+Incineroar@Sitrus Berry, Corviknight+Sneasler, Sneasler+Indeedee@Focus Sash, Tyranitar+Sneasler@Psychic Seed, Milotic+Rillaboom@Life Orb, Golisopod+Incineroar@Chople Berry, Kingambit+Rillaboom@Sitrus Berry, Floette-Eternal+Kingambit@Focus Sash, Indeedee-F+Basculegion@Focus Sash, Incineroar+Kommo-o, Volcarona+Basculegion@Life Orb, Salamence+Excadrill@Focus Sash, Charizard+Kingambit@Focus Sash, Indeedee+Sneasler, Basculegion+Whimsicott, Excadrill+Salamence, Excadrill+Salamence@Salamencite, Incineroar+Garchomp@Choice Scarf, Floette-Eternal+Rillaboom@Sitrus Berry, Salamence+Tyranitar, Tyranitar+Salamence@Salamencite, Sneasler+Indeedee@Choice Scarf, Incineroar+Rillaboom@Occa Berry, Basculegion+Garchomp@Life Orb, Glimmora+Kingambit@Chople Berry, Salamence+Volcarona@Rocky Helmet, Blaziken+Kingambit, Aerodactyl+Basculegion, Basculegion+Gardevoir, Basculegion+Gardevoir@Gardevoirite, Salamence+Tyranitar@Tyranitarite, Baxcalibur+Sneasler@White Herb, Lucario+Incineroar@Sitrus Berry, Golisopod+Basculegion@Choice Scarf, Primarina+Salamence, Primarina+Salamence@Salamencite, Incineroar+Politoed, Ninetales-Alola+Incineroar@Sitrus Berry, Dragonite+Incineroar@Sitrus Berry, Delphox+Indeedee-F, Kingambit+Glimmora@Glimmoranite, Volcarona+Kingambit@Chople Berry, Baxcalibur+Milotic@Leftovers, Kingambit+Sneasler@Focus Sash, Sylveon+Kingambit@Focus Sash, Floette-Eternal+Whimsicott, Whimsicott+Floette-Eternal@Floettite, Salamence+Milotic@Sitrus Berry, Sneasler+Indeedee-F@Sitrus Berry, Incineroar+Volcarona@Grassy Seed, Pawmot+Kingambit@Chople Berry, Incineroar+Farigiraf@Colbur Berry, Lucario+Garchomp@Garchompite Z, Basculegion+Pawmot, Rillaboom+Farigiraf@Grassy Seed, Rillaboom+Gholdengo@Grassy Seed, Rillaboom+Sneasler@Grassy Seed, Rillaboom+Volcarona@Grassy Seed, Rillaboom+Incineroar@Leftovers, Salamence+Kingambit@Chople Berry, Salamence+Indeedee@Choice Scarf, Incineroar+Ninetales-Alola, Lucario+Rillaboom@Miracle Seed, Incineroar+Sinistcha@Colbur Berry, Kingambit+Volcarona, Arcanine-Hisui+Kingambit@Life Orb, Indeedee+Sneasler@White Herb, Salamence+Glimmora@Glimmoranite, Sylveon+Basculegion@Life Orb, Kingambit+Kommo-o, Basculegion+Kingambit@Chople Berry, Salamence+Rillaboom@Sitrus Berry, Sneasler+Delphox@Delphoxite, Gholdengo+Rillaboom@Miracle Seed, Basculegion+Pelipper@Sitrus Berry, Raichu+Rillaboom, Rillaboom+Raichu@Raichunite Y, Delphox+Kingambit, Basculegion+Baxcalibur@Baxcalibrite, Gengar+Rillaboom, Rillaboom+Gengar@Gengarite, Basculegion+Glimmora@Glimmoranite, Rillaboom+Politoed@Sitrus Berry, Kingambit+Sinistcha@Colbur Berry, Milotic+Baxcalibur@Baxcalibrite, Floette-Eternal+Kingambit, Kingambit+Floette-Eternal@Floettite, Garchomp+Volcarona, Staraptor+Rillaboom@Miracle Seed, Incineroar+Lucario, Incineroar+Lucario@Lucarionite Z, Rillaboom+Volcarona@Rocky Helmet, Garchomp+Incineroar@Sitrus Berry, Garchomp+Lucario, Garchomp+Lucario@Lucarionite Z, Blastoise+Rillaboom@Miracle Seed, Gardevoir+Sneasler, Sneasler+Gardevoir@Gardevoirite, Indeedee+Salamence, Indeedee+Salamence@Salamencite, Arcanine-Hisui+Kingambit@Chople Berry, Kingambit+Basculegion@Life Orb, Incineroar+Garchomp@Garchompite Z, Rillaboom+Kommo-o@Leftovers, Froslass+Sneasler, Sneasler+Froslass@Froslassite, Glimmora+Kingambit, Kingambit+Garchomp@Choice Scarf, Basculegion+Glimmora, Delphox+Sneasler, Arcanine-Hisui+Rillaboom@Miracle Seed, Basculegion+Rillaboom@Sitrus Berry, Floette-Eternal+Sneasler, Sneasler+Floette-Eternal@Floettite, Sneasler+Sinistcha@Colbur Berry, Salamence+Gholdengo@Life Orb, Incineroar+Sneasler@Grassy Seed, Basculegion+Pawmot@Focus Sash, Charizard+Floette-Eternal, Charizard+Floette-Eternal@Floettite, Sneasler+Kingambit@Life Orb, Gholdengo+Incineroar@Sitrus Berry, Volcarona+Sneasler@White Herb, Salamence+Arcanine-Hisui@Focus Sash, Gholdengo+Salamence, Gholdengo+Salamence@Salamencite, Blastoise+Kingambit, Delphox+Incineroar, Floette-Eternal+Kingambit@Chople Berry, Sinistcha+Incineroar@Sitrus Berry, Garchomp+Incineroar, Arcanine-Hisui+Salamence, Arcanine-Hisui+Salamence@Salamencite, Sneasler+Indeedee-F@Colbur Berry, Charizard+Basculegion@Choice Scarf, Sneasler+Baxcalibur@Baxcalibrite, Indeedee-F+Basculegion@Choice Scarf, Rillaboom+Incineroar@Passho Berry, Excadrill+Sneasler@White Herb, Sneasler+Rillaboom@Sitrus Berry, Baxcalibur+Incineroar, Rillaboom+Gholdengo@Life Orb, Floette-Eternal+Rillaboom, Rillaboom+Floette-Eternal@Floettite, Lucario+Rillaboom, Rillaboom+Lucario@Lucarionite Z, Basculegion+Indeedee-F@Rocky Helmet, Floette-Eternal+Rillaboom@Miracle Seed, Incineroar+Sneasler@Focus Sash, Salamence+Volcarona, Volcarona+Salamence@Salamencite, Arcanine-Hisui+Sneasler@Grassy Seed, Salamence+Kingambit@Focus Sash, Incineroar+Pawmot@Focus Sash, Kingambit+Sneasler@Grassy Seed, Froslass+Rillaboom, Rillaboom+Froslass@Froslassite, Kingambit+Basculegion@Focus Sash, Salamence+Basculegion@Life Orb, Kingambit+Salamence, Kingambit+Salamence@Salamencite, Rillaboom+Arcanine-Hisui@Focus Sash, Baxcalibur+Raichu, Baxcalibur+Raichu@Raichunite Y, Torkoal+Sneasler@Psychic Seed, Floette-Eternal+Gholdengo, Gholdengo+Floette-Eternal@Floettite, Arcanine-Hisui+Rillaboom, Incineroar+Baxcalibur@Baxcalibrite, Salamence+Sneasler@White Herb, Gholdengo+Sneasler@Grassy Seed, Sylveon+Rillaboom@Miracle Seed, Politoed+Rillaboom, Gengar+Incineroar@Sitrus Berry, Indeedee-F+Whimsicott@Focus Sash, Garchomp+Pawmot, Gholdengo+Rillaboom, Sneasler+Armarouge@Focus Sash, Milotic+Sneasler@Focus Sash, Kingambit+Pawmot@Focus Sash, Floette-Eternal+Garchomp, Garchomp+Floette-Eternal@Floettite, Basculegion+Volcarona, Basculegion+Floette-Eternal, Basculegion+Floette-Eternal@Floettite, Floette-Eternal+Sinistcha, Sinistcha+Floette-Eternal@Floettite, Pawmot+Rillaboom@Miracle Seed, Dragonite+Incineroar, Incineroar+Rillaboom, Incineroar+Pawmot, Ceruledge+Rillaboom, Incineroar+Rillaboom@Miracle Seed, Baxcalibur+Sneasler, Rillaboom+Incineroar@Chople Berry, Kingambit+Pawmot, Basculegion+Baxcalibur, Pelipper+Sneasler@White Herb, Tyranitar+Sneasler@White Herb, Sneasler+Kingambit@Chople Berry, Rillaboom+Incineroar@Sitrus Berry, Kommo-o+Rillaboom, Salamence+Sneasler@Grassy Seed, Rillaboom+Basculegion@Life Orb, Sneasler+Garchomp@Garchompite Z, Sneasler+Basculegion@Life Orb, Rillaboom+Baxcalibur@Baxcalibrite, Aerodactyl+Incineroar@Sitrus Berry, Gholdengo+Rillaboom@Occa Berry, Baxcalibur+Milotic, Kommo-o+Rillaboom@Miracle Seed, Rillaboom+Volcarona, Basculegion+Kingambit, Salamence+Sylveon, Sylveon+Salamence@Salamencite, Rillaboom+Kingambit@Life Orb, Rillaboom+Milotic@Leftovers, Sneasler+Kingambit@Focus Sash, Sneasler+Armarouge@Life Orb, Basculegion+Sylveon, Garchomp+Sneasler@Focus Sash, Kingambit+Sneasler, Garchomp+Sneasler@Psychic Seed, Golisopod+Rillaboom@Life Orb, Salamence+Sylveon@Fairy Feather, Floette-Eternal+Gholdengo@Life Orb, Raichu+Sneasler@White Herb, Gholdengo+Incineroar, Rillaboom+Garchomp@Garchompite Z, Sneasler+Basculegion@Focus Sash, Baxcalibur+Sneasler@Grassy Seed, Kingambit+Sneasler@White Herb, Kingambit+Armarouge@Life Orb, Basculegion+Sneasler@White Herb, Salamence+Basculegion@Focus Sash, Salamence+Rillaboom@Miracle Seed, Ninetales-Alola+Rillaboom, Incineroar+Kingambit@Life Orb, Salamence+Rillaboom@Life Orb, Sneasler+Tyranitar, Floette-Eternal+Charizard@Charizardite Y, Rillaboom+Kingambit@Focus Sash, Milotic+Salamence, Milotic+Salamence@Salamencite, Rillaboom+Salamence, Rillaboom+Salamence@Salamencite, Rillaboom+Staraptor@Staraptite, Rillaboom+Aerodactyl@Aerodactylite, Milotic+Rillaboom, Primarina+Rillaboom, Rillaboom+Staraptor, Rillaboom+Pawmot@Focus Sash, Pawmot+Rillaboom, Rillaboom+Sneasler@Focus Sash, Kingambit+Rillaboom, Baxcalibur+Rillaboom, Rillaboom+Sylveon@Fairy Feather, Rillaboom+Glimmora@Glimmoranite
+- Core pairs: Gengar+Rillaboom@Eject Button, Baxcalibur+Ninetales-Alola@Light Clay, Glimmora+Volcarona@Rocky Helmet, Politoed+Incineroar@Passho Berry, Volcarona+Glimmora@Glimmoranite, Gengar+Incineroar@Passho Berry, Ninetales-Alola+Baxcalibur@Baxcalibrite, Lucario+Aerodactyl@Aerodactylite, Glimmora+Volcarona, Baxcalibur+Ninetales-Alola, Aerodactyl+Lucario, Aerodactyl+Lucario@Lucarionite Z, Pawmot+Glimmora@Glimmoranite, Indeedee+Sneasler@Psychic Seed, Froslass+Kingambit@Black Glasses, Aerodactyl+Sylveon@Fairy Feather, Archaludon+Incineroar@Passho Berry, Gardevoir+Sneasler@Psychic Seed, Aerodactyl+Sylveon, Archaludon+Rillaboom@Eject Button, Glimmora+Whimsicott, Volcarona+Baxcalibur@Baxcalibrite, Baxcalibur+Incineroar@Chople Berry, Floette-Eternal+Delphox@Delphoxite, Glimmora+Pawmot@Focus Sash, Baxcalibur+Volcarona, Charizard+Rillaboom@Occa Berry, Froslass+Sneasler@White Herb, Glimmora+Pawmot, Volcarona+Kingambit@Focus Sash, Floette-Eternal+Rillaboom@Occa Berry, Kingambit+Volcarona@Rocky Helmet, Floette-Eternal+Sneasler@Focus Sash, Basculegion+Talonflame, Delphox+Floette-Eternal, Delphox+Floette-Eternal@Floettite, Lucario+Basculegion@Life Orb, Arcanine-Hisui+Rillaboom@Sitrus Berry, Lucario+Sylveon@Fairy Feather, Indeedee-F+Sneasler@Psychic Seed, Whimsicott+Kingambit@Chople Berry, Incineroar+Rillaboom@Eject Button, Lucario+Sylveon, Sylveon+Lucario@Lucarionite Z, Pawmot+Basculegion@Choice Scarf, Armarouge+Sneasler@Psychic Seed, Gardevoir+Basculegion@Choice Scarf, Froslass+Kingambit, Kingambit+Froslass@Froslassite, Floette-Eternal+Garchomp@Choice Scarf, Pelipper+Basculegion@Choice Scarf, Farigiraf+Incineroar@Chople Berry, Incineroar+Politoed@Sitrus Berry, Charizard+Incineroar@Chople Berry, Froslass+Arcanine-Hisui@Focus Sash, Salamence+Rillaboom@Expert Belt, Kommo-o+Incineroar@Sitrus Berry, Archaludon+Basculegion@Choice Scarf, Incineroar+Kommo-o@Leftovers, Floette-Eternal+Sneasler@Grassy Seed, Arcanine-Hisui+Froslass, Arcanine-Hisui+Froslass@Froslassite, Garchomp+Whimsicott, Kingambit+Rillaboom@Life Orb, Excadrill+Sneasler@Psychic Seed, Basculegion+Lucario, Basculegion+Lucario@Lucarionite Z, Glimmora+Basculegion@Life Orb, Baxcalibur+Basculegion@Life Orb, Gengar+Incineroar, Incineroar+Gengar@Gengarite, Whimsicott+Basculegion@Life Orb, Floette-Eternal+Incineroar@Chople Berry, Baxcalibur+Sneasler@Focus Sash, Pawmot+Garchomp@Garchompite Z, Basculegion+Whimsicott@Focus Sash, Incineroar+Delphox@Delphoxite, Raichu+Rillaboom@Miracle Seed, Floette-Eternal+Kingambit@Life Orb, Floette-Eternal+Basculegion@Life Orb, Floette-Eternal+Incineroar, Incineroar+Floette-Eternal@Floettite, Floette-Eternal+Incineroar@Sitrus Berry, Corviknight+Sneasler, Sneasler+Indeedee@Focus Sash, Tyranitar+Sneasler@Psychic Seed, Milotic+Rillaboom@Life Orb, Golisopod+Incineroar@Chople Berry, Kingambit+Rillaboom@Sitrus Berry, Floette-Eternal+Kingambit@Focus Sash, Indeedee-F+Basculegion@Focus Sash, Incineroar+Kommo-o, Volcarona+Basculegion@Life Orb, Salamence+Excadrill@Focus Sash, Charizard+Kingambit@Focus Sash, Indeedee+Sneasler, Basculegion+Whimsicott, Excadrill+Salamence, Excadrill+Salamence@Salamencite, Incineroar+Garchomp@Choice Scarf, Floette-Eternal+Rillaboom@Sitrus Berry, Salamence+Tyranitar, Tyranitar+Salamence@Salamencite, Sneasler+Indeedee@Choice Scarf, Incineroar+Rillaboom@Occa Berry, Basculegion+Garchomp@Life Orb, Glimmora+Kingambit@Chople Berry, Salamence+Volcarona@Rocky Helmet, Blaziken+Kingambit, Aerodactyl+Basculegion, Basculegion+Gardevoir, Basculegion+Gardevoir@Gardevoirite, Salamence+Tyranitar@Tyranitarite, Baxcalibur+Sneasler@White Herb, Lucario+Incineroar@Sitrus Berry, Golisopod+Basculegion@Choice Scarf, Primarina+Salamence, Primarina+Salamence@Salamencite, Incineroar+Politoed, Ninetales-Alola+Incineroar@Sitrus Berry, Dragonite+Incineroar@Sitrus Berry, Delphox+Indeedee-F, Kingambit+Glimmora@Glimmoranite, Volcarona+Kingambit@Chople Berry, Baxcalibur+Milotic@Leftovers, Kingambit+Sneasler@Focus Sash, Sylveon+Kingambit@Focus Sash, Floette-Eternal+Whimsicott, Whimsicott+Floette-Eternal@Floettite, Salamence+Milotic@Sitrus Berry, Sneasler+Indeedee-F@Sitrus Berry, Incineroar+Volcarona@Grassy Seed, Pawmot+Kingambit@Chople Berry, Incineroar+Farigiraf@Colbur Berry, Lucario+Garchomp@Garchompite Z, Basculegion+Pawmot, Rillaboom+Sneasler@Grassy Seed, Rillaboom+Farigiraf@Grassy Seed, Rillaboom+Gholdengo@Grassy Seed, Rillaboom+Incineroar@Leftovers, Rillaboom+Volcarona@Grassy Seed, Salamence+Kingambit@Chople Berry, Salamence+Indeedee@Choice Scarf, Incineroar+Ninetales-Alola, Lucario+Rillaboom@Miracle Seed, Incineroar+Sinistcha@Colbur Berry, Kingambit+Volcarona, Arcanine-Hisui+Kingambit@Life Orb, Indeedee+Sneasler@White Herb, Salamence+Glimmora@Glimmoranite, Sylveon+Basculegion@Life Orb, Kingambit+Kommo-o, Basculegion+Kingambit@Chople Berry, Salamence+Rillaboom@Sitrus Berry, Sneasler+Delphox@Delphoxite, Gholdengo+Rillaboom@Miracle Seed, Basculegion+Pelipper@Sitrus Berry, Raichu+Rillaboom, Rillaboom+Raichu@Raichunite Y, Delphox+Kingambit, Basculegion+Baxcalibur@Baxcalibrite, Gengar+Rillaboom, Rillaboom+Gengar@Gengarite, Basculegion+Glimmora@Glimmoranite, Rillaboom+Politoed@Sitrus Berry, Kingambit+Sinistcha@Colbur Berry, Milotic+Baxcalibur@Baxcalibrite, Floette-Eternal+Kingambit, Kingambit+Floette-Eternal@Floettite, Garchomp+Volcarona, Staraptor+Rillaboom@Miracle Seed, Incineroar+Lucario, Incineroar+Lucario@Lucarionite Z, Rillaboom+Volcarona@Rocky Helmet, Garchomp+Incineroar@Sitrus Berry, Garchomp+Lucario, Garchomp+Lucario@Lucarionite Z, Blastoise+Rillaboom@Miracle Seed, Gardevoir+Sneasler, Sneasler+Gardevoir@Gardevoirite, Indeedee+Salamence, Indeedee+Salamence@Salamencite, Arcanine-Hisui+Kingambit@Chople Berry, Kingambit+Basculegion@Life Orb, Incineroar+Garchomp@Garchompite Z, Rillaboom+Kommo-o@Leftovers, Froslass+Sneasler, Sneasler+Froslass@Froslassite, Glimmora+Kingambit, Kingambit+Garchomp@Choice Scarf, Basculegion+Glimmora, Delphox+Sneasler, Arcanine-Hisui+Rillaboom@Miracle Seed, Basculegion+Rillaboom@Sitrus Berry, Floette-Eternal+Sneasler, Sneasler+Floette-Eternal@Floettite, Sneasler+Sinistcha@Colbur Berry, Salamence+Gholdengo@Life Orb, Incineroar+Sneasler@Grassy Seed, Basculegion+Pawmot@Focus Sash, Charizard+Floette-Eternal, Charizard+Floette-Eternal@Floettite, Sneasler+Kingambit@Life Orb, Gholdengo+Incineroar@Sitrus Berry, Volcarona+Sneasler@White Herb, Salamence+Arcanine-Hisui@Focus Sash, Gholdengo+Salamence, Gholdengo+Salamence@Salamencite, Blastoise+Kingambit, Delphox+Incineroar, Floette-Eternal+Kingambit@Chople Berry, Sinistcha+Incineroar@Sitrus Berry, Garchomp+Incineroar, Arcanine-Hisui+Salamence, Arcanine-Hisui+Salamence@Salamencite, Sneasler+Indeedee-F@Colbur Berry, Charizard+Basculegion@Choice Scarf, Sneasler+Baxcalibur@Baxcalibrite, Indeedee-F+Basculegion@Choice Scarf, Rillaboom+Incineroar@Passho Berry, Excadrill+Sneasler@White Herb, Sneasler+Rillaboom@Sitrus Berry, Baxcalibur+Incineroar, Rillaboom+Gholdengo@Life Orb, Floette-Eternal+Rillaboom, Rillaboom+Floette-Eternal@Floettite, Lucario+Rillaboom, Rillaboom+Lucario@Lucarionite Z, Basculegion+Indeedee-F@Rocky Helmet, Floette-Eternal+Rillaboom@Miracle Seed, Incineroar+Sneasler@Focus Sash, Salamence+Volcarona, Volcarona+Salamence@Salamencite, Arcanine-Hisui+Sneasler@Grassy Seed, Salamence+Kingambit@Focus Sash, Incineroar+Pawmot@Focus Sash, Kingambit+Sneasler@Grassy Seed, Froslass+Rillaboom, Rillaboom+Froslass@Froslassite, Kingambit+Basculegion@Focus Sash, Salamence+Basculegion@Life Orb, Kingambit+Salamence, Kingambit+Salamence@Salamencite, Rillaboom+Arcanine-Hisui@Focus Sash, Baxcalibur+Raichu, Baxcalibur+Raichu@Raichunite Y, Torkoal+Sneasler@Psychic Seed, Floette-Eternal+Gholdengo, Gholdengo+Floette-Eternal@Floettite, Arcanine-Hisui+Rillaboom, Incineroar+Baxcalibur@Baxcalibrite, Salamence+Sneasler@White Herb, Gholdengo+Sneasler@Grassy Seed, Sylveon+Rillaboom@Miracle Seed, Politoed+Rillaboom, Gengar+Incineroar@Sitrus Berry, Indeedee-F+Whimsicott@Focus Sash, Garchomp+Pawmot, Gholdengo+Rillaboom, Sneasler+Armarouge@Focus Sash, Milotic+Sneasler@Focus Sash, Kingambit+Pawmot@Focus Sash, Floette-Eternal+Garchomp, Garchomp+Floette-Eternal@Floettite, Basculegion+Volcarona, Basculegion+Floette-Eternal, Basculegion+Floette-Eternal@Floettite, Floette-Eternal+Sinistcha, Sinistcha+Floette-Eternal@Floettite, Pawmot+Rillaboom@Miracle Seed, Dragonite+Incineroar, Incineroar+Rillaboom, Incineroar+Pawmot, Ceruledge+Rillaboom, Incineroar+Rillaboom@Miracle Seed, Baxcalibur+Sneasler, Rillaboom+Incineroar@Chople Berry, Kingambit+Pawmot, Basculegion+Baxcalibur, Pelipper+Sneasler@White Herb, Tyranitar+Sneasler@White Herb, Sneasler+Kingambit@Chople Berry, Rillaboom+Incineroar@Sitrus Berry, Kommo-o+Rillaboom, Salamence+Sneasler@Grassy Seed, Rillaboom+Basculegion@Life Orb, Sneasler+Garchomp@Garchompite Z, Sneasler+Basculegion@Life Orb, Rillaboom+Baxcalibur@Baxcalibrite, Aerodactyl+Incineroar@Sitrus Berry, Gholdengo+Rillaboom@Occa Berry, Baxcalibur+Milotic, Kommo-o+Rillaboom@Miracle Seed, Rillaboom+Volcarona, Basculegion+Kingambit, Salamence+Sylveon, Sylveon+Salamence@Salamencite, Rillaboom+Kingambit@Life Orb, Rillaboom+Milotic@Leftovers, Sneasler+Kingambit@Focus Sash, Sneasler+Armarouge@Life Orb, Basculegion+Sylveon, Garchomp+Sneasler@Focus Sash, Kingambit+Sneasler, Garchomp+Sneasler@Psychic Seed, Golisopod+Rillaboom@Life Orb, Salamence+Sylveon@Fairy Feather, Floette-Eternal+Gholdengo@Life Orb, Raichu+Sneasler@White Herb, Gholdengo+Incineroar, Rillaboom+Garchomp@Garchompite Z, Sneasler+Basculegion@Focus Sash, Baxcalibur+Sneasler@Grassy Seed, Kingambit+Sneasler@White Herb, Kingambit+Armarouge@Life Orb, Basculegion+Sneasler@White Herb, Salamence+Basculegion@Focus Sash, Salamence+Rillaboom@Miracle Seed, Ninetales-Alola+Rillaboom, Incineroar+Kingambit@Life Orb, Salamence+Rillaboom@Life Orb, Sneasler+Tyranitar, Floette-Eternal+Charizard@Charizardite Y, Rillaboom+Kingambit@Focus Sash, Milotic+Salamence, Milotic+Salamence@Salamencite, Rillaboom+Salamence, Rillaboom+Salamence@Salamencite, Rillaboom+Staraptor@Staraptite, Rillaboom+Aerodactyl@Aerodactylite, Milotic+Rillaboom, Primarina+Rillaboom, Rillaboom+Staraptor, Rillaboom+Pawmot@Focus Sash, Pawmot+Rillaboom, Rillaboom+Sneasler@Focus Sash, Kingambit+Rillaboom, Baxcalibur+Rillaboom, Rillaboom+Sylveon@Fairy Feather, Rillaboom+Glimmora@Glimmoranite
 - Members:
 | Species | In-community support | Roles |
 | :--- | :--- | :--- |
@@ -471,8 +471,8 @@ Connected communities only: unconnected species are outside the graph Louvain ru
 | Delphox | 4.2% | mega-attacker 67.7%, setup 53.2%, terrain-setter 7.8%, priority-blocker 7.8%, disruption 7.1% |
 | Primarina | 2.4% | setup 71.0%, helping-hand 9.8% |
 - Representative teams (primary teams with the highest score for this community):
-  - [CloverBells, , 13 Sep 2026](https://pokepast.es/fdc0b961c0d0ef8c)
   - [punihina1334, , 10 Sep 2026](https://pokepast.es/202c514602d9abe9)
+  - [CloverBells, , 13 Sep 2026](https://pokepast.es/fdc0b961c0d0ef8c)
   - [shynessalex, Champion, 20 Sep 2026](https://pokepast.es/6f1d5b2b15285f2b)
 - Hybrid teams (teams for which this is a hybrid, by their score for it):
   - [Jermaine Mcleod, Top 256, 22 Sep 2026](https://pokepast.es/bfe773d9cda8999c)
@@ -623,7 +623,7 @@ Connected communities only: unconnected species are outside the graph Louvain ru
 - Top species by team share: Salamence 89%, Kingambit 82%, Rillaboom 64%, Sneasler 61%, Basculegion 48%, Arcanine-Hisui 27%
 - Primary teams: 44 (23.2% of the community's primary weight), hybrid teams: 17 (7.1%)
 - Date range: 2026-09-09 to 2026-09-22
-- Core pairs: Glimmora@Glimmoranite+Volcarona@Rocky Helmet, Froslass@Froslassite+Kingambit@Black Glasses, Arcanine-Hisui@Focus Sash+Rillaboom@Sitrus Berry, Arcanine-Hisui@Focus Sash+Froslass@Froslassite, Froslass@Froslassite+Sneasler@White Herb, Arcanine-Hisui@Focus Sash+Kingambit@Life Orb, Kingambit@Chople Berry+Rillaboom@Sitrus Berry, Rillaboom@Sitrus Berry+Sneasler@Grassy Seed, Raichu@Raichunite Y+Sneasler@White Herb, Arcanine-Hisui@Focus Sash+Kingambit@Chople Berry, Basculegion@Focus Sash+Salamence@Salamencite, Tyranitar (other item; Tyranitarite 3/6)+Salamence@Salamencite, Arcanine-Hisui@Focus Sash+Sneasler@Grassy Seed, Glimmora@Glimmoranite+Salamence@Salamencite, Salamence@Salamencite+Volcarona@Rocky Helmet, Kingambit@Chople Berry+Salamence@Salamencite, Basculegion@Choice Scarf+Sneasler@White Herb, Arcanine-Hisui@Focus Sash+Sylveon@Fairy Feather, Arcanine-Hisui@Focus Sash+Sneasler@White Herb, Rillaboom@Sitrus Berry+Salamence@Salamencite, Baxcalibur@Baxcalibrite+Sneasler@White Herb, Floette-Eternal@Floettite+Rillaboom@Sitrus Berry, Kingambit@Chople Berry+Sneasler@White Herb, Gholdengo (other item; Grassy Seed 3/9)+Salamence@Salamencite, Kingambit@Focus Sash+Salamence@Salamencite, Gholdengo@Life Orb+Salamence@Salamencite, Arcanine-Hisui@Focus Sash+Salamence@Salamencite, Basculegion@Life Orb+Salamence@Salamencite, Basculegion@Choice Scarf+Salamence@Salamencite, Salamence@Salamencite+Sneasler@White Herb, Basculegion@Life Orb+Sneasler@White Herb, Salamence@Salamencite+Sylveon@Fairy Feather, Basculegion@Choice Scarf+Rillaboom@Miracle Seed
+- Core pairs: Glimmora@Glimmoranite+Volcarona@Rocky Helmet, Froslass@Froslassite+Kingambit@Black Glasses, Arcanine-Hisui@Focus Sash+Rillaboom@Sitrus Berry, Arcanine-Hisui@Focus Sash+Froslass@Froslassite, Froslass@Froslassite+Sneasler@White Herb, Arcanine-Hisui@Focus Sash+Kingambit@Life Orb, Kingambit@Chople Berry+Rillaboom@Sitrus Berry, Rillaboom@Sitrus Berry+Sneasler@Grassy Seed, Raichu@Raichunite Y+Sneasler@White Herb, Arcanine-Hisui@Focus Sash+Kingambit@Chople Berry, Tyranitar (other item; Tyranitarite 3/6)+Salamence@Salamencite, Basculegion@Focus Sash+Salamence@Salamencite, Arcanine-Hisui@Focus Sash+Sneasler@Grassy Seed, Glimmora@Glimmoranite+Salamence@Salamencite, Salamence@Salamencite+Volcarona@Rocky Helmet, Kingambit@Chople Berry+Salamence@Salamencite, Basculegion@Choice Scarf+Sneasler@White Herb, Arcanine-Hisui@Focus Sash+Sylveon@Fairy Feather, Arcanine-Hisui@Focus Sash+Sneasler@White Herb, Rillaboom@Sitrus Berry+Salamence@Salamencite, Baxcalibur@Baxcalibrite+Sneasler@White Herb, Floette-Eternal@Floettite+Rillaboom@Sitrus Berry, Kingambit@Chople Berry+Sneasler@White Herb, Gholdengo (other item; Grassy Seed 3/9)+Salamence@Salamencite, Kingambit@Focus Sash+Salamence@Salamencite, Gholdengo@Life Orb+Salamence@Salamencite, Arcanine-Hisui@Focus Sash+Salamence@Salamencite, Basculegion@Life Orb+Salamence@Salamencite, Basculegion@Choice Scarf+Salamence@Salamencite, Salamence@Salamencite+Sneasler@White Herb, Basculegion@Life Orb+Sneasler@White Herb, Salamence@Salamencite+Sylveon@Fairy Feather, Basculegion@Choice Scarf+Rillaboom@Miracle Seed
 - Members:
 | Token | In-sub-community support |
 | :--- | :--- |
@@ -840,7 +840,7 @@ Species whose variants fall in at least two sub-communities: each variant's home
 ### Community 1: Indeedee-F + Armarouge/Gardevoir
 - Primary teams: 66 (primary share 16.0%), hybrid teams: 13 (hybrid share 2.9%)
 - Date range: 2026-09-09 to 2026-09-22
-- Core pairs: Hatterene+Torkoal@Charcoal, Hatterene+Torkoal, Torkoal+Hatterene@Life Orb, Gardevoir+Talonflame, Talonflame+Gardevoir@Gardevoirite, Gardevoir+Indeedee-F@Colbur Berry, Gardevoir+Sneasler@Psychic Seed, Torkoal+Indeedee-F@Psychic Seed, Armarouge+Indeedee-F@Psychic Seed, Hatterene+Indeedee-F@Rocky Helmet, Armarouge+Hatterene, Armarouge+Hatterene@Life Orb, Gardevoir+Indeedee-F@Rocky Helmet, Talonflame+Indeedee-F@Rocky Helmet, Gardevoir+Indeedee-F, Indeedee-F+Gardevoir@Gardevoirite, Hatterene+Indeedee-F, Indeedee-F+Hatterene@Life Orb, Gallade+Indeedee-F, Indeedee-F+Meowstic-F, Indeedee-F+Meowstic-F@Meowsticite, Indeedee-F+Armarouge@Life Orb, Armarouge+Indeedee-F@Colbur Berry, Gardevoir+Torkoal@Charcoal, Gardevoir+Armarouge@Life Orb, Armarouge+Indeedee-F, Torkoal+Armarouge@Life Orb, Indeedee-F+Armarouge@Focus Sash, Gardevoir+Torkoal, Torkoal+Gardevoir@Gardevoirite, Gardevoir+Garchomp@Life Orb, Torkoal+Farigiraf@Sitrus Berry, Torkoal+Indeedee-F@Colbur Berry, Indeedee-F+Blastoise@Blastoisinite, Absol+Milotic@Leftovers, Armarouge+Torkoal@Charcoal, Indeedee-F+Torkoal@Charcoal, Absol+Indeedee-F@Rocky Helmet, Basculegion+Talonflame, Armarouge+Torkoal, Armarouge+Indeedee-F@Rocky Helmet, Indeedee-F+Torkoal, Farigiraf+Torkoal, Blastoise+Indeedee-F, Indeedee-F+Mawile, Indeedee-F+Mawile@Mawilite, Metagross+Indeedee-F@Rocky Helmet, Absol+Armarouge, Armarouge+Absol@Absolite Z, Golisopod+Hatterene, Hatterene+Golisopod@Golisopite, Golisopod+Hatterene@Life Orb, Indeedee-F+Sneasler@Psychic Seed, Farigiraf+Torkoal@Charcoal, Armarouge+Sneasler@Psychic Seed, Gardevoir+Basculegion@Choice Scarf, Charizard+Indeedee-F@Psychic Seed, Golisopod+Indeedee-F@Psychic Seed, Indeedee-F+Venusaur@Focus Sash, Absol+Indeedee-F, Indeedee-F+Absol@Absolite Z, Pelipper+Indeedee-F@Colbur Berry, Blaziken+Indeedee-F, Armarouge+Golisopod, Armarouge+Golisopod@Golisopite, Indeedee-F+Basculegion@Focus Sash, Absol+Milotic, Milotic+Absol@Absolite Z, Indeedee-F+Venusaur, Golisopod+Armarouge@Life Orb, Indeedee-F+Metagross, Indeedee-F+Metagross@Metagrossite, Blaziken+Kingambit, Basculegion+Gardevoir, Basculegion+Gardevoir@Gardevoirite, Armarouge+Gardevoir, Armarouge+Gardevoir@Gardevoirite, Indeedee-F+Talonflame, Dragonite+Incineroar@Sitrus Berry, Delphox+Indeedee-F, Absol+Gholdengo@Life Orb, Sneasler+Indeedee-F@Sitrus Berry, Torkoal+Charizard@Charizardite Y, Golisopod+Indeedee-F@Colbur Berry, Charizard+Torkoal@Charcoal, Torkoal+Indeedee-F@Rocky Helmet, Indeedee-F+Pelipper@Focus Sash, Indeedee-F+Garchomp@Life Orb, Dragonite+Indeedee-F, Charizard+Torkoal, Blastoise+Rillaboom@Miracle Seed, Absol+Gholdengo, Gholdengo+Absol@Absolite Z, Gardevoir+Sneasler, Sneasler+Gardevoir@Gardevoirite, Indeedee-F+Swampert, Indeedee-F+Swampert@Swampertite, Blastoise+Kingambit, Sneasler+Indeedee-F@Colbur Berry, Indeedee-F+Basculegion@Choice Scarf, Basculegion+Indeedee-F@Rocky Helmet, Torkoal+Sneasler@Psychic Seed, Gardevoir+Charizard@Charizardite Y, Indeedee-F+Whimsicott@Focus Sash, Golisopod+Indeedee-F, Indeedee-F+Golisopod@Golisopite, Indeedee-F+Pelipper, Sneasler+Armarouge@Focus Sash, Dragonite+Incineroar, Pelipper+Indeedee-F@Rocky Helmet, Sneasler+Armarouge@Life Orb, Gardevoir+Pelipper, Pelipper+Gardevoir@Gardevoirite, Charizard+Gardevoir, Charizard+Gardevoir@Gardevoirite, Kingambit+Armarouge@Life Orb, Armarouge+Excadrill
+- Core pairs: Hatterene+Torkoal@Charcoal, Hatterene+Torkoal, Torkoal+Hatterene@Life Orb, Gardevoir+Talonflame, Talonflame+Gardevoir@Gardevoirite, Gardevoir+Indeedee-F@Colbur Berry, Gardevoir+Sneasler@Psychic Seed, Torkoal+Indeedee-F@Psychic Seed, Armarouge+Indeedee-F@Psychic Seed, Hatterene+Indeedee-F@Rocky Helmet, Armarouge+Hatterene, Armarouge+Hatterene@Life Orb, Gardevoir+Indeedee-F@Rocky Helmet, Talonflame+Indeedee-F@Rocky Helmet, Indeedee-F+Armarouge@Life Orb, Hatterene+Indeedee-F, Indeedee-F+Hatterene@Life Orb, Gallade+Indeedee-F, Indeedee-F+Meowstic-F, Indeedee-F+Meowstic-F@Meowsticite, Gardevoir+Indeedee-F, Indeedee-F+Gardevoir@Gardevoirite, Armarouge+Indeedee-F@Colbur Berry, Gardevoir+Torkoal@Charcoal, Gardevoir+Armarouge@Life Orb, Armarouge+Indeedee-F, Torkoal+Armarouge@Life Orb, Indeedee-F+Armarouge@Focus Sash, Gardevoir+Torkoal, Torkoal+Gardevoir@Gardevoirite, Gardevoir+Garchomp@Life Orb, Torkoal+Farigiraf@Sitrus Berry, Torkoal+Indeedee-F@Colbur Berry, Indeedee-F+Blastoise@Blastoisinite, Absol+Milotic@Leftovers, Armarouge+Torkoal@Charcoal, Indeedee-F+Torkoal@Charcoal, Absol+Indeedee-F@Rocky Helmet, Basculegion+Talonflame, Armarouge+Torkoal, Armarouge+Indeedee-F@Rocky Helmet, Indeedee-F+Torkoal, Farigiraf+Torkoal, Blastoise+Indeedee-F, Indeedee-F+Mawile, Indeedee-F+Mawile@Mawilite, Metagross+Indeedee-F@Rocky Helmet, Absol+Armarouge, Armarouge+Absol@Absolite Z, Golisopod+Hatterene, Hatterene+Golisopod@Golisopite, Golisopod+Hatterene@Life Orb, Indeedee-F+Sneasler@Psychic Seed, Farigiraf+Torkoal@Charcoal, Armarouge+Sneasler@Psychic Seed, Gardevoir+Basculegion@Choice Scarf, Charizard+Indeedee-F@Psychic Seed, Golisopod+Indeedee-F@Psychic Seed, Indeedee-F+Venusaur@Focus Sash, Absol+Indeedee-F, Indeedee-F+Absol@Absolite Z, Pelipper+Indeedee-F@Colbur Berry, Blaziken+Indeedee-F, Armarouge+Golisopod, Armarouge+Golisopod@Golisopite, Indeedee-F+Basculegion@Focus Sash, Absol+Milotic, Milotic+Absol@Absolite Z, Indeedee-F+Venusaur, Golisopod+Armarouge@Life Orb, Indeedee-F+Metagross, Indeedee-F+Metagross@Metagrossite, Blaziken+Kingambit, Basculegion+Gardevoir, Basculegion+Gardevoir@Gardevoirite, Armarouge+Gardevoir, Armarouge+Gardevoir@Gardevoirite, Indeedee-F+Talonflame, Dragonite+Incineroar@Sitrus Berry, Delphox+Indeedee-F, Absol+Gholdengo@Life Orb, Sneasler+Indeedee-F@Sitrus Berry, Torkoal+Charizard@Charizardite Y, Golisopod+Indeedee-F@Colbur Berry, Charizard+Torkoal@Charcoal, Torkoal+Indeedee-F@Rocky Helmet, Indeedee-F+Pelipper@Focus Sash, Indeedee-F+Garchomp@Life Orb, Dragonite+Indeedee-F, Charizard+Torkoal, Blastoise+Rillaboom@Miracle Seed, Absol+Gholdengo, Gholdengo+Absol@Absolite Z, Gardevoir+Sneasler, Sneasler+Gardevoir@Gardevoirite, Indeedee-F+Swampert, Indeedee-F+Swampert@Swampertite, Blastoise+Kingambit, Sneasler+Indeedee-F@Colbur Berry, Indeedee-F+Basculegion@Choice Scarf, Basculegion+Indeedee-F@Rocky Helmet, Torkoal+Sneasler@Psychic Seed, Gardevoir+Charizard@Charizardite Y, Indeedee-F+Whimsicott@Focus Sash, Golisopod+Indeedee-F, Indeedee-F+Golisopod@Golisopite, Indeedee-F+Pelipper, Sneasler+Armarouge@Focus Sash, Dragonite+Incineroar, Pelipper+Indeedee-F@Rocky Helmet, Sneasler+Armarouge@Life Orb, Gardevoir+Pelipper, Pelipper+Gardevoir@Gardevoirite, Charizard+Gardevoir, Charizard+Gardevoir@Gardevoirite, Kingambit+Armarouge@Life Orb, Armarouge+Excadrill
 - Members:
 | Species | In-community support | Roles |
 | :--- | :--- | :--- |
@@ -1067,7 +1067,7 @@ Species whose variants fall in at least two sub-communities: each variant's home
 - Top species by team share: Raichu 100%, Gholdengo 90%, Rillaboom 90%, Arcanine-Hisui 71%, Sylveon 57%, Salamence 48%
 - Primary teams: 21 (72.9% of the community's primary weight), hybrid teams: 3 (10.1%)
 - Date range: 2026-09-10 to 2026-09-22
-- Core pairs: Staraptor@Staraptite+Sylveon@Fairy Feather, Rillaboom@Miracle Seed+Staraptor@Staraptite, Arcanine-Hisui@Focus Sash+Sylveon@Fairy Feather, Raichu@Raichunite Y+Sylveon@Fairy Feather, Raichu@Raichunite Y+Staraptor@Staraptite, Rillaboom@Miracle Seed+Sylveon@Fairy Feather, Gholdengo@Life Orb+Staraptor@Staraptite, Raichu@Raichunite Y+Rillaboom@Miracle Seed, Gholdengo@Life Orb+Rillaboom@Miracle Seed, Arcanine-Hisui@Focus Sash+Rillaboom@Miracle Seed, Arcanine-Hisui@Focus Sash+Raichu@Raichunite Y, Arcanine-Hisui@Focus Sash+Staraptor@Staraptite
+- Core pairs: Staraptor@Staraptite+Sylveon@Fairy Feather, Rillaboom@Miracle Seed+Staraptor@Staraptite, Arcanine-Hisui@Focus Sash+Sylveon@Fairy Feather, Raichu@Raichunite Y+Staraptor@Staraptite, Raichu@Raichunite Y+Sylveon@Fairy Feather, Rillaboom@Miracle Seed+Sylveon@Fairy Feather, Gholdengo@Life Orb+Staraptor@Staraptite, Raichu@Raichunite Y+Rillaboom@Miracle Seed, Gholdengo@Life Orb+Rillaboom@Miracle Seed, Arcanine-Hisui@Focus Sash+Rillaboom@Miracle Seed, Arcanine-Hisui@Focus Sash+Raichu@Raichunite Y, Arcanine-Hisui@Focus Sash+Staraptor@Staraptite
 - Members:
 | Token | In-sub-community support |
 | :--- | :--- |
@@ -1142,7 +1142,7 @@ Species whose variants fall in at least two sub-communities: each variant's home
 - Top species by team share: Golisopod 100%, Farigiraf 55%, Pelipper 45%, Rillaboom 45%, Milotic 27%, Garchomp 18%
 - Primary teams: 11 (21.1% of the community's primary weight), hybrid teams: 6 (9.4%)
 - Date range: 2026-09-09 to 2026-09-16
-- Core pairs: Farigiraf@Sitrus Berry+Golisopod@Golisopite, Farigiraf (other item; Colbur Berry 4/6)+Golisopod@Golisopite, Sneasler (other item; Focus Sash 3/4)+Golisopod@Golisopite, Kingambit (other item; Black Glasses 2/4)+Golisopod@Golisopite, Milotic (other item; Leftovers 4/5)+Golisopod@Golisopite, Sinistcha (other item; Sitrus Berry 3/6)+Golisopod@Golisopite, Sinistcha (other item; Sitrus Berry 3/6)+Archaludon@Leftovers, Golisopod@Golisopite+Rillaboom@Miracle Seed, Golisopod@Golisopite+Grimmsnarl@Light Clay, Golisopod@Golisopite+Pelipper@Sitrus Berry, Basculegion@Choice Scarf+Golisopod@Golisopite, Golisopod@Golisopite+Salamence@Salamencite, Golisopod@Golisopite+Pelipper@Focus Sash, Indeedee-F (other item; Colbur Berry 3/8)+Golisopod@Golisopite, Golisopod@Golisopite+Sneasler@White Herb
+- Core pairs: Milotic (other item; Leftovers 4/5)+Golisopod@Golisopite, Farigiraf@Sitrus Berry+Golisopod@Golisopite, Sneasler (other item; Focus Sash 3/4)+Golisopod@Golisopite, Sinistcha (other item; Sitrus Berry 3/6)+Golisopod@Golisopite, Kingambit (other item; Black Glasses 2/4)+Golisopod@Golisopite, Farigiraf (other item; Colbur Berry 4/6)+Golisopod@Golisopite, Sinistcha (other item; Sitrus Berry 3/6)+Archaludon@Leftovers, Golisopod@Golisopite+Rillaboom@Miracle Seed, Golisopod@Golisopite+Grimmsnarl@Light Clay, Golisopod@Golisopite+Pelipper@Sitrus Berry, Basculegion@Choice Scarf+Golisopod@Golisopite, Golisopod@Golisopite+Salamence@Salamencite, Golisopod@Golisopite+Pelipper@Focus Sash, Indeedee-F (other item; Colbur Berry 3/8)+Golisopod@Golisopite, Golisopod@Golisopite+Sneasler@White Herb
 - Members:
 | Token | In-sub-community support |
 | :--- | :--- |
@@ -1171,7 +1171,7 @@ Species whose variants fall in at least two sub-communities: each variant's home
 - Top species by team share: Archaludon 100%, Golisopod 89%, Grimmsnarl 78%, Charizard 67%, Pelipper 56%, Politoed 44%
 - Primary teams: 9 (16.1% of the community's primary weight), hybrid teams: 12 (25.2%)
 - Date range: 2026-09-09 to 2026-09-22
-- Core pairs: Charizard@Charizardite Y+Grimmsnarl@Light Clay, Archaludon@Leftovers+Basculegion@Choice Scarf, Archaludon@Leftovers+Incineroar@Passho Berry, Archaludon@Leftovers+Charizard@Charizardite Y, Archaludon@Leftovers+Gengar@Gengarite, Archaludon@Leftovers+Politoed@Sitrus Berry, Rillaboom (other item; Eject Button 4/12)+Archaludon@Leftovers, Archaludon@Leftovers+Swampert@Swampertite, Sinistcha (other item; Sitrus Berry 3/6)+Archaludon@Leftovers, Archaludon@Leftovers+Grimmsnarl@Light Clay, Golisopod@Golisopite+Grimmsnarl@Light Clay, Archaludon@Leftovers+Pelipper@Focus Sash, Archaludon@Leftovers+Pelipper@Sitrus Berry
+- Core pairs: Charizard@Charizardite Y+Grimmsnarl@Light Clay, Archaludon@Leftovers+Incineroar@Passho Berry, Archaludon@Leftovers+Charizard@Charizardite Y, Archaludon@Leftovers+Basculegion@Choice Scarf, Archaludon@Leftovers+Gengar@Gengarite, Archaludon@Leftovers+Politoed@Sitrus Berry, Rillaboom (other item; Eject Button 4/12)+Archaludon@Leftovers, Archaludon@Leftovers+Swampert@Swampertite, Sinistcha (other item; Sitrus Berry 3/6)+Archaludon@Leftovers, Archaludon@Leftovers+Grimmsnarl@Light Clay, Golisopod@Golisopite+Grimmsnarl@Light Clay, Archaludon@Leftovers+Pelipper@Focus Sash, Archaludon@Leftovers+Pelipper@Sitrus Berry
 - Members:
 | Token | In-sub-community support |
 | :--- | :--- |
@@ -1323,7 +1323,7 @@ Species whose variants fall in at least two sub-communities: each variant's home
 - Top species by team share: Tyranitar 100%, Excadrill 92%, Salamence 75%, Sneasler 67%, Indeedee 50%, Milotic 46%
 - Primary teams: 24 (61.8% of the community's primary weight), hybrid teams: 7 (18.9%)
 - Date range: 2026-09-09 to 2026-09-21
-- Core pairs: Excadrill@Focus Sash+Gholdengo@Life Orb, Gholdengo@Life Orb+Salamence@Salamencite, Corviknight (other item; Psychic Seed 4/7)+Tyranitar@Tyranitarite, Indeedee-F (other item; Colbur Berry 2/4)+Tyranitar@Tyranitarite, Gholdengo@Life Orb+Tyranitar@Tyranitarite, Sneasler@White Herb+Tyranitar@Tyranitarite, Sinistcha (other item; Colbur Berry 4/6)+Tyranitar@Tyranitarite, Sinistcha (other item; Colbur Berry 4/6)+Excadrill@Focus Sash, Excadrill@Focus Sash+Milotic@Sitrus Berry, Corviknight (other item; Psychic Seed 4/7)+Excadrill@Focus Sash, Excadrill@Focus Sash+Tyranitar@Tyranitarite, Sinistcha (other item; Colbur Berry 4/6)+Salamence@Salamencite, Rillaboom (other item; Expert Belt 3/10)+Excadrill@Focus Sash, Rillaboom (other item; Expert Belt 3/10)+Tyranitar@Tyranitarite, Excadrill@Focus Sash+Salamence@Salamencite, Rillaboom (other item; Expert Belt 3/10)+Salamence@Salamencite, Milotic@Sitrus Berry+Salamence@Salamencite, Milotic@Sitrus Berry+Tyranitar@Tyranitarite, Salamence@Salamencite+Tyranitar@Tyranitarite, Excadrill@Focus Sash+Indeedee@Choice Scarf
+- Core pairs: Excadrill@Focus Sash+Gholdengo@Life Orb, Gholdengo@Life Orb+Salamence@Salamencite, Indeedee-F (other item; Colbur Berry 2/4)+Tyranitar@Tyranitarite, Gholdengo@Life Orb+Tyranitar@Tyranitarite, Corviknight (other item; Psychic Seed 4/7)+Tyranitar@Tyranitarite, Sneasler@White Herb+Tyranitar@Tyranitarite, Sinistcha (other item; Colbur Berry 4/6)+Tyranitar@Tyranitarite, Sinistcha (other item; Colbur Berry 4/6)+Excadrill@Focus Sash, Excadrill@Focus Sash+Milotic@Sitrus Berry, Corviknight (other item; Psychic Seed 4/7)+Excadrill@Focus Sash, Excadrill@Focus Sash+Tyranitar@Tyranitarite, Sinistcha (other item; Colbur Berry 4/6)+Salamence@Salamencite, Rillaboom (other item; Expert Belt 3/10)+Excadrill@Focus Sash, Rillaboom (other item; Expert Belt 3/10)+Tyranitar@Tyranitarite, Excadrill@Focus Sash+Salamence@Salamencite, Rillaboom (other item; Expert Belt 3/10)+Salamence@Salamencite, Milotic@Sitrus Berry+Salamence@Salamencite, Milotic@Sitrus Berry+Tyranitar@Tyranitarite, Salamence@Salamencite+Tyranitar@Tyranitarite, Excadrill@Focus Sash+Indeedee@Choice Scarf
 - Members:
 | Token | In-sub-community support |
 | :--- | :--- |
@@ -1562,7 +1562,7 @@ Species whose variants fall in at least two sub-communities: each variant's home
 | https://pokepast.es/efddc5627f766a06 |
 
 ## 9. Communities vs. Cluster Archetypes
-Rows: each team's primary community (or unassigned); columns: its cluster_teams cluster.
+Rows: each team's primary community (or unassigned); columns: its cluster from the cluster CLI.
 | Community | cluster-1 | cluster-2 | cluster-3 | cluster-4 | cluster-5 | cluster-6 | cluster-7 | cluster-8 | cluster-9 | cluster-10 | cluster-11 | cluster-12 | cluster-13 | cluster-14 | cluster-15 | unclustered |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Community 0: Rillaboom / Sneasler / Incineroar | 109 | 10 | 0 | 1 | 26 | 4 | 7 | 0 | 7 | 9 | 0 | 9 | 0 | 2 | 0 | 18 |
@@ -1592,7 +1592,7 @@ Rows: each team's primary community (or unassigned); columns: its cluster_teams 
 | cluster-15 | Mega Golisopod Psyspam Trick Room | Community 1: Indeedee-F + Armarouge/Gardevoir | 100.0% |
 
 ### Sub-communities of Community 0: Rillaboom / Sneasler / Incineroar vs. cluster archetypes
-Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster_teams cluster. The majority is over each cluster's teams inside the community.
+Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster from the cluster CLI. The majority is over each cluster's teams inside the community.
 | Sub-community | cluster-1 (Mega Salamence + Rillaboom/Sneasler Balance) | cluster-2 (Mega Salamence Balance) | cluster-4 (Mega Tyranitar + Excadrill/Sneasler Sand Balance) | cluster-5 (Mega Floette-Eternal + Incineroar/Rillaboom Balance) | cluster-6 (Mega Gardevoir Psyspam Offense) | cluster-7 (Mega Gengar + Incineroar/Rillaboom Rain) | cluster-9 (Mega Golisopod + Rillaboom/Milotic Trick Room) | cluster-10 (Mega Lucario + Rillaboom Tailwind Offense) | cluster-12 (Mega Salamence + Volcarona/Glimmora Tailwind Offense) | cluster-14 (Mega Golisopod + Rillaboom/Farigiraf Trick Room) | unclustered |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Sub-community 0: Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 31 | 8 | 1 | 13 | 0 | 2 | 3 | 3 | 0 | 0 | 5 |
@@ -1618,7 +1618,7 @@ Rows: each of the community's primary teams by its primary sub-community (minor 
 | cluster-14 | Mega Golisopod + Rillaboom/Farigiraf Trick Room | Sub-community 1: Salamence@Salamencite + Kingambit@Chople Berry/Sneasler@White Herb | 50.0% |
 
 ### Sub-communities of Community 1: Indeedee-F + Armarouge/Gardevoir vs. cluster archetypes
-Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster_teams cluster. The majority is over each cluster's teams inside the community.
+Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster from the cluster CLI. The majority is over each cluster's teams inside the community.
 | Sub-community | cluster-1 (Mega Salamence + Rillaboom/Sneasler Balance) | cluster-2 (Mega Salamence Balance) | cluster-3 (Mega Gardevoir Psyspam Offense) | cluster-6 (Mega Gardevoir Psyspam Offense) | cluster-11 (Mega Golisopod Psyspam Trick Room) | cluster-15 (Mega Golisopod Psyspam Trick Room) | unclustered |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Sub-community 0: Sneasler@Psychic Seed / Gardevoir@Gardevoirite / Indeedee-F@Colbur Berry | 2 | 1 | 18 | 10 | 0 | 0 | 2 |
@@ -1637,7 +1637,7 @@ Rows: each of the community's primary teams by its primary sub-community (minor 
 | cluster-15 | Mega Golisopod Psyspam Trick Room | Sub-community 2: Torkoal@Charcoal / Hatterene@Life Orb / Golisopod@Golisopite | 66.7% |
 
 ### Sub-communities of Community 2: Gholdengo / Raichu / Arcanine-Hisui vs. cluster archetypes
-Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster_teams cluster. The majority is over each cluster's teams inside the community.
+Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster from the cluster CLI. The majority is over each cluster's teams inside the community.
 | Sub-community | cluster-2 (Mega Salamence Balance) | unclustered |
 | :--- | :--- | :--- |
 | Sub-community 0: Gholdengo@Life Orb / Arcanine-Hisui@Focus Sash / Salamence@Salamencite | 6 | 1 |
@@ -1649,7 +1649,7 @@ Rows: each of the community's primary teams by its primary sub-community (minor 
 | cluster-2 | Mega Salamence Balance | Sub-community 1: Raichu@Raichunite Y / Rillaboom@Miracle Seed / Sylveon@Fairy Feather | 75.0% |
 
 ### Sub-communities of Community 3: Golisopod / Archaludon / Pelipper vs. cluster archetypes
-Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster_teams cluster. The majority is over each cluster's teams inside the community.
+Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster from the cluster CLI. The majority is over each cluster's teams inside the community.
 | Sub-community | cluster-1 (Mega Salamence + Rillaboom/Sneasler Balance) | cluster-3 (Mega Gardevoir Psyspam Offense) | cluster-7 (Mega Gengar + Incineroar/Rillaboom Rain) | cluster-8 (Mega Golisopod + Pelipper/Archaludon Rain) | cluster-9 (Mega Golisopod + Rillaboom/Milotic Trick Room) | cluster-11 (Mega Golisopod Psyspam Trick Room) | cluster-13 (Mega Golisopod + Grimmsnarl/Archaludon Rain) | cluster-14 (Mega Golisopod + Rillaboom/Farigiraf Trick Room) | unclustered |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Sub-community 0: Golisopod@Golisopite + Farigiraf@Sitrus Berry/Rillaboom@Miracle Seed | 0 | 1 | 0 | 1 | 4 | 1 | 1 | 3 | 0 |
@@ -1670,7 +1670,7 @@ Rows: each of the community's primary teams by its primary sub-community (minor 
 | cluster-14 | Mega Golisopod + Rillaboom/Farigiraf Trick Room | Sub-community 0: Golisopod@Golisopite + Farigiraf@Sitrus Berry/Rillaboom@Miracle Seed | 50.0% |
 
 ### Sub-communities of Community 4: Tyranitar / Excadrill / Milotic vs. cluster archetypes
-Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster_teams cluster. The majority is over each cluster's teams inside the community.
+Rows: each of the community's primary teams by its primary sub-community (minor sub-communities pooled, or unassigned); columns: its cluster from the cluster CLI. The majority is over each cluster's teams inside the community.
 | Sub-community | cluster-2 (Mega Salamence Balance) | cluster-4 (Mega Tyranitar + Excadrill/Sneasler Sand Balance) | cluster-9 (Mega Golisopod + Rillaboom/Milotic Trick Room) | unclustered |
 | :--- | :--- | :--- | :--- | :--- |
 | Sub-community 0: Tyranitar@Tyranitarite / Excadrill@Focus Sash / Salamence@Salamencite | 1 | 22 | 0 | 1 |
@@ -2776,7 +2776,7 @@ Rows: each of the community's primary teams by its primary sub-community (minor 
 | Incineroar | 27 | 6.3% | 0.818 | 6 (Incineroar in Basculegion's) | items: Life Orb 51.2%, Choice Scarf 32.5%, Focus Sash 9.8%, Mystic Water 6.6%; spreads: fast 82.7%, offensive 7.3%, bulky 6.1%, mixed 3.9% |
 
 ## 12. Sheet vs. Ladder
-Ladder: median rank over 15 daily snapshots from 2026-09-11 to 2026-09-25 (M6, M-C, Doubles), those archived within the sheet window (2026-09-09 to 2026-09-26); snapshots are kept 14 days, so a longer window is compared over at most its last 14 days. Teammates and items are from 2026-09-25. Battle data provided by Pokémon Champions Battle Data (https://championsbattledata.com); only figures derived from these snapshots are shown.
+Ladder: median rank over 15 daily snapshots from 2026-09-13 to 2026-09-27 (M6, M-C, Doubles), those archived within the sheet window (2026-09-09 to 2026-09-28); snapshots are kept 14 days, so a longer window is compared over at most its last 14 days. Teammates and items are from 2026-09-27. Battle data provided by Pokémon Champions Battle Data (https://championsbattledata.com); only figures derived from these snapshots are shown.
 Sheet = shared teams (87 of 395 placed; of the window's teams, only those with a placement are results; the rest are social shares, videos, and ladder pastes), not only Bo3 open-sheet results.
 Ladder teammates: the site's top 8 in its order (metric unstated); absence means not in the top 8, not rare.
 
@@ -2795,37 +2795,37 @@ Ladder top 60 species by median rank: 59 node, 1 thin (fewer than minNodeTeams s
 | 9 | Pelipper | Pelipper | 39 | 10.4% | node |
 | 10 | Garchomp | Garchomp | 54 | 14.5% | node |
 | 11 | Gholdengo | Gholdengo | 87 | 24.1% | node |
-| 12 | Archaludon | Archaludon | 37 | 10.3% | node |
+| 11 | Archaludon | Archaludon | 37 | 10.3% | node |
 | 13 | Milotic | Milotic | 63 | 15.6% | node |
 | 14 | Farigiraf | Farigiraf | 40 | 10.0% | node |
 | 15 | Charizard | Charizard | 33 | 8.6% | node |
 | 16 | Gardevoir | Gardevoir | 34 | 7.7% | node |
-| 18 | Raichu | Raichu | 40 | 11.7% | node |
+| 17 | Raichu | Raichu | 40 | 11.7% | node |
 | 18 | Arcanine-Hisui | Arcanine-Hisui | 52 | 14.0% | node |
 | 19 | Sylveon | Sylveon | 43 | 11.1% | node |
 | 20 | Tyranitar | Tyranitar | 39 | 9.0% | node |
 | 20 | Armarouge | Armarouge | 37 | 9.3% | node |
 | 21 | Whimsicott | Whimsicott | 15 | 4.1% | node |
-| 23 | Floette-Eternal | Floette-Eternal | 69 | 16.6% | node |
 | 24 | Torkoal | Torkoal | 26 | 6.2% | node |
+| 24 | Floette-Eternal | Floette-Eternal | 69 | 16.6% | node |
+| 25 | Staraptor | Staraptor | 18 | 4.6% | node |
 | 25 | Sinistcha | Sinistcha | 21 | 5.2% | node |
-| 26 | Staraptor | Staraptor | 18 | 4.6% | node |
 | 26 | Indeedee | Indeedee | 23 | 5.4% | node |
+| 27 | Metagross | Metagross | 20 | 5.0% | node |
 | 29 | Excadrill | Excadrill | 32 | 7.2% | node |
-| 29 | Lucario | Lucario | 27 | 6.7% | node |
-| 30 | Metagross | Metagross | 20 | 5.0% | node |
 | 30 | Volcarona | Volcarona | 18 | 4.8% | node |
+| 30 | Lucario | Lucario | 27 | 6.7% | node |
 | 32 | Politoed | Politoed | 14 | 3.7% | node |
 | 33 | Grimmsnarl | Grimmsnarl | 13 | 3.1% | node |
 | 34 | Swampert | Swampert | 12 | 3.4% | node |
-| 34 | Baxcalibur | Baxcalibur | 27 | 5.9% | node |
+| 35 | Baxcalibur | Baxcalibur | 27 | 5.9% | node |
 | 36 | Froslass | Froslass | 14 | 4.6% | node |
-| 37 | Pawmot | Pawmot | 19 | 4.6% | node |
 | 38 | Ninetales-Alola | Ninetales-Alola | 11 | 2.6% | node |
+| 38 | Pawmot | Pawmot | 19 | 4.6% | node |
 | 39 | Glimmora | Glimmora | 19 | 5.3% | node |
 | 40 | Gengar | Gengar | 18 | 5.3% | node |
-| 41 | Venusaur | Venusaur | 9 | 2.2% | node |
 | 42 | Dragonite | Dragonite | 10 | 2.9% | node |
+| 42 | Venusaur | Venusaur | 9 | 2.2% | node |
 | 43 | Aerodactyl | Aerodactyl | 11 | 2.9% | node |
 | 43 | Primarina | Primarina | 6 | 2.2% | node |
 | 45 | Sableye | Sableye | 2 | 0.5% | thin |
@@ -2833,7 +2833,7 @@ Ladder top 60 species by median rank: 59 node, 1 thin (fewer than minNodeTeams s
 | 47 | Blastoise | Blastoise | 9 | 2.2% | node |
 | 48 | Absol | Absol | 14 | 3.7% | node |
 | 49 | Delphox | Delphox | 9 | 2.7% | node |
-| 49 | Annihilape | Annihilape | 5 | 1.4% | node |
+| 50 | Annihilape | Annihilape | 5 | 1.4% | node |
 | 51 | Maushold-Four | Maushold | 3 | 0.9% | node |
 | 52 | Talonflame | Talonflame | 8 | 1.8% | node |
 | 54 | Kommo-o | Kommo-o | 8 | 2.4% | node |
@@ -2842,7 +2842,7 @@ Ladder top 60 species by median rank: 59 node, 1 thin (fewer than minNodeTeams s
 | 57 | Hydreigon | Hydreigon | 6 | 1.4% | node |
 | 58 | Blaziken | Blaziken | 9 | 2.3% | node |
 | 58 | Mawile | Mawile | 6 | 1.4% | node |
-| 60 | Corviknight | Corviknight | 7 | 1.5% | node |
+| 59 | Corviknight | Corviknight | 7 | 1.5% | node |
 | 61 | Typhlosion-Hisui | Typhlosion-Hisui | 3 | 0.6% | node |
 Sheet-only (not on the ladder, or outside its top 60): Dragapult, Sirfetch’d, Meowstic-F, Toxtricity, Scrafty, Pyroar, Klefki, Gallade, Vanilluxe, Aegislash, Tsareena, Alakazam, Altaria, Pincurchin, Lycanroc-Dusk, Zoroark-Hisui, Scizor
 
@@ -2850,40 +2850,38 @@ Sheet-only (not on the ladder, or outside its top 60): Dragapult, Sirfetch’d, 
 Ladder items (latest snapshot) on a top-60 species held by at least ladderItemMinShare of the species on the ladder -- a higher share than in the sheet -- that have fewer than minNodeTeams sheet teams.
 | Median rank | Species | Item | Ladder share | Sheet share | Sheet teams |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 26 | Staraptor | Choice Scarf | 16.0% | 4.4% | 1 |
-| 30 | Volcarona | Sitrus Berry | 15.3% | 12.3% | 2 |
-| 32 | Politoed | Life Orb | 15.9% | 5.5% | 1 |
-| 38 | Ninetales-Alola | Focus Sash | 20.3% | 0.0% | 0 |
-| 41 | Venusaur | Life Orb | 17.9% | 9.5% | 1 |
-| 41 | Venusaur | Venusaurite | 16.9% | 0.0% | 0 |
-| 43 | Primarina | Life Orb | 29.4% | 19.2% | 1 |
+| 25 | Staraptor | Choice Scarf | 15.7% | 4.4% | 1 |
+| 32 | Politoed | Life Orb | 15.3% | 5.5% | 1 |
+| 38 | Ninetales-Alola | Focus Sash | 20.1% | 0.0% | 0 |
+| 42 | Venusaur | Life Orb | 17.7% | 9.5% | 1 |
+| 42 | Venusaur | Venusaurite | 17.3% | 0.0% | 0 |
+| 43 | Primarina | Life Orb | 29.0% | 19.2% | 1 |
 | 43 | Primarina | Mystic Water | 16.2% | 0.0% | 0 |
-| 49 | Annihilape | Leftovers | 22.2% | 15.4% | 1 |
-| 51 | Maushold | Focus Sash | 15.4% | 0.0% | 0 |
-| 52 | Talonflame | Focus Sash | 27.4% | 0.0% | 0 |
-| 54 | Kommo-o | Life Orb | 32.1% | 17.7% | 1 |
-| 55 | Ceruledge | Colbur Berry | 25.2% | 17.4% | 1 |
-| 57 | Hydreigon | Life Orb | 15.7% | 0.0% | 0 |
-| 58 | Blaziken | Focus Sash | 25.0% | 23.7% | 2 |
-| 60 | Corviknight | Leftovers | 28.7% | 28.1% | 2 |
+| 50 | Annihilape | Leftovers | 22.5% | 15.4% | 1 |
+| 51 | Maushold | Focus Sash | 15.0% | 0.0% | 0 |
+| 52 | Talonflame | Focus Sash | 27.6% | 0.0% | 0 |
+| 54 | Kommo-o | Life Orb | 31.8% | 17.7% | 1 |
+| 55 | Ceruledge | Colbur Berry | 23.6% | 17.4% | 1 |
+| 57 | Hydreigon | Life Orb | 15.9% | 0.0% | 0 |
+| 58 | Blaziken | Focus Sash | 24.7% | 23.7% | 2 |
 
 ### 12.3 Bias
 #### By usage rank
 Over-represented in the sheet vs. the ladder (sheet nodes among the ladder's top 60, score above zero, highest first):
 | Species | Sheet rank | Median rank | Sheet teams | Score (log2) |
 | :--- | :--- | :--- | :--- | :--- |
-| Floette-Eternal | 9 | 23 | 69 | 1.35 |
+| Floette-Eternal | 9 | 24 | 69 | 1.42 |
 | Gholdengo | 7 | 11 | 87 | 0.65 |
 | Glimmora | 28 | 39 | 19 | 0.48 |
 | Arcanine-Hisui | 13 | 18 | 52 | 0.47 |
 | Gengar | 29 | 40 | 18 | 0.46 |
-| Baxcalibur | 26 | 34 | 27 | 0.39 |
+| Baxcalibur | 26 | 35 | 27 | 0.43 |
 | Absol | 37 | 48 | 14 | 0.38 |
-| Raichu | 14 | 18 | 40 | 0.36 |
 | Sylveon | 15 | 19 | 43 | 0.34 |
 | Excadrill | 23 | 29 | 32 | 0.33 |
+| Lucario | 24 | 30 | 27 | 0.32 |
 | Blaziken | 47 | 58 | 9 | 0.30 |
-| Lucario | 24 | 29 | 27 | 0.27 |
+| Raichu | 14 | 17 | 40 | 0.28 |
 | Milotic | 11 | 13 | 63 | 0.24 |
 | Kommo-o | 46 | 54 | 8 | 0.23 |
 | Delphox | 43 | 49 | 9 | 0.19 |
@@ -2894,11 +2892,11 @@ Under-represented in the sheet (among the ladder's top 60, score below zero, low
 | Pelipper | 16 | 9 | 39 | -0.83 |
 | Sableye | 80 | 45 | 2 | -0.83 |
 | Whimsicott | 36 | 21 | 15 | -0.78 |
-| Archaludon | 17 | 12 | 37 | -0.50 |
+| Archaludon | 17 | 11 | 37 | -0.63 |
 | Charizard | 21 | 15 | 33 | -0.49 |
 | Gardevoir | 22 | 16 | 34 | -0.46 |
+| Staraptor | 33 | 25 | 18 | -0.40 |
 | Farigiraf | 18 | 14 | 40 | -0.36 |
-| Staraptor | 33 | 26 | 18 | -0.34 |
 | Maushold | 64 | 51 | 3 | -0.33 |
 | Golisopod | 10 | 8 | 66 | -0.32 |
 | Typhlosion-Hisui | 76 | 61 | 3 | -0.32 |
@@ -2909,10 +2907,10 @@ Under-represented in the sheet (among the ladder's top 60, score below zero, low
 
 #### By teammate list
 Mean overlap between a species' ladder teammate list and its sheet partners by P(B|A), over the species compared: 65.4%.
-- Rillaboom 7/8 shared. Ladder adds Raichu (#8; sheet P=19%, 37 teams). Sheet adds Floette-Eternal (P=24%, 58 teams; Floette-Eternal's own ladder list includes Rillaboom).
+- Rillaboom 7/8 shared. Ladder adds Raichu (#6; sheet P=19%, 37 teams). Sheet adds Floette-Eternal (P=24%, 58 teams; Floette-Eternal's own ladder list includes Rillaboom).
 - Sneasler 7/8 shared. Ladder adds Gardevoir (#7; sheet P=12%, 25 teams). Sheet adds Floette-Eternal (P=25%, 52 teams; Floette-Eternal's own ladder list includes Sneasler).
-- Salamence 6/8 shared. Ladder adds Milotic (#7; sheet P=19%, 29 teams), Tyranitar (#8; sheet P=18%, 30 teams). Sheet adds Arcanine-Hisui (P=21%, 30 teams; Arcanine-Hisui's own ladder list includes Salamence), Floette-Eternal (P=19%, 36 teams; Floette-Eternal's own ladder list includes Salamence).
-- Incineroar 7/8 shared. Ladder adds Golisopod (#8; sheet P=10%, 14 teams). Sheet adds Floette-Eternal (P=35%, 52 teams; Floette-Eternal's own ladder list includes Incineroar).
+- Salamence 6/8 shared. Ladder adds Tyranitar (#7; sheet P=18%, 30 teams), Milotic (#8; sheet P=19%, 29 teams). Sheet adds Arcanine-Hisui (P=21%, 30 teams; Arcanine-Hisui's own ladder list includes Salamence), Floette-Eternal (P=19%, 36 teams; Floette-Eternal's own ladder list includes Salamence).
+- Incineroar 7/8 shared. Ladder adds Indeedee-F (#7; sheet P=10%, 14 teams). Sheet adds Floette-Eternal (P=35%, 52 teams; Floette-Eternal's own ladder list includes Incineroar).
 - Kingambit 6/8 shared. Ladder adds Garchomp (#6; sheet P=13%, 16 teams), Charizard (#8; sheet P=8%, 9 teams). Sheet adds Floette-Eternal (P=27%, 33 teams; Floette-Eternal's own ladder list includes Kingambit), Arcanine-Hisui (P=16%, 15 teams; Arcanine-Hisui's own ladder list includes Kingambit).
 - Indeedee-F 7/8 shared. Ladder adds Pelipper (#8; sheet P=14%, 13 teams). Sheet adds Salamence (P=15%, 15 teams; Salamence's own ladder list does not include Indeedee-F).
 - Basculegion 6/8 shared. Ladder adds Pelipper (#7; sheet P=12%, 9 teams), Gardevoir (#8; sheet P=15%, 14 teams). Sheet adds Floette-Eternal (P=22%, 21 teams; Floette-Eternal's own ladder list includes Basculegion), Lucario (P=16%, 13 teams; Lucario's own ladder list includes Basculegion).
@@ -2923,34 +2921,34 @@ Mean overlap between a species' ladder teammate list and its sheet partners by P
 - Archaludon 6/8 shared. Ladder adds Grimmsnarl (#7; sheet P=21%, 9 teams), Charizard (#8; sheet P=14%, 6 teams). Sheet adds Basculegion (P=25%, 9 teams; Basculegion's own ladder list does not include Archaludon), Gengar (P=22%, 7 teams; Gengar's own ladder list includes Archaludon).
 - Milotic 7/8 shared. Ladder adds Indeedee-F (#7; sheet P=10%, 7 teams). Sheet adds Arcanine-Hisui (P=23%, 14 teams; Arcanine-Hisui's own ladder list does not include Milotic).
 - Farigiraf 5/8 shared. Ladder adds Pelipper (#6; sheet P=18%, 8 teams), Sylveon (#7; sheet P=14%, 5 teams), Archaludon (#8; sheet P=11%, 6 teams). Sheet adds Salamence (P=29%, 12 teams; Salamence's own ladder list does not include Farigiraf), Sneasler (P=20%, 9 teams; Sneasler's own ladder list does not include Farigiraf), Torkoal (P=20%, 8 teams; Torkoal's own ladder list includes Farigiraf).
-- Charizard 5/8 shared. Ladder adds Whimsicott (#5; <4 sheet teams), Basculegion (#6; sheet P=20%, 6 teams), Archaludon (#7; sheet P=17%, 6 teams). Sheet adds Indeedee-F (P=27%, 10 teams; Indeedee-F's own ladder list does not include Charizard), Floette-Eternal (P=25%, 7 teams; Floette-Eternal's own ladder list does not include Charizard), Venusaur (P=24%, 8 teams; Venusaur's own ladder list includes Charizard).
+- Charizard 5/8 shared. Ladder adds Whimsicott (#5; <4 sheet teams), Archaludon (#6; sheet P=17%, 6 teams), Basculegion (#7; sheet P=20%, 6 teams). Sheet adds Indeedee-F (P=27%, 10 teams; Indeedee-F's own ladder list does not include Charizard), Floette-Eternal (P=25%, 7 teams; Floette-Eternal's own ladder list does not include Charizard), Venusaur (P=24%, 8 teams; Venusaur's own ladder list includes Charizard).
 - Gardevoir 7/8 shared. Ladder adds Golisopod (#7; sheet P=13%, 4 teams). Sheet adds Salamence (P=20%, 6 teams; Salamence's own ladder list does not include Gardevoir).
 - Raichu 8/8 shared.
 - Arcanine-Hisui 7/8 shared. Ladder adds Basculegion (#8; sheet P=14%, 8 teams). Sheet adds Milotic (P=25%, 14 teams; Milotic's own ladder list does not include Arcanine-Hisui).
-- Sylveon 7/8 shared. Ladder adds Farigiraf (#6; sheet P=13%, 5 teams). Sheet adds Basculegion (P=27%, 13 teams; Basculegion's own ladder list does not include Sylveon).
+- Sylveon 6/8 shared. Ladder adds Farigiraf (#6; sheet P=13%, 5 teams), Staraptor (#7; sheet P=21%, 8 teams). Sheet adds Sneasler (P=30%, 14 teams; Sneasler's own ladder list does not include Sylveon), Basculegion (P=27%, 13 teams; Basculegion's own ladder list does not include Sylveon).
 - Tyranitar 8/8 shared.
 - Armarouge 7/8 shared. Ladder adds Milotic (#8; <4 sheet teams). Sheet adds Hatterene (P=11%, 4 teams; Hatterene's own ladder list includes Armarouge).
 - Whimsicott 4/8 shared. Ladder adds Charizard (#1; <4 sheet teams), Sneasler (#4; sheet P=22%, 4 teams), Rillaboom (#6; <4 sheet teams), Staraptor (#8; <4 sheet teams). Sheet adds Floette-Eternal (P=31%, 4 teams; Floette-Eternal's own ladder list does not include Whimsicott), Salamence (P=29%, 5 teams; Salamence's own ladder list does not include Whimsicott), Glimmora (P=27%, 4 teams; Glimmora's own ladder list includes Whimsicott), Indeedee-F (P=26%, 4 teams; Indeedee-F's own ladder list does not include Whimsicott).
-- Floette-Eternal 8/8 shared.
 - Torkoal 7/8 shared. Ladder adds Incineroar (#8; <4 sheet teams). Sheet adds Hatterene (P=26%, 7 teams; Hatterene's own ladder list includes Torkoal).
-- Sinistcha 6/8 shared. Ladder adds Pelipper (#3; sheet P=21%, 4 teams), Grimmsnarl (#8; <4 sheet teams). Sheet adds Salamence (P=36%, 8 teams; Salamence's own ladder list does not include Sinistcha), Kingambit (P=24%, 5 teams; Kingambit's own ladder list does not include Sinistcha).
+- Floette-Eternal 8/8 shared.
 - Staraptor 6/8 shared. Ladder adds Kingambit (#6; <4 sheet teams), Whimsicott (#8; <4 sheet teams).
+- Sinistcha 6/8 shared. Ladder adds Pelipper (#3; sheet P=21%, 4 teams), Milotic (#8; sheet P=19%, 5 teams). Sheet adds Salamence (P=36%, 8 teams; Salamence's own ladder list does not include Sinistcha), Kingambit (P=24%, 5 teams; Kingambit's own ladder list does not include Sinistcha).
 - Indeedee 6/8 shared. Ladder adds Metagross (#7; <4 sheet teams), Kingambit (#8; <4 sheet teams). Sheet adds Arcanine-Hisui (P=23%, 4 teams; Arcanine-Hisui's own ladder list does not include Indeedee), Garchomp (P=21%, 5 teams; Garchomp's own ladder list does not include Indeedee).
+- Metagross 7/8 shared. Ladder adds Salamence (#6; <4 sheet teams). Sheet adds Basculegion (P=22%, 4 teams; Basculegion's own ladder list does not include Metagross).
 - Excadrill 8/8 shared.
+- Volcarona 5/8 shared. Ladder adds Incineroar (#2; sheet P=20%, 4 teams), Raichu (#6; <4 sheet teams), Gholdengo (#7; <4 sheet teams). Sheet adds Glimmora (P=50%, 8 teams; Glimmora's own ladder list includes Volcarona), Basculegion (P=29%, 6 teams; Basculegion's own ladder list does not include Volcarona), Baxcalibur (P=24%, 5 teams; Baxcalibur's own ladder list does not include Volcarona).
 - Lucario 7/8 shared. Ladder adds Indeedee-F (#6; sheet P=19%, 5 teams). Sheet adds Aerodactyl (P=21%, 6 teams; Aerodactyl's own ladder list does not include Lucario).
-- Metagross 7/8 shared. Ladder adds Salamence (#5; <4 sheet teams). Sheet adds Basculegion (P=22%, 4 teams; Basculegion's own ladder list does not include Metagross).
-- Volcarona 5/8 shared. Ladder adds Incineroar (#3; sheet P=20%, 4 teams), Raichu (#6; <4 sheet teams), Gholdengo (#8; <4 sheet teams). Sheet adds Glimmora (P=50%, 8 teams; Glimmora's own ladder list includes Volcarona), Basculegion (P=29%, 6 teams; Basculegion's own ladder list does not include Volcarona), Baxcalibur (P=24%, 5 teams; Baxcalibur's own ladder list does not include Volcarona).
-- Politoed 6/8 shared. Ladder adds Charizard (#7; <4 sheet teams), Kingambit (#8; <4 sheet teams).
-- Grimmsnarl 5/8 shared. Ladder adds Swampert (#5; <4 sheet teams), Rillaboom (#6; <4 sheet teams), Sinistcha (#7; <4 sheet teams).
+- Politoed 6/8 shared. Ladder adds Charizard (#7; <4 sheet teams), Grimmsnarl (#8; <4 sheet teams).
+- Grimmsnarl 5/8 shared. Ladder adds Swampert (#5; <4 sheet teams), Rillaboom (#6; <4 sheet teams), Sinistcha (#8; <4 sheet teams).
 - Swampert 5/8 shared. Ladder adds Grimmsnarl (#4; <4 sheet teams), Rillaboom (#5; <4 sheet teams), Sinistcha (#7; <4 sheet teams). Sheet adds Indeedee-F (P=37%, 4 teams; Indeedee-F's own ladder list does not include Swampert).
 - Baxcalibur 7/8 shared. Ladder adds Gholdengo (#6; sheet P=16%, 4 teams). Sheet adds Volcarona (P=19%, 5 teams; Volcarona's own ladder list does not include Baxcalibur).
-- Froslass 5/8 shared. Ladder adds Incineroar (#4; <4 sheet teams), Archaludon (#6; <4 sheet teams), Politoed (#8; <4 sheet teams). Sheet adds Salamence (P=40%, 6 teams; Salamence's own ladder list does not include Froslass).
-- Pawmot 4/8 shared. Ladder adds Golisopod (#1; <4 sheet teams), Farigiraf (#4; <4 sheet teams), Politoed (#7; <4 sheet teams), Staraptor (#8; <4 sheet teams). Sheet adds Basculegion (P=38%, 7 teams; Basculegion's own ladder list does not include Pawmot), Glimmora (P=20%, 4 teams; Glimmora's own ladder list does not include Pawmot), Garchomp (P=20%, 4 teams; Garchomp's own ladder list does not include Pawmot).
-- Ninetales-Alola 4/8 shared. Ladder adds Milotic (#5; <4 sheet teams), Kingambit (#6; <4 sheet teams), Gholdengo (#7; <4 sheet teams), Basculegion (#8; <4 sheet teams).
+- Froslass 5/8 shared. Ladder adds Incineroar (#4; <4 sheet teams), Archaludon (#6; <4 sheet teams), Garchomp (#8; <4 sheet teams). Sheet adds Salamence (P=40%, 6 teams; Salamence's own ladder list does not include Froslass).
+- Ninetales-Alola 4/8 shared. Ladder adds Milotic (#5; <4 sheet teams), Kingambit (#6; <4 sheet teams), Gholdengo (#7; <4 sheet teams), Raichu (#8; <4 sheet teams).
+- Pawmot 4/8 shared. Ladder adds Golisopod (#1; <4 sheet teams), Farigiraf (#4; <4 sheet teams), Politoed (#7; <4 sheet teams), Indeedee-F (#8; <4 sheet teams). Sheet adds Basculegion (P=38%, 7 teams; Basculegion's own ladder list does not include Pawmot), Glimmora (P=20%, 4 teams; Glimmora's own ladder list does not include Pawmot), Garchomp (P=20%, 4 teams; Garchomp's own ladder list does not include Pawmot).
 - Glimmora 6/8 shared. Ladder adds Incineroar (#5; <4 sheet teams), Golisopod (#8; <4 sheet teams). Sheet adds Pawmot (P=17%, 4 teams; Pawmot's own ladder list does not include Glimmora), Indeedee-F (P=17%, 4 teams; Indeedee-F's own ladder list does not include Glimmora).
 - Gengar 5/8 shared. Ladder adds Froslass (#5; <4 sheet teams), Vivillon (#6; <4 sheet teams), Swampert (#8; <4 sheet teams). Sheet adds Kingambit (P=22%, 4 teams; Kingambit's own ladder list does not include Gengar).
-- Venusaur 2/8 shared. Ladder adds Archaludon (#2; <4 sheet teams), Pelipper (#3; <4 sheet teams), Grimmsnarl (#4; <4 sheet teams), Sneasler (#6; <4 sheet teams), Basculegion (#7; <4 sheet teams), Golisopod (#8; <4 sheet teams). Sheet adds Indeedee-F (P=49%, 5 teams; Indeedee-F's own ladder list does not include Venusaur).
 - Dragonite 3/8 shared. Ladder adds Basculegion (#4; <4 sheet teams), Kingambit (#5; <4 sheet teams), Archaludon (#6; <4 sheet teams), Pelipper (#7; <4 sheet teams), Gholdengo (#8; <4 sheet teams). Sheet adds Indeedee-F (P=39%, 5 teams; Indeedee-F's own ladder list does not include Dragonite).
+- Venusaur 3/8 shared. Ladder adds Archaludon (#2; <4 sheet teams), Pelipper (#3; <4 sheet teams), Grimmsnarl (#4; <4 sheet teams), Sneasler (#6; <4 sheet teams), Basculegion (#7; <4 sheet teams).
 - Aerodactyl 4/8 shared. Ladder adds Garchomp (#1; <4 sheet teams), Charizard (#2; <4 sheet teams), Kingambit (#3; <4 sheet teams), Farigiraf (#8; <4 sheet teams). Sheet adds Lucario (P=49%, 6 teams; Lucario's own ladder list does not include Aerodactyl), Basculegion (P=41%, 5 teams; Basculegion's own ladder list does not include Aerodactyl).
 - Primarina 2/8 shared. Ladder adds Incineroar (#2; <4 sheet teams), Farigiraf (#4; <4 sheet teams), Sneasler (#5; <4 sheet teams), Golisopod (#6; <4 sheet teams), Indeedee-F (#7; <4 sheet teams), Kingambit (#8; <4 sheet teams).
 - Hatterene 4/8 shared. Ladder adds Camerupt (#5; <4 sheet teams), Incineroar (#6; <4 sheet teams), Kingambit (#7; <4 sheet teams), Farigiraf (#8; <4 sheet teams).
@@ -2959,11 +2957,11 @@ Mean overlap between a species' ladder teammate list and its sheet partners by P
 - Delphox 5/8 shared. Ladder adds Garchomp (#6; <4 sheet teams), Sinistcha (#7; <4 sheet teams), Whimsicott (#8; <4 sheet teams). Sheet adds Floette-Eternal (P=53%, 4 teams; Floette-Eternal's own ladder list does not include Delphox).
 - Annihilape 0/8 shared. Ladder adds Rillaboom (#1; <4 sheet teams), Indeedee-F (#2; <4 sheet teams), Incineroar (#3; <4 sheet teams), Golisopod (#4; <4 sheet teams), Salamence (#5; <4 sheet teams), Pelipper (#6; <4 sheet teams), Archaludon (#7; <4 sheet teams), Armarouge (#8; <4 sheet teams).
 - Talonflame 3/8 shared. Ladder adds Rillaboom (#1; <4 sheet teams), Garchomp (#2; <4 sheet teams), Sneasler (#3; <4 sheet teams), Kingambit (#6; <4 sheet teams), Milotic (#8; <4 sheet teams).
-- Kommo-o 4/8 shared. Ladder adds Indeedee-F (#3; <4 sheet teams), Gardevoir (#6; <4 sheet teams), Basculegion (#7; <4 sheet teams), Sneasler (#8; <4 sheet teams).
-- Camerupt 0/8 shared. Ladder adds Farigiraf (#1; <4 sheet teams), Indeedee-F (#2; <4 sheet teams), Hatterene (#3; <4 sheet teams), Kingambit (#4; <4 sheet teams), Rillaboom (#5; <4 sheet teams), Golisopod (#6; <4 sheet teams), Incineroar (#7; <4 sheet teams), Torkoal (#8; <4 sheet teams).
+- Kommo-o 4/8 shared. Ladder adds Indeedee-F (#3; <4 sheet teams), Gardevoir (#6; <4 sheet teams), Sneasler (#7; <4 sheet teams), Basculegion (#8; <4 sheet teams).
+- Camerupt 0/8 shared. Ladder adds Farigiraf (#1; <4 sheet teams), Indeedee-F (#2; <4 sheet teams), Hatterene (#3; <4 sheet teams), Kingambit (#4; <4 sheet teams), Rillaboom (#5; <4 sheet teams), Golisopod (#6; <4 sheet teams), Incineroar (#7; <4 sheet teams), Sylveon (#8; <4 sheet teams).
 - Ceruledge 2/8 shared. Ladder adds Raichu (#3; <4 sheet teams), Gholdengo (#4; <4 sheet teams), Sneasler (#5; <4 sheet teams), Staraptor (#6; <4 sheet teams), Salamence (#7; <4 sheet teams), Ninetales-Alola (#8; <4 sheet teams).
 - Hydreigon 0/8 shared. Ladder adds Rillaboom (#1; <4 sheet teams), Sneasler (#2; <4 sheet teams), Metagross (#3; <4 sheet teams), Indeedee-F (#4; <4 sheet teams), Incineroar (#5; <4 sheet teams), Charizard (#6; <4 sheet teams), Golisopod (#7; <4 sheet teams), Salamence (#8; <4 sheet teams).
-- Blaziken 3/8 shared. Ladder adds Metagross (#4; <4 sheet teams), Salamence (#5; <4 sheet teams), Basculegion (#6; <4 sheet teams), Farigiraf (#7; <4 sheet teams), Milotic (#8; <4 sheet teams).
+- Blaziken 3/8 shared. Ladder adds Metagross (#4; <4 sheet teams), Salamence (#5; <4 sheet teams), Basculegion (#6; <4 sheet teams), Milotic (#7; <4 sheet teams), Farigiraf (#8; <4 sheet teams).
 - Mawile 1/8 shared. Ladder adds Farigiraf (#1; <4 sheet teams), Torkoal (#3; <4 sheet teams), Incineroar (#4; <4 sheet teams), Rillaboom (#5; <4 sheet teams), Armarouge (#6; <4 sheet teams), Sneasler (#7; <4 sheet teams), Hatterene (#8; <4 sheet teams).
 - Corviknight 4/8 shared. Ladder adds Salamence (#4; <4 sheet teams), Garchomp (#6; <4 sheet teams), Indeedee-F (#7; <4 sheet teams), Rillaboom (#8; <4 sheet teams).
 Too few sheet teams to compare: Maushold, Typhlosion-Hisui.
@@ -2971,15 +2969,15 @@ Too few sheet teams to compare: Maushold, Typhlosion-Hisui.
 ### 12.4 Ladder-calibrated view (λ = 1)
 A model built from the ladder's rank order, not a ladder usage share: among the sheet's species nodes with a ladder entry, the i-th in the ladder order takes the i-th highest sheet support as its rank-matched support, and each team's weight is multiplied once by the geometric mean over its species of (rank-matched support / sheet support)^λ. The sheet's communities, cores, labels, and assignments are unchanged; a species thin or absent on the sheet (outside its species nodes) can't be reweighted. Unlike the coverage table (§12.1, the ladder's top 60), this view reweights every sheet species node the ladder lists, at any rank.
 Calibrated support need not land on its rank-matched support: a species' factor is averaged with its teammates' in each team's multiplier and every share is renormalised, so it usually moves only part of the way, and can stop short, overshoot, or even move against its own factor; λ = 1 does not mean the ladder is matched. Mapping the i-th in the ladder order to the i-th sheet support assumes the ladder's usage curve has the sheet's shape; where sheet supports are compressed, one or two ranks swing a factor a lot. Where the two orders agree the factor is exactly one by construction, which does not mean equal usage; such a species still moves through its teammates and the renormalisation. Reweighting scales the sheet's own teams: it cannot add a ladder build the sheet lacks, so it corrects how much of each sheet archetype appears, not which archetypes exist, and sub-community labels keep the sheet's items.
-Effective teams (Kish): 359.13 under the sheet weights, 354.85 calibrated; team weight multiplier 0.71 to 1.39.
+Effective teams (Kish): 359.13 under the sheet weights, 354.61 calibrated; team weight multiplier 0.70 to 1.38.
 
 #### Communities
 | Community | Label | Sheet primary | Calibrated primary | Sheet hybrid | Calibrated hybrid |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 0 | Rillaboom / Sneasler / Incineroar | 51.7% | 49.1% | 19.1% | 19.1% |
-| 1 | Indeedee-F + Armarouge/Gardevoir | 16.0% | 17.1% | 2.9% | 2.9% |
+| 0 | Rillaboom / Sneasler / Incineroar | 51.7% | 49.0% | 19.1% | 19.1% |
+| 1 | Indeedee-F + Armarouge/Gardevoir | 16.0% | 17.2% | 2.9% | 2.9% |
 | 2 | Gholdengo / Raichu / Arcanine-Hisui | 7.8% | 7.0% | 10.2% | 9.3% |
-| 3 | Golisopod / Archaludon / Pelipper | 13.2% | 15.9% | 4.2% | 4.3% |
+| 3 | Golisopod / Archaludon / Pelipper | 13.2% | 15.8% | 4.2% | 4.3% |
 | 4 | Tyranitar / Excadrill / Milotic | 8.6% | 8.2% | 2.7% | 2.7% |
 | 5 | Garchomp / Charizard / Venusaur | 2.2% | 2.3% | 2.6% | 2.7% |
 | — | Unassigned | 0.4% | 0.4% | — | — |
@@ -2987,11 +2985,11 @@ Effective teams (Kish): 359.13 under the sheet weights, 354.85 calibrated; team 
 #### Sub-communities of Community 0: Rillaboom / Sneasler / Incineroar (shares of the parent's primary team weight)
 | Sub-community | Label | Sheet primary | Calibrated primary | Sheet hybrid | Calibrated hybrid |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 0 | Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 32.9% | 32.6% | 14.6% | 14.7% |
-| 1 | Salamence@Salamencite + Kingambit@Chople Berry/Sneasler@White Herb | 23.2% | 23.8% | 7.1% | 7.1% |
-| 2 | Floette-Eternal@Floettite / Sneasler@Grassy Seed / Sneasler@Focus Sash | 21.6% | 20.6% | 12.1% | 11.8% |
+| 0 | Miracle Seed Rillaboom + Sitrus Incineroar balance (flex Megas) | 32.9% | 32.6% | 14.6% | 14.6% |
+| 1 | Salamence@Salamencite + Kingambit@Chople Berry/Sneasler@White Herb | 23.2% | 23.9% | 7.1% | 7.1% |
+| 2 | Floette-Eternal@Floettite / Sneasler@Grassy Seed / Sneasler@Focus Sash | 21.6% | 20.5% | 12.1% | 11.8% |
 | 3 | Sylveon@Fairy Feather / Basculegion@Life Orb / Lucario@Lucarionite Z | 10.5% | 10.8% | 6.4% | 6.7% |
-| 4 | Milotic@Leftovers + Rillaboom@Life Orb/Golisopod@Golisopite | 4.4% | 4.6% | 5.9% | 5.8% |
+| 4 | Milotic@Leftovers + Rillaboom@Life Orb/Golisopod@Golisopite | 4.4% | 4.7% | 5.9% | 5.8% |
 | 5 | Charizard@Charizardite Y / Garchomp@Choice Scarf | 1.2% | 1.3% | 2.4% | 2.4% |
 | 6 | Gengar@Gengarite / Rillaboom (other item; Eject Button 4/10) | 2.8% | 2.7% | 0.4% | 0.4% |
 | — | Unassigned | 3.4% | 3.7% | — | — |
@@ -2999,26 +2997,26 @@ Effective teams (Kish): 359.13 under the sheet weights, 354.85 calibrated; team 
 #### Sub-communities of Community 1: Indeedee-F + Armarouge/Gardevoir (shares of the parent's primary team weight)
 | Sub-community | Label | Sheet primary | Calibrated primary | Sheet hybrid | Calibrated hybrid |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 0 | Sneasler@Psychic Seed / Gardevoir@Gardevoirite / Indeedee-F@Colbur Berry | 48.1% | 48.9% | 1.4% | 1.4% |
-| 1 | Indeedee-F@Rocky Helmet + Basculegion (other item; Focus Sash 4/7)/Absol@Absolite Z | 8.8% | 8.1% | 5.2% | 5.2% |
-| 2 | Torkoal@Charcoal / Hatterene@Life Orb / Golisopod@Golisopite | 26.7% | 27.3% | 4.6% | 4.9% |
+| 0 | Sneasler@Psychic Seed / Gardevoir@Gardevoirite / Indeedee-F@Colbur Berry | 48.1% | 48.8% | 1.4% | 1.4% |
+| 1 | Indeedee-F@Rocky Helmet + Basculegion (other item; Focus Sash 4/7)/Absol@Absolite Z | 8.8% | 8.1% | 5.2% | 5.1% |
+| 2 | Torkoal@Charcoal / Hatterene@Life Orb / Golisopod@Golisopite | 26.7% | 27.4% | 4.6% | 4.9% |
 | 3 | Armarouge@Life Orb / Kingambit@Chople Berry / Salamence@Salamencite | 2.9% | 2.7% | 4.9% | 4.4% |
-| 4 | Charizard@Charizardite Y / Venusaur (other item; Focus Sash 4/5) | 1.7% | 1.7% | 1.4% | 1.6% |
-| — | Unassigned | 11.8% | 11.3% | — | — |
+| 4 | Charizard@Charizardite Y / Venusaur (other item; Focus Sash 4/5) | 1.7% | 1.7% | 1.4% | 1.5% |
+| — | Unassigned | 11.8% | 11.4% | — | — |
 
 #### Sub-communities of Community 2: Gholdengo / Raichu / Arcanine-Hisui (shares of the parent's primary team weight)
 | Sub-community | Label | Sheet primary | Calibrated primary | Sheet hybrid | Calibrated hybrid |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 0 | Gholdengo@Life Orb / Arcanine-Hisui@Focus Sash / Salamence@Salamencite | 23.6% | 23.2% | 31.7% | 31.5% |
+| 0 | Gholdengo@Life Orb / Arcanine-Hisui@Focus Sash / Salamence@Salamencite | 23.6% | 23.1% | 31.7% | 31.4% |
 | 1 | Raichu@Raichunite Y / Rillaboom@Miracle Seed / Sylveon@Fairy Feather | 72.9% | 73.8% | 10.1% | 9.8% |
-| — | Unassigned | 3.5% | 3.0% | — | — |
+| — | Unassigned | 3.5% | 3.1% | — | — |
 
 #### Sub-communities of Community 3: Golisopod / Archaludon / Pelipper (shares of the parent's primary team weight)
 | Sub-community | Label | Sheet primary | Calibrated primary | Sheet hybrid | Calibrated hybrid |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 0 | Golisopod@Golisopite + Farigiraf@Sitrus Berry/Rillaboom@Miracle Seed | 21.1% | 20.1% | 9.4% | 9.5% |
-| 1 | Archaludon@Leftovers / Grimmsnarl@Light Clay / Charizard@Charizardite Y | 16.1% | 17.8% | 25.2% | 26.5% |
-| 2 | Pelipper@Focus Sash / Swampert@Swampertite / Indeedee-F (other item; Colbur Berry 3/8) | 28.3% | 29.6% | 7.8% | 7.7% |
+| 1 | Archaludon@Leftovers / Grimmsnarl@Light Clay / Charizard@Charizardite Y | 16.1% | 17.9% | 25.2% | 26.4% |
+| 2 | Pelipper@Focus Sash / Swampert@Swampertite / Indeedee-F (other item; Colbur Berry 3/8) | 28.3% | 29.5% | 7.8% | 7.7% |
 | 3 | Pelipper@Sitrus Berry / Farigiraf (other item; Colbur Berry 4/6) / Sneasler@White Herb | 12.0% | 12.4% | 9.2% | 9.4% |
 | 4 | Gengar@Gengarite / Rillaboom (other item; Eject Button 4/12) / Politoed@Sitrus Berry | 22.5% | 20.2% | 5.5% | 5.7% |
 | — | Unassigned | 0.0% | 0.0% | — | — |
@@ -3026,87 +3024,87 @@ Effective teams (Kish): 359.13 under the sheet weights, 354.85 calibrated; team 
 #### Sub-communities of Community 4: Tyranitar / Excadrill / Milotic (shares of the parent's primary team weight)
 | Sub-community | Label | Sheet primary | Calibrated primary | Sheet hybrid | Calibrated hybrid |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 0 | Tyranitar@Tyranitarite / Excadrill@Focus Sash / Salamence@Salamencite | 61.8% | 62.2% | 18.9% | 18.0% |
-| 1 | Indeedee@Choice Scarf / Sneasler@Psychic Seed / Corviknight (other item; Psychic Seed 4/7) | 13.6% | 13.7% | 26.5% | 27.1% |
+| 0 | Tyranitar@Tyranitarite / Excadrill@Focus Sash / Salamence@Salamencite | 61.8% | 62.0% | 18.9% | 18.0% |
+| 1 | Indeedee@Choice Scarf / Sneasler@Psychic Seed / Corviknight (other item; Psychic Seed 4/7) | 13.6% | 13.8% | 26.5% | 27.1% |
 | 2 | Gholdengo@Life Orb / Milotic@Sitrus Berry / Rillaboom (other item; Expert Belt 3/10) | 14.1% | 13.1% | 8.3% | 8.4% |
-| — | Unassigned | 10.5% | 11.0% | — | — |
+| — | Unassigned | 10.5% | 11.1% | — | — |
 
 #### Species
 | Median rank | Species | Sheet support | Rank-matched support | Factor | Calibrated support |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 1 | Rillaboom | 56.6% | 56.6% | 1.00 | 54.1% |
-| 2 | Sneasler | 47.1% | 47.1% | 1.00 | 46.5% |
-| 3 | Salamence | 39.5% | 39.5% | 1.00 | 37.9% |
-| 4 | Incineroar | 35.8% | 35.8% | 1.00 | 34.6% |
+| 2 | Sneasler | 47.1% | 47.1% | 1.00 | 46.4% |
+| 3 | Salamence | 39.5% | 39.5% | 1.00 | 37.8% |
+| 4 | Incineroar | 35.8% | 35.8% | 1.00 | 34.5% |
 | 5 | Kingambit | 29.0% | 29.0% | 1.00 | 28.4% |
-| 6 | Indeedee-F | 24.2% | 24.2% | 1.00 | 25.4% |
+| 6 | Indeedee-F | 24.2% | 24.2% | 1.00 | 25.5% |
 | 7 | Basculegion | 21.5% | 24.1% | 1.12 | 22.3% |
 | 8 | Golisopod | 16.2% | 21.5% | 1.33 | 18.9% |
 | 9 | Pelipper | 10.4% | 16.6% | 1.60 | 12.9% |
-| 10 | Garchomp | 14.5% | 16.2% | 1.12 | 14.8% |
+| 10 | Garchomp | 14.5% | 16.2% | 1.12 | 14.7% |
 | 11 | Gholdengo | 24.1% | 15.6% | 0.65 | 21.7% |
-| 12 | Archaludon | 10.3% | 14.5% | 1.40 | 12.6% |
-| 13 | Milotic | 15.6% | 14.0% | 0.90 | 14.8% |
-| 14 | Farigiraf | 10.0% | 11.7% | 1.17 | 10.8% |
+| 11 | Archaludon | 10.3% | 14.5% | 1.40 | 12.6% |
+| 13 | Milotic | 15.6% | 14.0% | 0.90 | 14.9% |
+| 14 | Farigiraf | 10.0% | 11.7% | 1.17 | 10.9% |
 | 15 | Charizard | 8.6% | 11.1% | 1.30 | 9.5% |
 | 16 | Gardevoir | 7.7% | 10.4% | 1.34 | 8.6% |
-| 18 | Raichu | 11.7% | 10.3% | 0.88 | 10.6% |
+| 17 | Raichu | 11.7% | 10.3% | 0.88 | 10.6% |
 | 18 | Arcanine-Hisui | 14.0% | 10.0% | 0.71 | 12.7% |
 | 19 | Sylveon | 11.1% | 9.3% | 0.84 | 10.6% |
 | 20 | Tyranitar | 9.0% | 9.0% | 1.00 | 8.7% |
-| 20 | Armarouge | 9.3% | 8.6% | 0.92 | 9.6% |
+| 20 | Armarouge | 9.3% | 8.6% | 0.92 | 9.7% |
 | 21 | Whimsicott | 4.1% | 7.7% | 1.90 | 4.5% |
-| 23 | Floette-Eternal | 16.6% | 7.2% | 0.43 | 14.7% |
-| 24 | Torkoal | 6.2% | 6.7% | 1.07 | 6.7% |
-| 25 | Sinistcha | 5.2% | 6.2% | 1.20 | 5.6% |
-| 26 | Staraptor | 4.6% | 5.9% | 1.27 | 4.4% |
+| 24 | Torkoal | 6.2% | 7.2% | 1.16 | 6.8% |
+| 24 | Floette-Eternal | 16.6% | 6.7% | 0.40 | 14.6% |
+| 25 | Staraptor | 4.6% | 6.2% | 1.34 | 4.5% |
+| 25 | Sinistcha | 5.2% | 5.9% | 1.13 | 5.5% |
 | 26 | Indeedee | 5.4% | 5.4% | 1.00 | 5.2% |
+| 27 | Metagross | 5.0% | 5.3% | 1.07 | 5.0% |
 | 29 | Excadrill | 7.2% | 5.3% | 0.74 | 6.8% |
-| 29 | Lucario | 6.7% | 5.3% | 0.80 | 6.6% |
-| 30 | Metagross | 5.0% | 5.2% | 1.04 | 4.9% |
-| 30 | Volcarona | 4.8% | 5.0% | 1.04 | 4.8% |
+| 30 | Volcarona | 4.8% | 5.2% | 1.08 | 4.8% |
+| 30 | Lucario | 6.7% | 5.0% | 0.74 | 6.5% |
 | 32 | Politoed | 3.7% | 4.8% | 1.30 | 4.0% |
 | 33 | Grimmsnarl | 3.1% | 4.6% | 1.49 | 4.0% |
 | 34 | Swampert | 3.4% | 4.6% | 1.35 | 4.3% |
-| 34 | Baxcalibur | 5.9% | 4.6% | 0.78 | 5.7% |
+| 35 | Baxcalibur | 5.9% | 4.6% | 0.78 | 5.7% |
 | 36 | Froslass | 4.6% | 4.1% | 0.90 | 4.5% |
-| 37 | Pawmot | 4.6% | 3.7% | 0.81 | 4.4% |
-| 38 | Ninetales-Alola | 2.6% | 3.7% | 1.39 | 2.7% |
+| 38 | Ninetales-Alola | 2.6% | 3.7% | 1.41 | 2.7% |
+| 38 | Pawmot | 4.6% | 3.7% | 0.80 | 4.4% |
 | 39 | Glimmora | 5.3% | 3.4% | 0.64 | 5.1% |
 | 40 | Gengar | 5.3% | 3.1% | 0.58 | 5.2% |
-| 41 | Venusaur | 2.2% | 2.9% | 1.32 | 2.6% |
 | 42 | Dragonite | 2.9% | 2.9% | 1.00 | 3.0% |
+| 42 | Venusaur | 2.2% | 2.9% | 1.31 | 2.6% |
 | 43 | Aerodactyl | 2.9% | 2.7% | 0.93 | 2.8% |
-| 43 | Primarina | 2.2% | 2.7% | 1.23 | 2.2% |
+| 43 | Primarina | 2.2% | 2.7% | 1.23 | 2.1% |
 | 46 | Hatterene | 2.7% | 2.6% | 0.99 | 2.9% |
 | 47 | Blastoise | 2.2% | 2.4% | 1.09 | 2.1% |
 | 48 | Absol | 3.7% | 2.3% | 0.63 | 3.3% |
 | 49 | Delphox | 2.7% | 2.2% | 0.82 | 2.5% |
-| 49 | Annihilape | 1.4% | 2.2% | 1.50 | 1.8% |
+| 50 | Annihilape | 1.4% | 2.2% | 1.50 | 1.8% |
 | 51 | Maushold | 0.9% | 2.2% | 2.44 | 1.1% |
 | 52 | Talonflame | 1.8% | 1.9% | 1.06 | 1.8% |
 | 54 | Kommo-o | 2.4% | 1.8% | 0.77 | 2.3% |
 | 54 | Camerupt | 1.2% | 1.6% | 1.37 | 1.3% |
 | 55 | Ceruledge | 1.6% | 1.5% | 0.92 | 1.5% |
-| 57 | Hydreigon | 1.4% | 1.4% | 1.03 | 1.5% |
+| 57 | Hydreigon | 1.4% | 1.4% | 1.03 | 1.6% |
 | 58 | Blaziken | 2.3% | 1.4% | 0.61 | 2.2% |
 | 58 | Mawile | 1.4% | 1.4% | 1.00 | 1.5% |
-| 60 | Corviknight | 1.5% | 1.4% | 0.96 | 1.4% |
+| 59 | Corviknight | 1.5% | 1.4% | 0.96 | 1.4% |
 | 61 | Typhlosion-Hisui | 0.6% | 1.3% | 1.97 | 0.8% |
-| 61 | Gallade | 0.8% | 1.2% | 1.40 | 1.0% |
+| 62 | Dragapult | 1.9% | 1.2% | 0.61 | 1.8% |
 | 62 | Sirfetch’d | 1.4% | 0.9% | 0.66 | 1.4% |
-| 64 | Dragapult | 1.9% | 0.9% | 0.49 | 1.7% |
-| 64 | Tsareena | 0.7% | 0.9% | 1.20 | 0.7% |
-| 67 | Zoroark-Hisui | 0.7% | 0.9% | 1.35 | 0.7% |
+| 63 | Gallade | 0.8% | 0.9% | 1.12 | 1.0% |
+| 65 | Tsareena | 0.7% | 0.9% | 1.20 | 0.7% |
+| 66 | Zoroark-Hisui | 0.7% | 0.9% | 1.35 | 0.7% |
 | 71 | Alakazam | 0.7% | 0.9% | 1.17 | 0.9% |
-| 79 | Aegislash | 0.8% | 0.8% | 1.09 | 0.8% |
-| 79 | Scizor | 0.6% | 0.8% | 1.37 | 0.7% |
-| 79 | Toxtricity | 0.9% | 0.8% | 0.81 | 0.9% |
-| 81 | Pincurchin | 0.7% | 0.7% | 1.09 | 0.7% |
-| 87 | Lycanroc-Dusk | 0.7% | 0.7% | 1.09 | 0.7% |
-| 93 | Scrafty | 0.9% | 0.7% | 0.75 | 0.9% |
+| 78 | Aegislash | 0.8% | 0.8% | 1.09 | 0.8% |
+| 79 | Toxtricity | 0.9% | 0.8% | 0.88 | 0.9% |
+| 80 | Pincurchin | 0.7% | 0.8% | 1.14 | 0.7% |
+| 80 | Scizor | 0.6% | 0.7% | 1.22 | 0.7% |
+| 89 | Lycanroc-Dusk | 0.7% | 0.7% | 1.09 | 0.7% |
+| 95 | Scrafty | 0.9% | 0.7% | 0.75 | 0.9% |
 | 105 | Pyroar | 0.9% | 0.7% | 0.77 | 0.9% |
 | 107 | Vanilluxe | 0.8% | 0.7% | 0.81 | 0.8% |
-| 113 | Klefki | 0.9% | 0.7% | 0.77 | 0.8% |
-| 124 | Meowstic-F | 1.3% | 0.6% | 0.51 | 1.2% |
-| 134 | Altaria | 0.7% | 0.6% | 0.85 | 0.6% |
+| 111 | Klefki | 0.9% | 0.7% | 0.77 | 0.8% |
+| 123 | Meowstic-F | 1.3% | 0.6% | 0.51 | 1.2% |
+| 133 | Altaria | 0.7% | 0.6% | 0.85 | 0.6% |
