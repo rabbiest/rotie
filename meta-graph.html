@@ -81,6 +81,7 @@
   .set-item { display: flex; align-items: center; gap: 4px; }
   .illegal-move-note { color: var(--muted); }
   .group-heading { color: var(--muted); font-size: 0.86rem; margin: 8px 0 4px 0; }
+  .token-label { display: block; color: var(--muted); font-size: var(--fs-panel-small); }
 </style>
 </head>
 <body>
@@ -298,15 +299,30 @@
     return g;
   }
 
-  function appendSwatchText(row, color, text) {
+  // subtitle (optional): a muted second line under the text, e.g. an entry's token label.
+  function appendSwatchText(row, color, text, subtitle) {
     var swatch = document.createElement("span");
     swatch.className = "swatch";
     swatch.style.background = color;
     var label = document.createElement("span");
     label.className = "label-text";
     label.textContent = text;
+    if (subtitle) label.appendChild(tokenLabelEl(subtitle));
     row.appendChild(swatch);
     row.appendChild(label);
+  }
+
+  // An entry's token label (its top members, "A / B / C") when it carries one that differs from its
+  // label (a composed or override name), else "": shown as a small subtitle under the label.
+  function tokenSubtitle(entry) {
+    return entry && typeof entry.tokenLabel === "string" && entry.tokenLabel !== entry.label ? entry.tokenLabel : "";
+  }
+
+  function tokenLabelEl(text) {
+    var el = document.createElement("span");
+    el.className = "token-label";
+    el.textContent = text;
+    return el;
   }
 
   // The focused node's community key (its "community" attribute, Unconnected being null), or
@@ -338,7 +354,7 @@
       if (renderer) renderer.refresh();
     });
     row.appendChild(box);
-    appendSwatchText(row, color, label + " " + detail);
+    appendSwatchText(row, color, label + " " + detail, tokenSubtitle(community));
     // Unconnected (community undefined here) gets no Teams button: it's a species grouping, not an archetype.
     if (community) row.appendChild(teamsButton(community.id));
     if (community && community.subCommunities && community.subCommunities.length > 0) {
@@ -381,8 +397,37 @@
     row.className = "legend-row";
     var label = sub.label ? sub.label : "Sub-community " + sub.id;
     appendSwatchText(row, sub.color, label + " (" + sub.memberCount + " tokens, " + fmtPct(sub.primaryShareOfParent) +
-      " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent" + calibratedNote(sub.calibratedPrimaryShareOfParent) + ")" + entryNote(sub));
+      " primary + " + fmtPct(sub.hybridShareOfParent) + " hybrid of parent" + calibratedNote(sub.calibratedPrimaryShareOfParent) + ")" + entryNote(sub), tokenSubtitle(sub));
     row.appendChild(teamsButton(parentId, sub.id));
+    return row;
+  }
+
+  // A replicated build's (a roster's) detail: ", <mode label>, N copies, first <pilot> (<date>), best
+  // <placement>", the mode label only when it has one.
+  function buildDetail(build) {
+    return (build.modeLabel ? ", " + build.modeLabel : "") + ", " + build.copies + " copies, first " + (build.pilot || "an unnamed pilot") +
+      " (" + (build.dateRange ? build.dateRange.since : "undated") + "), best " + build.bestPlacement;
+  }
+
+  // A roster's copies: every team whose six species are the roster's (sorted, so order doesn't matter).
+  function buildTeams(build) {
+    var key = build.species.slice().sort().join("|");
+    return (currentData.teams || []).filter(function (t) { return (t.species || []).slice().sort().join("|") === key; });
+  }
+
+  // A replicated build's legend row: its label and detail, coloured by the community holding most
+  // of its copies (grey when none), with a Teams button listing its copies.
+  function buildLegendRow(build, index) {
+    var row = document.createElement("div");
+    row.className = "legend-row";
+    var community = findCommunity(build.community);
+    appendSwatchText(row, community ? community.color : "#888888", build.label + buildDetail(build));
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "drill-btn";
+    btn.textContent = "Teams";
+    btn.addEventListener("click", function () { setSelection({ kind: "build", index: index }); });
+    row.appendChild(btn);
     return row;
   }
 
@@ -405,6 +450,7 @@
       var heading = document.createElement("div");
       heading.className = "drill-heading";
       heading.textContent = "Drilled into: " + (drilled.label ? drilled.label : "Community " + drilled.id);
+      if (tokenSubtitle(drilled)) heading.appendChild(tokenLabelEl(tokenSubtitle(drilled)));
       legendEl.appendChild(heading);
       drilled.subCommunities.forEach(function (s) { legendEl.appendChild(subCommunityLegendRow(s, drilled.id)); });
       return;
@@ -419,6 +465,14 @@
     var unconnected = data.nodes.filter(function (n) { return n.community === null || n.community === undefined; });
     if (unconnected.length > 0) {
       legendEl.appendChild(communityLegendRow("Unconnected", "#888888", "(" + unconnected.length + " species)", UNCONNECTED_KEY));
+    }
+    // Replicated builds (absent from older JSON): the same six species on several teams, one placed.
+    if (data.builds && data.builds.length > 0) {
+      var buildsHeading = document.createElement("div");
+      buildsHeading.className = "drill-heading";
+      buildsHeading.textContent = "Replicated builds";
+      legendEl.appendChild(buildsHeading);
+      data.builds.forEach(function (b, i) { legendEl.appendChild(buildLegendRow(b, i)); });
     }
   }
 
@@ -957,14 +1011,18 @@
     head.id = "selected-title";
     var strong = document.createElement("strong");
     var shareText;
+    var subtitle;
     if (sel.sub !== undefined) {
       var sub = findSubCommunity(sel.community, sel.sub);
       strong.textContent = (sub ? (sub.label || "Sub-community " + sub.id) : "Sub-community " + sel.sub) + entryNote(sub || {});
       shareText = fmtPct(sub ? sub.primaryShareOfParent : undefined);
+      subtitle = tokenSubtitle(sub);
     } else {
       strong.textContent = communityLabelText(sel.community);
       shareText = fmtPct(community.primaryShare);
+      subtitle = tokenSubtitle(community);
     }
+    if (subtitle) strong.appendChild(tokenLabelEl(subtitle));
     head.appendChild(strong);
     head.appendChild(closeButton());
     selectedInfo.appendChild(head);
@@ -1007,12 +1065,42 @@
     appendHybridGroup(sel.community, undefined);
   }
 
+  // Build panel: opened via a replicated build's Teams button. Header: its label (its six species),
+  // its mode label as a subtitle when it has one; then its copies, first pilot and date, best
+  // placement, and the archetype holding most of them; then its copies through the same team list
+  // as an archetype's (buildTeams: the teams with its six species).
+  function renderBuildPanel(sel) {
+    var build = (currentData.builds || [])[sel.index];
+    if (!build) { selectedPanel.style.display = "none"; return; }
+    selectedPanel.style.display = "";
+
+    var head = document.createElement("div");
+    head.id = "selected-title";
+    var strong = document.createElement("strong");
+    strong.textContent = build.label;
+    if (build.modeLabel) strong.appendChild(tokenLabelEl(build.modeLabel));
+    head.appendChild(strong);
+    head.appendChild(closeButton());
+    selectedInfo.appendChild(head);
+
+    var row = { community: build.community };
+    if (build.subCommunity !== null && build.subCommunity !== undefined) row.subCommunity = build.subCommunity;
+    var meta = document.createElement("div");
+    meta.className = "group-heading";
+    meta.textContent = buildDetail(Object.assign({}, build, { modeLabel: null })).slice(2) + " · " + archetypeRowLabel(row);
+    selectedInfo.appendChild(meta);
+
+    if (!currentData.teams) { selectedInfo.appendChild(regenerateNote()); return; }
+    appendTeamList(selectedInfo, buildTeams(build));
+  }
+
   // The Selected panel (above Hover): hidden while nothing is selected. DOM built with
   // textContent/element methods throughout, never innerHTML with data.
   function renderSelected() {
     selectedInfo.textContent = "";
     if (!selection) { selectedPanel.style.display = "none"; return; }
     if (selection.kind === "species") renderSpeciesPanel(selection);
+    else if (selection.kind === "build") renderBuildPanel(selection);
     else renderArchetypePanel(selection);
   }
 
