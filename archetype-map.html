@@ -49,12 +49,18 @@
   #hover-info { line-height: 1.45; white-space: pre-line; }
   .chip-row { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
   .chip-row button { display: inline-flex; align-items: center; gap: 3px; }
-  .species-chip { display: flex; align-items: center; gap: 6px; border: 1px solid var(--accent); border-radius: 6px; padding: 4px 6px; margin: 4px 0; }
-  .species-chip:hover { background: #1e293b; }
-  .species-chip:has(.chip-open[aria-pressed="true"]) { background: #0c4a6e; }
-  .species-chip .chip-open { flex: 1; display: flex; align-items: center; gap: 6px; padding: 0; background: transparent; border: none; font-size: var(--fs-panel); text-align: left; }
-  .species-chip .chip-open[aria-pressed="true"] { background: transparent; }
-  .species-chip .chip-open:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .species-chip { display: flex; align-items: flex-start; gap: 6px; border: 1px solid var(--accent); border-radius: 6px; padding: 4px 6px; margin: 4px 0; }
+  .species-chip.view-open { background: #0c4a6e; }
+  .species-chip > details { flex: 1; min-width: 0; }
+  .species-chip > details > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 6px; border-radius: 4px; }
+  .species-chip > details > summary::-webkit-details-marker { display: none; }
+  .species-chip > details > summary::after { content: "▸"; color: var(--muted); margin-left: auto; }
+  .species-chip > details[open] > summary::after { content: "▾"; }
+  .species-chip > details > summary:hover { background: #1e293b; }
+  .species-chip > details > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .chip-builds { max-height: 50vh; overflow-y: auto; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); }
+  .chip-group { margin: 6px 0; }
+  .build-row { display: flex; align-items: center; gap: 6px; margin-left: 10px; font-size: var(--fs-panel-small); cursor: pointer; }
   .class-heading { color: var(--muted); font-size: var(--fs-panel-head); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin: 12px 0 2px 0; }
   .group-head { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
   .sprite-mega { position: relative; display: inline-flex; flex-shrink: 0; }
@@ -1141,34 +1147,90 @@ return { MAX_SPECIES, decodeTeams, statPointsText, decodeSet, speciesLabel, spri
     notes.forEach(function (n) { notesEl.appendChild(el("div", "note", n)); });
   }
 
-  // A build's checkbox (the builds view's, the page's only one): checked when the selection has it.
+  // A build's checkbox, in a chip's dropdown and in the builds view alike (one state): checked when the
+  // selection has it. Keyboard focus returns to the same box once the re-render has replaced it.
   function buildCheckbox(key) {
     var box = document.createElement("input");
     box.type = "checkbox";
     box.dataset.key = key;
     box.defaultChecked = box.checked = state.builds.indexOf(key) >= 0;
-    box.addEventListener("change", function () { toggleValue("builds", key); });
+    box.addEventListener("change", function () {
+      var scope = chipsEl.contains(box) ? chipsEl : resultsEl;
+      toggleValue("builds", key);
+      var boxes = scope.querySelectorAll('input[type="checkbox"]');
+      for (var i = 0; i < boxes.length; i++) {
+        if (boxes[i].dataset.key === key) { boxes[i].focus({ preventScroll: true }); return; }
+      }
+    });
     return box;
   }
 
-  // A selected species: its open button (sprite and name, the whole chip but the ×) opens or closes its
-  // builds view, the × removes it.
-  function speciesChip(name) {
-    var open = view.species === name;
-    var chip = el("div", "species-chip");
+  // An item class's heading over its groups, in a chip's dropdown and in the builds view.
+  function classHeadingEl(g) {
+    var head = el("div", "class-heading", g.classLabel);
+    head.dataset.itemClass = g.itemClass;
+    return head;
+  }
+
+  // An item-and-ability group's line (icon, item, ability, sets and share, staples), in both places too.
+  function groupHeadEl(g) {
+    var head = el("div", "group-head");
+    if (typeof g.itemIcon === "number") head.appendChild(itemIcon(g.itemIcon));
+    head.appendChild(el("span", "", (g.item || "no item") + " · " + (g.ability || "no ability") + " · " + plural(g.sets, "set") + " (" + pct(g.share) + ")"));
+    if (g.staples.length) head.appendChild(el("span", "muted", "staples: " + g.staples.join(", ")));
+    return head;
+  }
+
+  // A selected species: a dropdown (open when `open`) whose summary (sprite, name, the builds checked) opens
+  // its builds as checkboxes by item class, then item and ability, and a control for its builds view; the ×,
+  // a sibling of the dropdown, removes it.
+  function speciesChip(name, open) {
+    var viewOpen = view.species === name;
+    var chip = el("div", viewOpen ? "species-chip view-open" : "species-chip");
     chip.dataset.species = name;
-    var openBtn = el("button", "chip-open");
-    openBtn.type = "button";
-    openBtn.setAttribute("aria-pressed", open ? "true" : "false");
-    openBtn.title = open ? "Back to the teams" : "Show " + name + "'s builds";
-    openBtn.appendChild(speciesSprite(name, 28));
+    var details = el("details", "chip-dropdown");
+    if (open) details.open = true;
+    var summary = el("summary", "chip-summary");
+    summary.title = name + "'s builds";
+    summary.appendChild(speciesSprite(name, 28));
     var picked = state.builds.filter(function (k) { return L.buildSpecies(data, k) === name; }).length;
-    openBtn.appendChild(el("span", "chip-name", name + (picked ? " · " + plural(picked, "build") : " · any build")));
-    openBtn.addEventListener("click", function () {
-      apply(state, [], open ? NO_VIEW : { species: name, open: null }, false);
+    summary.appendChild(el("span", "chip-name", name + (picked ? " · " + plural(picked, "build") : " · any build")));
+    details.appendChild(summary);
+
+    var body = el("div", "chip-builds");
+    var viewBtn = el("button", "chip-view", viewOpen ? "Close builds view" : "Open builds view");
+    viewBtn.type = "button";
+    viewBtn.title = viewOpen ? "Back to the teams" : "Show " + name + "'s builds below the tabs";
+    viewBtn.addEventListener("click", function () {
+      details.open = false;
+      apply(state, [], viewOpen ? NO_VIEW : { species: name, open: null }, false);
       focusChip(name);
     });
-    chip.appendChild(openBtn);
+    body.appendChild(viewBtn);
+    var matchedBuilds = new Map(((answer && answer.builds[name]) || []).map(function (b) { return [b.key, b.teams]; }));
+    var lastClass = null;
+    L.buildsViewModel(data, records, name).groups.forEach(function (g) {
+      if (g.itemClass !== lastClass) {
+        lastClass = g.itemClass;
+        body.appendChild(classHeadingEl(g));
+      }
+      var group = el("div", "chip-group");
+      group.appendChild(groupHeadEl(g));
+      g.builds.forEach(function (b) {
+        var row = el("label", "build-row");
+        row.dataset.key = b.key;
+        row.dataset.teams = String(b.teams);
+        row.dataset.matched = String(matchedBuilds.get(b.key) || 0);
+        row.appendChild(buildCheckbox(b.key));
+        row.appendChild(el("span", "", b.label));
+        row.appendChild(el("span", "muted", plural(b.teams, "team") + " · " + row.dataset.matched + " matched"));
+        group.appendChild(row);
+      });
+      body.appendChild(group);
+    });
+    details.appendChild(body);
+    chip.appendChild(details);
+
     var remove = el("button", "", "×");
     remove.type = "button";
     remove.title = "Remove " + name;
@@ -1178,13 +1240,13 @@ return { MAX_SPECIES, decodeTeams, statPointsText, decodeSet, speciesLabel, spri
     return chip;
   }
 
-  // Keyboard focus back on a species chip's open button once the re-render has replaced it.
+  // Keyboard focus back on a species chip's summary once the re-render has replaced it.
   function focusChip(name) {
     for (var i = 0; i < chipsEl.children.length; i++) {
       var c = chipsEl.children[i];
       if (c.dataset.species !== name) continue;
-      var btn = c.querySelector(".chip-open");
-      if (btn) btn.focus();
+      var summary = c.querySelector("summary");
+      if (summary) summary.focus();
       return;
     }
   }
@@ -1202,8 +1264,18 @@ return { MAX_SPECIES, decodeTeams, statPointsText, decodeSet, speciesLabel, spri
 
   function renderFilters() {
     hintEl.hidden = !!answer;
+    // Which dropdowns are open, and how far each is scrolled, survives the re-render.
+    var wasOpen = new Map();
+    chipsEl.querySelectorAll(".species-chip").forEach(function (c) {
+      var d = c.querySelector("details");
+      if (d && d.open) wasOpen.set(c.dataset.species, c.querySelector(".chip-builds").scrollTop);
+    });
     chipsEl.textContent = "";
-    state.species.forEach(function (s) { chipsEl.appendChild(speciesChip(s)); });
+    state.species.forEach(function (s) {
+      var chip = speciesChip(s, wasOpen.has(s));
+      chipsEl.appendChild(chip);
+      if (wasOpen.has(s)) chip.querySelector(".chip-builds").scrollTop = wasOpen.get(s);
+    });
 
     modeChipsEl.textContent = "";
     var modeCounts = new Map((answer ? answer.modes.map(function (m) { return [m.mode, m.teams]; }) : windowModes.map(function (m) { return [m.name, m.teams]; })));
@@ -1348,16 +1420,10 @@ return { MAX_SPECIES, decodeTeams, statPointsText, decodeSet, speciesLabel, spri
     model.groups.forEach(function (g) {
       if (g.itemClass !== lastClass) {
         lastClass = g.itemClass;
-        var classHead = el("div", "class-heading", g.classLabel);
-        classHead.dataset.itemClass = g.itemClass;
-        groupList.appendChild(classHead);
+        groupList.appendChild(classHeadingEl(g));
       }
       var box = el("div", "bv-group");
-      var gh = el("div", "group-head");
-      if (typeof g.itemIcon === "number") gh.appendChild(itemIcon(g.itemIcon));
-      gh.appendChild(el("span", "", (g.item || "no item") + " · " + (g.ability || "no ability") + " · " + plural(g.sets, "set") + " (" + pct(g.share) + ")"));
-      if (g.staples.length) gh.appendChild(el("span", "muted", "staples: " + g.staples.join(", ")));
-      box.appendChild(gh);
+      box.appendChild(groupHeadEl(g));
       g.builds.forEach(function (b) {
         var opened = view.open === b.key;
         var row = el("div", "bv-build");
@@ -1365,7 +1431,9 @@ return { MAX_SPECIES, decodeTeams, statPointsText, decodeSet, speciesLabel, spri
         row.dataset.teams = String(b.teams);
         row.dataset.matched = String(matchedBuilds.get(b.key) || 0);
         var bh = el("div", "bv-build-head");
-        bh.appendChild(buildCheckbox(b.key));
+        var bvBox = buildCheckbox(b.key);
+        bvBox.setAttribute("aria-label", b.label);
+        bh.appendChild(bvBox);
         var openBtn = el("button", "bv-open", (opened ? "▾ " : "▸ ") + b.label);
         openBtn.type = "button";
         openBtn.title = opened ? "Close this build's teams" : "Open this build's teams";
