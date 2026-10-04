@@ -12,7 +12,7 @@
   three slots below with the data, team_query's compiled core, and archetype-map.mjs. Nothing is
   fetched, so the built page works from file:// and a web server alike.
 
-  Pinned CDN builds, as in meta-graph.html: graphology 0.26.0's UMD build (global `graphology`) and
+  Pinned CDN builds: graphology 0.26.0's UMD build (global `graphology`) and
   sigma 3.0.3's UMD bundle (global `Sigma`). Without them (offline) the graph pane says so and the
   selection, results and builds still work. Sprites are drawn on a 2D canvas layer above sigma's
   own (no CORS needed for drawImage), redrawn on sigma's "afterRender".
@@ -922,7 +922,7 @@ return { MAX_SPECIES, decodeTeams, statPointsText, decodeSet, speciesLabel, spri
     return e;
   }
 
-  // ---- Sprites, item icons, team rows (as meta-graph.html draws them) ----
+  // ---- Sprites, item icons, team rows ----
 
   function spriteImg(id, label, sizePx) {
     var img = document.createElement("img");
@@ -1001,7 +1001,7 @@ return { MAX_SPECIES, decodeTeams, statPointsText, decodeSet, speciesLabel, spri
   }
 
   // One set as team_query's sample sets give it (species, item, ability, nature, stat points, moves),
-  // with the Mega ability and the inferred-ability flag as meta-graph.html shows them.
+  // with the Mega ability and the inferred-ability flag.
   function setBlock(s, sets) {
     var block = el("div", "set-block");
     var head = el("div", "set-head");
