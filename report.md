@@ -7698,6 +7698,54 @@ A model built from the ladder's rank order, not a ladder usage share: among the 
 Calibrated support need not land on its rank-matched support: a species' factor is averaged with its teammates' in each team's multiplier and every share is renormalised, so it usually moves only part of the way, and can stop short, overshoot, or even move against its own factor; λ = 1 does not mean the ladder is matched. Mapping the i-th in the ladder order to the i-th sheet support assumes the ladder's usage curve has the sheet's shape; where sheet supports are compressed, one or two ranks swing a factor a lot. Where the two orders agree the factor is exactly one by construction, which does not mean equal usage; such a species still moves through its teammates and the renormalisation. Reweighting scales the sheet's own teams: it cannot add a ladder build the sheet lacks, so it corrects how much of each sheet archetype appears, not which archetypes exist, and sub-community labels keep the sheet's items.
 Effective teams (Kish): 2735.34 under the sheet weights, 2669.89 calibrated; team weight multiplier 0.57 to 1.82.
 
+#### Definitions
+Each archetype definition of §13 by rank, its variants under it. Share = its teams over the window's teams, every roster copy counting one (§13's Share column); calibrated share = the same teams each weighted by its team multiplier above, over every window team so weighted. Each team's base weight is one (no placement weighting), so the difference is the calibration alone. A model built from the ladder's rank order, not a ladder usage share.
+| Rank | Definition | Teams | Share | Calibrated share | Difference |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | Tailwind Mega Salamence + Rillaboom | 571 | 19.3% | 17.8% | −1.5 pts |
+| 1.1 | Tailwind Mega Salamence + Rillaboom + Sneasler | 324 | 11.0% | 10.0% | −1.0 pts |
+| 1.2 | Tailwind Mega Salamence + Rillaboom + Gholdengo | 294 | 9.9% | 8.2% | −1.7 pts |
+| 1.3 | Tailwind Mega Salamence + Rillaboom + Arcanine-Hisui | 242 | 8.2% | 6.9% | −1.3 pts |
+| 2 | Psyspam Indeedee-F | 436 | 14.7% | 17.9% | +3.2 pts |
+| 2.1 | Psyspam Indeedee-F + Armarouge | 183 | 6.2% | 7.4% | +1.2 pts |
+| 2.2 | Psyspam Mega Gardevoir + Sneasler + Indeedee-F | 150 | 5.1% | 6.7% | +1.6 pts |
+| 2.3 | Psyspam Mega Golisopod + Indeedee-F | 87 | 2.9% | 3.8% | +0.9 pts |
+| 3 | Trick Room | 420 | 14.2% | 16.7% | +2.5 pts |
+| 3.1 | Rain Trick Room Mega Golisopod + Farigiraf + Politoed | 54 | 1.8% | 2.0% | +0.2 pts |
+| 3.2 | Trick Room Mega Camerupt + Farigiraf | 51 | 1.7% | 1.8% | +0.1 pts |
+| 3.3 | Rain Trick Room Mega Golisopod + Archaludon + Politoed | 50 | 1.7% | 1.8% | +0.1 pts |
+| 4 | Tailwind Mega Raichu-Y + Rillaboom + Gholdengo | 383 | 13.0% | 9.4% | −3.6 pts |
+| 4.1 | Tailwind Setup Mega Raichu-Y + Rillaboom + Gholdengo | 108 | 3.7% | 2.6% | −1.1 pts |
+| 5 | Sun Mega Charizard-Y | 357 | 12.1% | 13.2% | +1.1 pts |
+| 5.1 | Sun Mega Charizard-Y + Garchomp | 157 | 5.3% | 5.7% | +0.4 pts |
+| 5.2 | Sun Mega Charizard-Y + Farigiraf | 118 | 4.0% | 4.3% | +0.3 pts |
+| 5.3 | Sun Rain Screens Mega Charizard-Y + Archaludon + Grimmsnarl | 95 | 3.2% | 3.5% | +0.3 pts |
+| 6 | Rain Tailwind Archaludon + Pelipper | 225 | 7.6% | 8.9% | +1.3 pts |
+| 6.1 | Rain Tailwind Mega Golisopod + Archaludon + Pelipper | 106 | 3.6% | 4.4% | +0.8 pts |
+| 6.2 | Rain Tailwind Mega Swampert + Archaludon + Pelipper | 84 | 2.8% | 3.3% | +0.5 pts |
+| 6.3 | Rain Tailwind Basculegion + Archaludon + Pelipper | 52 | 1.8% | 2.2% | +0.4 pts |
+| 7 | Setup Mega Floette + Rillaboom + Incineroar | 176 | 6.0% | 5.1% | −0.9 pts |
+| 8 | Sand Mega Salamence + Mega Tyranitar + Excadrill | 165 | 5.6% | 5.4% | −0.2 pts |
+| 9 | Rain Archaludon + Politoed | 146 | 4.9% | 5.0% | +0.1 pts |
+| 9.1 | Rain Perish Trap Mega Gengar + Archaludon + Politoed | 63 | 2.1% | 2.0% | −0.1 pts |
+| 9.2 | Rain Perish Trap Incineroar + Archaludon + Politoed | 60 | 2.0% | 1.9% | −0.1 pts |
+| 9.3 | Rain Screens Archaludon + Politoed + Grimmsnarl | 47 | 1.6% | 1.7% | +0.1 pts |
+| 10 | Mega Garchomp-Z + Rillaboom + Incineroar | 96 | 3.2% | 3.3% | +0.1 pts |
+| 11 | Snow Mega Froslass + Rillaboom + Sneasler | 97 | 3.3% | 2.9% | −0.4 pts |
+| 12 | Tailwind Basculegion + Whimsicott | 66 | 2.2% | 2.5% | +0.3 pts |
+| 13 | Tailwind Mega Glimmora | 65 | 2.2% | 2.3% | +0.1 pts |
+| 14 | Tailwind Mega Dragonite | 60 | 2.0% | 2.0% | 0.0 pts |
+| 15 | Setup Mega Delphox + Sneasler | 61 | 2.1% | 1.9% | −0.2 pts |
+| 16 | Tailwind Garchomp + Whimsicott | 56 | 1.9% | 2.1% | +0.2 pts |
+| 17 | Tailwind Kingambit + Farigiraf + Sylveon | 54 | 1.8% | 1.9% | +0.1 pts |
+| 18 | Mega Raichu-Y + Rillaboom + Volcarona | 53 | 1.8% | 1.6% | −0.2 pts |
+| 19 | Rain Mega Golisopod + Farigiraf + Pelipper | 52 | 1.8% | 2.1% | +0.3 pts |
+| 20 | Psyspam Sneasler + Milotic + Indeedee | 51 | 1.7% | 1.7% | 0.0 pts |
+| 21 | Mega Metagross + Indeedee-F | 50 | 1.7% | 1.7% | 0.0 pts |
+| 22 | Mega Salamence + Mega Floette + Kingambit | 50 | 1.7% | 1.6% | −0.1 pts |
+| 23 | Mega Lucario-Z + Rillaboom + Incineroar | 50 | 1.7% | 2.1% | +0.4 pts |
+| 24 | Rain Tailwind Mega Golisopod + Basculegion + Pelipper | 49 | 1.7% | 2.3% | +0.6 pts |
+
 #### Communities
 | Community | Label | Sheet primary | Calibrated primary | Sheet hybrid | Calibrated hybrid |
 | :--- | :--- | :--- | :--- | :--- | :--- |
