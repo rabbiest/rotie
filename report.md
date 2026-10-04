@@ -13,7 +13,7 @@
 - **Primary, hybrid, unassigned**: a team scores against each community the summed Louvain weight of the cores it contains, counting only the strongest core per species pair, and a core counts toward the communities of both its species. The best-scoring community is the team's primary; every other community scoring at least `hybridRunnerUpRatio` of the best, and at least `hybridMinMedianRatio` of the median score of that community's own primary teams, is one of its hybrids, so a team that fits every community poorly collects none. A team with no core is unassigned. Primary shares plus the unassigned share make up the whole team weight; hybrid shares are counted apart, and a team with several hybrids counts toward each.
 - **Sub-communities**: a community with at least `subPassMinParentTeams` primary teams gets a second Louvain pass (resolution `subLouvainResolution`) over its primary teams alone; the teams for which it is only the hybrid are left out. Its nodes are species@item tokens: a set counts as its species@item only when its item defines a build, by a fixed item-class table (mega-stone (any Mega Stone), seed (Grassy Seed, Psychic Seed, Electric Seed, Misty Seed), speed (Choice Scarf), screens (Light Clay), pivot (Eject Button); an item the table doesn't class counts as defining), and that token is on at least `subMinTokenTeams` of those teams. Any other set (an item of another class, a rarer defining item, or no item) counts as its bare species, shown as "(other item)" with the most common of its items and how many of the bare species' teams hold it. Support, lift, cores, and the primary, hybrid, and unassigned split are computed within those teams by the rules above, two species@item tokens can form a core there, two tokens of the same species are never named as alternatives, and a sub-community's shares are of its parent community's primary team weight. Each sub-community is headed by its primary teams, its distinct builds (teams with the same tokens, or of one variant family, are one build), and how many of its primary teams carry its top two tokens together ("top pair on k/n"), then lists the Megas those teams carry and its most common species; one is minor when it has fewer than `subMinDistinctBuilds` distinct builds, or neither a shared core (its top pair on at least `subMinSharedCoverage` of its primary teams) nor a shared mode (a mode tag that names something in this window on at least that share): a minor sub-community is listed on one line, gets no composed name, and its teams count as minor in the cluster comparison.
 - **Sheet vs. ladder**: the tournament sample compared with the ladder's daily snapshots dated from the window's start to the as-of date and recorded under this regulation. A species is on the ladder when at least half of those snapshots list it; its median rank is the lower median of its ranks in the snapshots that list it, and the ladder order is by median rank, then rank in the latest snapshot, then name. Over the ladder's top `ladderTopSpecies` species in that order: the ladder items (latest snapshot) held by at least `ladderItemMinShare` of a species' sets on the ladder, more than in the sheet, on fewer than `minNodeTeams` sheet teams; the species the two rank most differently (each list capped at `ladderBiasListSize`); and each species' ladder teammate list (latest snapshot) against its sheet partners by P(B|A). Since the ladder gives usage and teammates as ranks and lists with no shares, these comparisons are by rank or list membership only.
-- **Definition**: up to three Pokémon (a Mega counts as its Pokémon), mode tags and Megas, mined from team_query's records for the same as-of date and window; a team is in a definition exactly when it carries all of them, as team_query matches, every copy of a roster counting. Candidates start from species pairs found together more often than chance (lift at least `coreMinLift`), species triples whose lift over each of their pairs and its third member is at least `coreMinLift`, mode tags, and a mode tag with a Mega whose share among that tag's teams is at least `coreMinLift` times its share of the window; each candidate needs at least `definitionMinCoverage` of the window's teams (the floor). Each is then extended one element at a time by the mode tag, Mega or species on the most of its teams, when that element is on at least `definitionExtendShare` of them, its lift over the window is at least `coreMinLift`, and the extended candidate keeps the floor; no new Pokémon joins past three, and a Mega whose Pokémon is already required replaces it. Candidates are ranked by weighted share (the placement tier weights alone), then teams, distinct rosters, fewer elements, and key. One with fewer than `definitionMinRosters` distinct rosters is refused, as is one on at least `definitionMaxCoverage` of the window (its refinements stay eligible). One of Pokémon alone (no mode tag and no Mega) is refused as a staple unless its lift is at least `definitionBareMinLift` (a pair's lift; a triple's least lift over each of its pairs and its third member): Pokémon found together on many teams but not much more often than chance are not an archetype by themselves. In rank order, a candidate with at least `definitionMinOwnShare` of its teams new (in no related definition admitted before it: one sharing a Pokémon, a Mega counting as its Pokémon, or a mode tag) is admitted, until there are `definitionMax`; any other becomes the variant of an admitted definition whose every Pokémon, mode tag and Mega it has (at most `definitionVariants` each), or is refused as an overlap, listing the related definitions sharing the most of its teams. A definition's own teams are in no other definition; each team of the window is exclusive (in one definition), hybrid (in two or more) or uncovered (in none), a variant counting as its parent. Recent and earlier are its shares of the teams dated in the window's last `definitionRecentDays` days and of the rest. A definition that lists several Megas means a team runs one of them (one Mega per team); modes listed together are the team's options, not simultaneous conditions.
+- **Definition**: up to three Pokémon (a Mega counts as its Pokémon), mode tags and Megas, mined from team_query's records for the same as-of date and window; a team is in a definition exactly when it carries all of them, as team_query matches, every copy of a roster counting. Candidates start from species pairs found together more often than chance (lift at least `coreMinLift`), species triples whose lift over each of their pairs and its third member is at least `coreMinLift`, mode tags, and a mode tag with a Mega whose share among that tag's teams is at least `coreMinLift` times its share of the window; each candidate needs at least `definitionMinCoverage` of the window's teams (the floor). Each is then extended one element at a time by the mode tag, Mega or species on the most of its teams, when that element is on at least `definitionExtendShare` of them, its lift over the window is at least `coreMinLift`, and the extended candidate keeps the floor; no new Pokémon joins past three, and a Mega whose Pokémon is already required replaces it. Candidates are ranked by weighted share (the placement tier weights alone), then teams, distinct rosters, fewer elements, and key. One with fewer than `definitionMinRosters` distinct rosters is refused, as is one on at least `definitionMaxCoverage` of the window (its refinements stay eligible). One of Pokémon alone (no mode tag and no Mega) is refused as a staple unless its lift is at least `definitionBareMinLift` (a pair's lift; a triple's least lift over each of its pairs and its third member): Pokémon found together on many teams but not much more often than chance are not an archetype by themselves; the staples on at least `stapleMinShare` of the window's teams are listed, the rest counted. In rank order, a candidate with at least `definitionMinOwnShare` of its teams new (in no related definition admitted before it: one sharing a Pokémon, a Mega counting as its Pokémon, or a mode tag) is admitted, until there are `definitionMax`; any other becomes the variant of an admitted definition whose every Pokémon, mode tag and Mega it has (at most `definitionVariants` each), or is refused as an overlap, listing the related definitions sharing the most of its teams. Once the set is complete, of the definitions with less than `definitionMinOwnShare` of their teams outside every other related definition (above or below them), the one with the least (the lower-ranked on a tie) is refused as absorbed, listing the related definitions sharing the most of its teams, and admission is redone from the start without it, until a round absorbs none. A definition's name is its mode names, then its Megas and other Pokémon by window teams, joined by +. A definition's own teams are in no other definition; each team of the window is exclusive (in one definition), hybrid (in two or more) or uncovered (in none), a variant counting as its parent. Recent and earlier are its shares of the teams dated in the window's last `definitionRecentDays` days and of the rest. A definition that lists several Megas means a team runs one of them (one Mega per team); modes listed together are the team's options, not simultaneous conditions.
 - **Ladder-calibrated view**: with `ladderBlend` above zero, the same teams are weighed a second way. Among the sheet's species nodes with a ladder entry, each takes as its rank-matched support the sheet support found at its own position in the ladder order among them, and every team's weight is multiplied once by the geometric mean over its species of (rank-matched support / sheet support) raised to `ladderBlend`; any other species counts as one. Species support and the community and sub-community shares are then shown under both weights, over the unchanged communities and assignments. It is a model built from the ladder's rank order, not a ladder usage share: it moves shares only part of the way, and not always toward the ladder's order, since each factor is averaged with its teammates'; it cannot add a build the sheet lacks; and a species thin or absent on the sheet can't be reweighted.
 - **Tags that name nothing in this window** (on at least `labelDominantTagShare` of its teams): Tailwind.
 
@@ -88,6 +88,7 @@
   - definitionOverlaps: 3
   - definitionSampleRosters: 5
   - definitionListRows: 10
+  - stapleMinShare: 0.05
 
 ## 2. Known-Core Check
 Species pairs A + B from knownCoreChecks, with their best species@item + species pair (highest lift) beside them: an item can carry a synergy the species-level pair does not show.
@@ -7832,52 +7833,52 @@ Effective teams (Kish): 2701.46 under the sheet weights, 2638.49 calibrated; tea
 | 188 | Pidgeot | 0.1% | 0.1% | 0.72 | 0.1% |
 
 ## 13. Definitions
-Over team_query's 2915 teams shared 2026-09-09 to 2026-10-01: 25 definitions and 19 variants from 218 candidates (349 seeds); floor 44 teams, ceiling 1458 teams. Teams: exclusive 1294 (44.4%), hybrid 1176 (40.3%), uncovered 445 (15.3%) (a variant counts as its parent). Recent: 1456 teams dated 2026-09-25 to 2026-10-01; earlier: 1459 teams.
+Over team_query's 2915 teams shared 2026-09-09 to 2026-10-01: 25 definitions and 19 variants from 218 candidates (349 seeds); floor 44 teams, ceiling 1458 teams; admission ran 2 rounds, 1 absorbed. Teams: exclusive 1287 (44.2%), hybrid 1183 (40.6%), uncovered 445 (15.3%) (a variant counts as its parent). Recent: 1456 teams dated 2026-09-25 to 2026-10-01; earlier: 1459 teams.
 
 ### 13.1 Ranked definitions
 | Rank | Name | Key | Teams | Share | Weighted | Rosters | Own | New | Recent | Earlier | Variants | Origin |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | Tailwind Rillaboom (Mega Salamence) | `Rillaboom\|tailwind\|Salamence-Mega` | 568 | 19.5% | 19.5% | 206 | 156 | 100.0% | 14.1% | 24.8% | 3 | mode-mega + Rillaboom (75.7%, lift 1.38) |
-| 2 | Psyspam Indeedee-F | `Indeedee-F\|psyspam\|(none)` | 433 | 14.9% | 14.7% | 281 | 150 | 100.0% | 12.8% | 16.9% | 3 | mode + Indeedee-F (69.7%, lift 3.70) |
+| 1 | Tailwind Mega Salamence + Rillaboom | `Rillaboom\|tailwind\|Salamence-Mega` | 568 | 19.5% | 19.5% | 206 | 162 | 100.0% | 14.1% | 24.8% | 3 | mode-mega + Rillaboom (75.7%, lift 1.38) |
+| 2 | Psyspam Indeedee-F | `Indeedee-F\|psyspam\|(none)` | 433 | 14.9% | 14.7% | 281 | 138 | 100.0% | 12.8% | 16.9% | 3 | mode + Indeedee-F (69.7%, lift 3.70) |
 | 3 | Trick Room | `(none)\|trick-room\|(none)` | 407 | 14.0% | 14.0% | 305 | 109 | 100.0% | 12.8% | 15.1% | 3 | mode |
-| 4 | Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) | `Gholdengo+Rillaboom\|tailwind\|Raichu-Mega-Y` | 380 | 13.0% | 13.1% | 57 | 214 | 61.1% | 15.2% | 10.8% | 1 | triple + Mega Raichu-Y (99.8%, lift 4.21) + Tailwind (83.7%, lift 1.49) |
-| 5 | Sun (Mega Charizard-Y) | `(none)\|sun\|Charizard-Mega-Y` | 347 | 11.9% | 11.9% | 169 | 77 | 100.0% | 12.4% | 11.4% | 3 | mode-mega |
-| 6 | Rain Tailwind Archaludon + Pelipper | `Archaludon+Pelipper\|rain+tailwind\|(none)` | 219 | 7.5% | 7.6% | 141 | 71 | 88.6% | 7.2% | 7.8% | 3 | pair + Rain (100.0%, lift 5.83) + Tailwind (90.9%, lift 1.62) |
-| 7 | Setup Rillaboom + Incineroar (Mega Floette) | `Incineroar+Rillaboom\|setup\|Floette-Mega` | 172 | 5.9% | 6.0% | 44 | 59 | 68.0% | 5.6% | 6.2% | 0 | triple + Mega Floette (99.6%, lift 7.93) + Setup (76.1%, lift 3.85) |
-| 8 | Sand Excadrill (Mega Salamence, Mega Tyranitar) | `Excadrill\|sand\|Salamence-Mega+Tyranitar-Mega` | 164 | 5.6% | 5.6% | 33 | 93 | 70.7% | 6.1% | 5.1% | 0 | mode-mega + Excadrill (85.4%, lift 11.26) + Mega Salamence (80.4%, lift 2.51) |
+| 4 | Tailwind Mega Raichu-Y + Rillaboom + Gholdengo | `Gholdengo+Rillaboom\|tailwind\|Raichu-Mega-Y` | 380 | 13.0% | 13.1% | 57 | 214 | 61.1% | 15.2% | 10.8% | 1 | triple + Mega Raichu-Y (99.8%, lift 4.21) + Tailwind (83.7%, lift 1.49) |
+| 5 | Sun Mega Charizard-Y | `(none)\|sun\|Charizard-Mega-Y` | 347 | 11.9% | 11.9% | 169 | 77 | 100.0% | 12.4% | 11.4% | 3 | mode-mega |
+| 6 | Rain Tailwind Archaludon + Pelipper | `Archaludon+Pelipper\|rain+tailwind\|(none)` | 219 | 7.5% | 7.6% | 141 | 64 | 88.6% | 7.2% | 7.8% | 3 | pair + Rain (100.0%, lift 5.83) + Tailwind (90.9%, lift 1.62) |
+| 7 | Setup Mega Floette + Rillaboom + Incineroar | `Incineroar+Rillaboom\|setup\|Floette-Mega` | 172 | 5.9% | 6.0% | 44 | 59 | 68.0% | 5.6% | 6.2% | 0 | triple + Mega Floette (99.6%, lift 7.93) + Setup (76.1%, lift 3.85) |
+| 8 | Sand Mega Salamence + Mega Tyranitar + Excadrill | `Excadrill\|sand\|Salamence-Mega+Tyranitar-Mega` | 164 | 5.6% | 5.6% | 33 | 94 | 70.7% | 6.1% | 5.1% | 0 | mode-mega + Excadrill (85.4%, lift 11.26) + Mega Salamence (80.4%, lift 2.51) |
 | 9 | Rain Archaludon + Politoed | `Archaludon+Politoed\|rain\|(none)` | 142 | 4.9% | 4.9% | 60 | 67 | 100.0% | 7.2% | 2.5% | 3 | pair + Rain (100.0%, lift 5.83) |
-| 10 | Snow Rillaboom + Sneasler (Mega Froslass) | `Rillaboom+Sneasler\|snow\|Froslass-Mega` | 97 | 3.3% | 3.3% | 28 | 56 | 63.9% | 3.4% | 3.3% | 0 | triple + Mega Froslass (100.0%, lift 17.05) + Snow (100.0%, lift 11.80) |
-| 11 | Rillaboom + Incineroar (Mega Garchomp-Z) | `Incineroar+Rillaboom\|(none)\|Garchomp-Mega-Z` | 94 | 3.2% | 3.2% | 36 | 31 | 81.9% | 3.1% | 3.4% | 0 | pair + Mega Garchomp-Z (60.3%, lift 8.33) + Rillaboom (82.5%, lift 1.50) |
-| 12 | Sneasler (Mega Metagross) | `Sneasler\|(none)\|Metagross-Mega` | 80 | 2.7% | 2.7% | 43 | 18 | 100.0% | 2.3% | 3.2% | 0 | pair + Mega Metagross (97.6%, lift 18.35) |
+| 10 | Snow Mega Froslass + Rillaboom + Sneasler | `Rillaboom+Sneasler\|snow\|Froslass-Mega` | 97 | 3.3% | 3.3% | 28 | 56 | 63.9% | 3.4% | 3.3% | 0 | triple + Mega Froslass (100.0%, lift 17.05) + Snow (100.0%, lift 11.80) |
+| 11 | Mega Garchomp-Z + Rillaboom + Incineroar | `Incineroar+Rillaboom\|(none)\|Garchomp-Mega-Z` | 94 | 3.2% | 3.2% | 36 | 31 | 81.9% | 3.1% | 3.4% | 0 | pair + Mega Garchomp-Z (60.3%, lift 8.33) + Rillaboom (82.5%, lift 1.50) |
+| 12 | Mega Metagross + Sneasler | `Sneasler\|(none)\|Metagross-Mega` | 80 | 2.7% | 2.7% | 43 | 23 | 100.0% | 2.3% | 3.2% | 0 | pair + Mega Metagross (97.6%, lift 18.35) |
 | 13 | Tailwind Basculegion + Whimsicott | `Basculegion+Whimsicott\|tailwind\|(none)` | 66 | 2.3% | 2.3% | 35 | 10 | 97.0% | 2.7% | 1.8% | 0 | pair + Tailwind (100.0%, lift 1.78) |
-| 14 | Tailwind (Mega Glimmora) | `(none)\|tailwind\|Glimmora-Mega` | 65 | 2.2% | 2.3% | 42 | 27 | 60.0% | 2.1% | 2.4% | 0 | mode-mega |
-| 15 | Setup Sneasler (Mega Delphox) | `Sneasler\|setup\|Delphox-Mega` | 60 | 2.1% | 2.1% | 22 | 47 | 85.0% | 3.0% | 1.1% | 0 | mode-mega + Sneasler (76.9%, lift 1.80) |
-| 16 | Tailwind (Mega Dragonite) | `(none)\|tailwind\|Dragonite-Mega` | 57 | 2.0% | 2.0% | 31 | 13 | 77.2% | 2.7% | 1.2% | 0 | mode-mega |
-| 17 | Arcanine-Hisui + Milotic (Mega Salamence) | `Arcanine-Hisui+Milotic\|(none)\|Salamence-Mega` | 58 | 2.0% | 2.0% | 14 | 2 | 50.0% | 2.0% | 2.0% | 0 | triple + Mega Salamence (100.0%, lift 3.12) |
-| 18 | Tailwind Garchomp + Whimsicott | `Garchomp+Whimsicott\|tailwind\|(none)` | 56 | 1.9% | 1.9% | 37 | 6 | 55.4% | 2.1% | 1.8% | 0 | pair + Tailwind (100.0%, lift 1.78) |
-| 19 | Tailwind Kingambit + Farigiraf + Sylveon | `Farigiraf+Kingambit+Sylveon\|tailwind\|(none)` | 53 | 1.8% | 1.8% | 8 | 5 | 79.2% | 1.9% | 1.8% | 0 | triple + Tailwind (86.9%, lift 1.55) |
-| 20 | Indeedee-F + Milotic + Dragapult | `Dragapult+Indeedee-F+Milotic\|(none)\|(none)` | 52 | 1.8% | 1.8% | 14 | 17 | 32.7% | 2.3% | 1.2% | 0 | triple (lift 5.10) |
-| 21 | Rillaboom + Volcarona (Mega Raichu-Y) | `Rillaboom+Volcarona\|(none)\|Raichu-Mega-Y` | 51 | 1.7% | 1.8% | 31 | 23 | 51.0% | 2.8% | 0.7% | 0 | triple + Mega Raichu-Y (100.0%, lift 4.22) |
-| 22 | Rain Farigiraf + Pelipper (Mega Golisopod) | `Farigiraf+Pelipper\|rain\|Golisopod-Mega` | 51 | 1.7% | 1.8% | 31 | 10 | 37.3% | 1.9% | 1.6% | 0 | pair + Rain (100.0%, lift 5.83) + Mega Golisopod (82.3%, lift 5.96) |
-| 23 | Psyspam Sneasler + Milotic + Indeedee | `Indeedee+Milotic+Sneasler\|psyspam\|(none)` | 51 | 1.7% | 1.7% | 13 | 8 | 47.1% | 1.2% | 2.3% | 0 | triple + Psyspam (100.0%, lift 4.69) |
-| 24 | Kingambit (Mega Salamence, Mega Floette) | `Kingambit\|(none)\|Floette-Mega+Salamence-Mega` | 50 | 1.7% | 1.7% | 24 | 10 | 32.0% | 1.0% | 2.5% | 0 | triple + Mega Floette (100.0%, lift 7.96) + Mega Salamence (100.0%, lift 3.12) |
-| 25 | Rillaboom + Incineroar (Mega Lucario-Z) | `Incineroar+Rillaboom\|(none)\|Lucario-Mega-Z` | 50 | 1.7% | 1.7% | 30 | 15 | 40.0% | 1.0% | 2.4% | 0 | triple + Mega Lucario-Z (100.0%, lift 35.12) |
+| 14 | Tailwind Mega Glimmora | `(none)\|tailwind\|Glimmora-Mega` | 65 | 2.2% | 2.3% | 42 | 27 | 60.0% | 2.1% | 2.4% | 0 | mode-mega |
+| 15 | Setup Mega Delphox + Sneasler | `Sneasler\|setup\|Delphox-Mega` | 60 | 2.1% | 2.1% | 22 | 47 | 85.0% | 3.0% | 1.1% | 0 | mode-mega + Sneasler (76.9%, lift 1.80) |
+| 16 | Tailwind Mega Dragonite | `(none)\|tailwind\|Dragonite-Mega` | 57 | 2.0% | 2.0% | 31 | 13 | 77.2% | 2.7% | 1.2% | 0 | mode-mega |
+| 17 | Tailwind Garchomp + Whimsicott | `Garchomp+Whimsicott\|tailwind\|(none)` | 56 | 1.9% | 1.9% | 37 | 6 | 55.4% | 2.1% | 1.8% | 0 | pair + Tailwind (100.0%, lift 1.78) |
+| 18 | Tailwind Kingambit + Farigiraf + Sylveon | `Farigiraf+Kingambit+Sylveon\|tailwind\|(none)` | 53 | 1.8% | 1.8% | 8 | 5 | 79.2% | 1.9% | 1.8% | 0 | triple + Tailwind (86.9%, lift 1.55) |
+| 19 | Indeedee-F + Milotic + Dragapult | `Dragapult+Indeedee-F+Milotic\|(none)\|(none)` | 52 | 1.8% | 1.8% | 14 | 17 | 32.7% | 2.3% | 1.2% | 0 | triple (lift 5.10) |
+| 20 | Mega Raichu-Y + Rillaboom + Volcarona | `Rillaboom+Volcarona\|(none)\|Raichu-Mega-Y` | 51 | 1.7% | 1.8% | 31 | 23 | 51.0% | 2.8% | 0.7% | 0 | triple + Mega Raichu-Y (100.0%, lift 4.22) |
+| 21 | Rain Mega Golisopod + Farigiraf + Pelipper | `Farigiraf+Pelipper\|rain\|Golisopod-Mega` | 51 | 1.7% | 1.8% | 31 | 9 | 37.3% | 1.9% | 1.6% | 0 | pair + Rain (100.0%, lift 5.83) + Mega Golisopod (82.3%, lift 5.96) |
+| 22 | Psyspam Sneasler + Milotic + Indeedee | `Indeedee+Milotic+Sneasler\|psyspam\|(none)` | 51 | 1.7% | 1.7% | 13 | 9 | 49.0% | 1.2% | 2.3% | 0 | triple + Psyspam (100.0%, lift 4.69) |
+| 23 | Mega Salamence + Mega Floette + Kingambit | `Kingambit\|(none)\|Floette-Mega+Salamence-Mega` | 50 | 1.7% | 1.7% | 24 | 10 | 32.0% | 1.0% | 2.5% | 0 | triple + Mega Floette (100.0%, lift 7.96) + Mega Salamence (100.0%, lift 3.12) |
+| 24 | Mega Lucario-Z + Rillaboom + Incineroar | `Incineroar+Rillaboom\|(none)\|Lucario-Mega-Z` | 50 | 1.7% | 1.7% | 30 | 15 | 40.0% | 1.0% | 2.4% | 0 | triple + Mega Lucario-Z (100.0%, lift 35.12) |
+| 25 | Rain Tailwind Mega Golisopod + Basculegion + Pelipper | `Basculegion+Pelipper\|rain+tailwind\|Golisopod-Mega` | 49 | 1.7% | 1.7% | 19 | 2 | 36.7% | 1.0% | 2.4% | 0 | triple + Mega Golisopod (100.0%, lift 7.25) + Rain (100.0%, lift 5.83) + Tailwind (89.1%, lift 1.58) |
 
-Staple cores (Pokémon found together on many teams but less than definitionBareMinLift times chance; not archetypes by themselves): Rillaboom + Incineroar 603 teams (20.7%, lift 1.27), Sneasler + Kingambit 408 teams (14.0%, lift 1.32), Rillaboom + Volcarona 155 teams (5.3%, lift 1.45), Kingambit + Garchomp 151 teams (5.2%, lift 1.36), Kingambit + Farigiraf 136 teams (4.7%, lift 1.35), Sneasler + Kingambit + Arcanine-Hisui 124 teams (4.3%, lift 1.46), Sneasler + Kingambit + Basculegion 101 teams (3.5%, lift 1.42), Rillaboom + Incineroar + Volcarona 66 teams (2.3%, lift 1.43), Rillaboom + Basculegion + Volcarona 48 teams (1.6%, lift 1.41), Incineroar + Kommo-o 47 teams (1.6%, lift 1.37) (the first 10 of 11 by rank).
+Staple cores (Pokémon found together on many teams but less than definitionBareMinLift times chance; not archetypes by themselves): Rillaboom + Incineroar 603 teams (20.7%, lift 1.27), Sneasler + Kingambit 408 teams (14.0%, lift 1.32), Rillaboom + Volcarona 155 teams (5.3%, lift 1.45), Kingambit + Garchomp 151 teams (5.2%, lift 1.36) and 7 more below 5%.
 
 ### 13.2 Definitions in detail
 New counts a definition's teams in no related definition ranked above it (sharing a Pokémon or a mode); Overlaps and Own count every definition, so a definition can be mostly new yet share most of its teams with an unrelated one.
 
-#### 1. Tailwind Rillaboom (Mega Salamence)
+#### 1. Tailwind Mega Salamence + Rillaboom
 - Key: `Rillaboom|tailwind|Salamence-Mega`
 - Requires: Pokémon Rillaboom, Mega Salamence; modes Tailwind; Megas Mega Salamence
-- 568 teams (19.5%), weighted 19.5%, 206 rosters, 156 in no other definition; recent 14.1% of 1456 teams vs. earlier 24.8% of 1459; 100.0% of its teams new at admission (in no related definition ranked above it)
+- 568 teams (19.5%), weighted 19.5%, 206 rosters, 162 in no other definition; recent 14.1% of 1456 teams vs. earlier 24.8% of 1459; 100.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: mode-mega seed `(none)|tailwind|Salamence-Mega`, then Rillaboom (75.7%, lift 1.38)
-- Overlaps: Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) (148 teams); Setup Rillaboom + Incineroar (Mega Floette) (53 teams); Sand Excadrill (Mega Salamence, Mega Tyranitar) (48 teams)
+- Overlaps: Tailwind Mega Raichu-Y + Rillaboom + Gholdengo (148 teams); Setup Mega Floette + Rillaboom + Incineroar (53 teams); Sand Mega Salamence + Mega Tyranitar + Excadrill (48 teams)
 - Variants:
-  - Tailwind Rillaboom + Sneasler (Mega Salamence) `Rillaboom+Sneasler|tailwind|Salamence-Mega`: 323 teams (11.1%), weighted 11.1%, 92 rosters, 113 in no other definition; recent 7.1% of 1456 teams vs. earlier 15.0% of 1459; origin pair + Mega Salamence (100.0%, lift 3.12) + Tailwind (75.8%, lift 1.35) + Rillaboom (73.7%, lift 1.34)
-  - Tailwind Rillaboom + Gholdengo (Mega Salamence) `Gholdengo+Rillaboom|tailwind|Salamence-Mega`: 293 teams (10.1%), weighted 10.0%, 65 rosters, 45 in no other definition; recent 7.6% of 1456 teams vs. earlier 12.5% of 1459; origin triple + Mega Salamence (100.0%, lift 3.12) + Tailwind (91.6%, lift 1.63)
-  - Tailwind Rillaboom + Arcanine-Hisui (Mega Salamence) `Arcanine-Hisui+Rillaboom|tailwind|Salamence-Mega`: 240 teams (8.2%), weighted 8.2%, 53 rosters, 80 in no other definition; recent 6.2% of 1456 teams vs. earlier 10.3% of 1459; origin triple + Mega Salamence (100.0%, lift 3.12) + Tailwind (92.7%, lift 1.65)
+  - Tailwind Mega Salamence + Rillaboom + Sneasler `Rillaboom+Sneasler|tailwind|Salamence-Mega`: 323 teams (11.1%), weighted 11.1%, 92 rosters, 115 in no other definition; recent 7.1% of 1456 teams vs. earlier 15.0% of 1459; origin pair + Mega Salamence (100.0%, lift 3.12) + Tailwind (75.8%, lift 1.35) + Rillaboom (73.7%, lift 1.34)
+  - Tailwind Mega Salamence + Rillaboom + Gholdengo `Gholdengo+Rillaboom|tailwind|Salamence-Mega`: 293 teams (10.1%), weighted 10.0%, 65 rosters, 51 in no other definition; recent 7.6% of 1456 teams vs. earlier 12.5% of 1459; origin triple + Mega Salamence (100.0%, lift 3.12) + Tailwind (91.6%, lift 1.63)
+  - Tailwind Mega Salamence + Rillaboom + Arcanine-Hisui `Arcanine-Hisui+Rillaboom|tailwind|Salamence-Mega`: 240 teams (8.2%), weighted 8.2%, 53 rosters, 88 in no other definition; recent 6.2% of 1456 teams vs. earlier 10.3% of 1459; origin triple + Mega Salamence (100.0%, lift 3.12) + Tailwind (92.7%, lift 1.65)
 - Sample rosters:
   - Arcanine-Hisui / Gholdengo / Raichu / Rillaboom / Salamence / Sneasler: 55 copies, best 32, first 2026-09-20, https://pokepast.es/ecdecc58b9116d68
   - Floette-Eternal / Gholdengo / Incineroar / Rillaboom / Salamence / Sneasler: 36 copies, best 1, first 2026-09-09, https://pokepast.es/6f1d5b2b15285f2b
@@ -7888,13 +7889,13 @@ New counts a definition's teams in no related definition ranked above it (sharin
 #### 2. Psyspam Indeedee-F
 - Key: `Indeedee-F|psyspam|(none)`
 - Requires: Pokémon Indeedee-F; modes Psyspam; Megas none
-- 433 teams (14.9%), weighted 14.7%, 281 rosters, 150 in no other definition; recent 12.8% of 1456 teams vs. earlier 16.9% of 1459; 100.0% of its teams new at admission (in no related definition ranked above it)
+- 433 teams (14.9%), weighted 14.7%, 281 rosters, 138 in no other definition; recent 12.8% of 1456 teams vs. earlier 16.9% of 1459; 100.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: mode seed `(none)|psyspam|(none)`, then Indeedee-F (69.7%, lift 3.70)
-- Overlaps: Trick Room (173 teams); Sun (Mega Charizard-Y) (41 teams); Indeedee-F + Milotic + Dragapult (35 teams)
+- Overlaps: Trick Room (173 teams); Sun Mega Charizard-Y (41 teams); Indeedee-F + Milotic + Dragapult (35 teams)
 - Variants:
-  - Psyspam Indeedee-F + Armarouge `Armarouge+Indeedee-F|psyspam|(none)`: 181 teams (6.2%), weighted 6.2%, 124 rosters, 51 in no other definition; recent 5.5% of 1456 teams vs. earlier 6.9% of 1459; origin pair + Psyspam (100.0%, lift 4.69)
-  - Psyspam Sneasler + Indeedee-F (Mega Gardevoir) `Indeedee-F+Sneasler|psyspam|Gardevoir-Mega`: 149 teams (5.1%), weighted 5.1%, 83 rosters, 84 in no other definition; recent 3.4% of 1456 teams vs. earlier 6.9% of 1459; origin triple + Mega Gardevoir (100.0%, lift 12.79) + Psyspam (100.0%, lift 4.69)
-  - Psyspam Indeedee-F (Mega Golisopod) `Indeedee-F|psyspam|Golisopod-Mega`: 87 teams (3.0%), weighted 3.0%, 56 rosters, 26 in no other definition; recent 2.5% of 1456 teams vs. earlier 3.4% of 1459; origin pair + Mega Golisopod (100.0%, lift 7.25) + Psyspam (81.3%, lift 3.82)
+  - Psyspam Indeedee-F + Armarouge `Armarouge+Indeedee-F|psyspam|(none)`: 181 teams (6.2%), weighted 6.2%, 124 rosters, 52 in no other definition; recent 5.5% of 1456 teams vs. earlier 6.9% of 1459; origin pair + Psyspam (100.0%, lift 4.69)
+  - Psyspam Mega Gardevoir + Sneasler + Indeedee-F `Indeedee-F+Sneasler|psyspam|Gardevoir-Mega`: 149 teams (5.1%), weighted 5.1%, 83 rosters, 71 in no other definition; recent 3.4% of 1456 teams vs. earlier 6.9% of 1459; origin triple + Mega Gardevoir (100.0%, lift 12.79) + Psyspam (100.0%, lift 4.69)
+  - Psyspam Mega Golisopod + Indeedee-F `Indeedee-F|psyspam|Golisopod-Mega`: 87 teams (3.0%), weighted 3.0%, 56 rosters, 13 in no other definition; recent 2.5% of 1456 teams vs. earlier 3.4% of 1459; origin pair + Mega Golisopod (100.0%, lift 7.25) + Psyspam (81.3%, lift 3.82)
 - Sample rosters:
   - Camerupt / Farigiraf / Hatterene / Incineroar / Indeedee-F / Kingambit: 17 copies, best 38, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0940/teamlist
   - Basculegion / Gardevoir / Golisopod / Indeedee-F / Pelipper / Sneasler: 14 copies, best 6, first 2026-09-12, https://pokepast.es/1f4da9800a6ad851
@@ -7907,11 +7908,11 @@ New counts a definition's teams in no related definition ranked above it (sharin
 - Requires: Pokémon none; modes Trick Room; Megas none
 - 407 teams (14.0%), weighted 14.0%, 305 rosters, 109 in no other definition; recent 12.8% of 1456 teams vs. earlier 15.1% of 1459; 100.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: mode seed `(none)|trick-room|(none)`
-- Overlaps: Psyspam Indeedee-F (173 teams); Sun (Mega Charizard-Y) (60 teams); Rain Archaludon + Politoed (52 teams)
+- Overlaps: Psyspam Indeedee-F (173 teams); Sun Mega Charizard-Y (60 teams); Rain Archaludon + Politoed (52 teams)
 - Variants:
-  - Rain Trick Room Farigiraf + Politoed (Mega Golisopod) `Farigiraf+Politoed|rain+trick-room|Golisopod-Mega`: 53 teams (1.8%), weighted 1.8%, 19 rosters, 9 in no other definition; recent 2.9% of 1456 teams vs. earlier 0.8% of 1459; origin pair + Rain (100.0%, lift 5.83) + Mega Golisopod (95.8%, lift 6.94) + Trick Room (77.9%, lift 5.58)
-  - Trick Room Farigiraf (Mega Camerupt) `Farigiraf|trick-room|Camerupt-Mega`: 51 teams (1.7%), weighted 1.7%, 32 rosters, 19 in no other definition; recent 2.1% of 1456 teams vs. earlier 1.4% of 1459; origin mode-mega + Farigiraf (77.3%, lift 5.53)
-  - Rain Trick Room Archaludon + Politoed (Mega Golisopod) `Archaludon+Politoed|rain+trick-room|Golisopod-Mega`: 49 teams (1.7%), weighted 1.7%, 16 rosters, 0 in no other definition; recent 2.9% of 1456 teams vs. earlier 0.5% of 1459; origin triple + Mega Golisopod (100.0%, lift 7.25) + Rain (100.0%, lift 5.83) + Trick Room (65.3%, lift 4.68)
+  - Rain Trick Room Mega Golisopod + Farigiraf + Politoed `Farigiraf+Politoed|rain+trick-room|Golisopod-Mega`: 53 teams (1.8%), weighted 1.8%, 19 rosters, 9 in no other definition; recent 2.9% of 1456 teams vs. earlier 0.8% of 1459; origin pair + Rain (100.0%, lift 5.83) + Mega Golisopod (95.8%, lift 6.94) + Trick Room (77.9%, lift 5.58)
+  - Trick Room Mega Camerupt + Farigiraf `Farigiraf|trick-room|Camerupt-Mega`: 51 teams (1.7%), weighted 1.7%, 32 rosters, 19 in no other definition; recent 2.1% of 1456 teams vs. earlier 1.4% of 1459; origin mode-mega + Farigiraf (77.3%, lift 5.53)
+  - Rain Trick Room Mega Golisopod + Archaludon + Politoed `Archaludon+Politoed|rain+trick-room|Golisopod-Mega`: 49 teams (1.7%), weighted 1.7%, 16 rosters, 0 in no other definition; recent 2.9% of 1456 teams vs. earlier 0.5% of 1459; origin triple + Mega Golisopod (100.0%, lift 7.25) + Rain (100.0%, lift 5.83) + Trick Room (65.3%, lift 4.68)
 - Sample rosters:
   - Archaludon / Charizard / Farigiraf / Golisopod / Grimmsnarl / Politoed: 33 copies, best 2, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/i4SPzSax7gWzIckK52KU
   - Camerupt / Farigiraf / Hatterene / Incineroar / Indeedee-F / Kingambit: 17 copies, best 38, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0940/teamlist
@@ -7919,14 +7920,14 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Arcanine-Hisui / Farigiraf / Kingambit / Rillaboom / Salamence / Sylveon: 7 copies, best 116, first 2026-09-17, https://standings.limitlessvgc.com/0037/player/0640/teamlist
   - Armarouge / Camerupt / Golisopod / Hatterene / Indeedee-F / Sirfetch’d: 3 copies, best 9, first 2026-09-19, https://pokepast.es/e186eb86a1990ce2
 
-#### 4. Tailwind Rillaboom + Gholdengo (Mega Raichu-Y)
+#### 4. Tailwind Mega Raichu-Y + Rillaboom + Gholdengo
 - Key: `Gholdengo+Rillaboom|tailwind|Raichu-Mega-Y`
 - Requires: Pokémon Gholdengo, Rillaboom, Mega Raichu-Y; modes Tailwind; Megas Mega Raichu-Y
 - 380 teams (13.0%), weighted 13.1%, 57 rosters, 214 in no other definition; recent 15.2% of 1456 teams vs. earlier 10.8% of 1459; 61.1% of its teams new at admission (in no related definition ranked above it)
 - Origin: triple seed `Gholdengo+Raichu+Rillaboom|(none)|(none)`, then Mega Raichu-Y (99.8%, lift 4.21), Tailwind (83.7%, lift 1.49)
-- Overlaps: Tailwind Rillaboom (Mega Salamence) (148 teams); Arcanine-Hisui + Milotic (Mega Salamence) (19 teams); Rillaboom + Volcarona (Mega Raichu-Y) (11 teams)
+- Overlaps: Tailwind Mega Salamence + Rillaboom (148 teams); Mega Raichu-Y + Rillaboom + Volcarona (11 teams); Mega Garchomp-Z + Rillaboom + Incineroar (6 teams)
 - Variants:
-  - Tailwind Setup Rillaboom + Gholdengo (Mega Raichu-Y) `Gholdengo+Rillaboom|tailwind+setup|Raichu-Mega-Y`: 108 teams (3.7%), weighted 3.7%, 27 rosters, 77 in no other definition; recent 5.4% of 1456 teams vs. earlier 2.1% of 1459; origin mode-mega + Rillaboom (96.2%, lift 1.75) + Gholdengo (86.4%, lift 3.00) + Tailwind (70.6%, lift 1.26)
+  - Tailwind Setup Mega Raichu-Y + Rillaboom + Gholdengo `Gholdengo+Rillaboom|tailwind+setup|Raichu-Mega-Y`: 108 teams (3.7%), weighted 3.7%, 27 rosters, 77 in no other definition; recent 5.4% of 1456 teams vs. earlier 2.1% of 1459; origin mode-mega + Rillaboom (96.2%, lift 1.75) + Gholdengo (86.4%, lift 3.00) + Tailwind (70.6%, lift 1.26)
 - Sample rosters:
   - Arcanine-Hisui / Gholdengo / Raichu / Rillaboom / Staraptor / Sylveon: 122 copies, best 1, first 2026-09-14, https://pokepast.es/2d234b4ec11a9aca
   - Arcanine-Hisui / Gholdengo / Raichu / Rillaboom / Salamence / Sneasler: 55 copies, best 32, first 2026-09-20, https://pokepast.es/ecdecc58b9116d68
@@ -7934,16 +7935,16 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Gholdengo / Incineroar / Raichu / Rillaboom / Salamence / Sneasler: 19 copies, best 1, first 2026-09-18, https://pokepast.es/d6b2f01ddf4fee52
   - Arcanine-Hisui / Gholdengo / Milotic / Raichu / Rillaboom / Salamence: 19 copies, best 35, first 2026-09-20, https://standings.limitlessvgc.com/0038/player/0250/teamlist
 
-#### 5. Sun (Mega Charizard-Y)
+#### 5. Sun Mega Charizard-Y
 - Key: `(none)|sun|Charizard-Mega-Y`
 - Requires: Pokémon Mega Charizard-Y; modes Sun; Megas Mega Charizard-Y
 - 347 teams (11.9%), weighted 11.9%, 169 rosters, 77 in no other definition; recent 12.4% of 1456 teams vs. earlier 11.4% of 1459; 100.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: mode-mega seed `(none)|sun|Charizard-Mega-Y`
 - Overlaps: Rain Tailwind Archaludon + Pelipper (61 teams); Trick Room (60 teams); Rain Archaludon + Politoed (49 teams)
 - Variants:
-  - Sun Garchomp (Mega Charizard-Y) `Garchomp|sun|Charizard-Mega-Y`: 154 teams (5.3%), weighted 5.3%, 77 rosters, 45 in no other definition; recent 5.0% of 1456 teams vs. earlier 5.6% of 1459; origin pair + Mega Charizard-Y (100.0%, lift 8.40) + Sun (100.0%, lift 6.60)
-  - Sun Farigiraf (Mega Charizard-Y) `Farigiraf|sun|Charizard-Mega-Y`: 116 teams (4.0%), weighted 4.0%, 36 rosters, 13 in no other definition; recent 5.3% of 1456 teams vs. earlier 2.7% of 1459; origin pair + Mega Charizard-Y (100.0%, lift 8.40) + Sun (100.0%, lift 6.60)
-  - Sun Rain Screens Archaludon + Grimmsnarl (Mega Charizard-Y) `Archaludon+Grimmsnarl|sun+rain+screens|Charizard-Mega-Y`: 95 teams (3.3%), weighted 3.3%, 18 rosters, 0 in no other definition; recent 3.9% of 1456 teams vs. earlier 2.6% of 1459; origin pair + Rain (100.0%, lift 5.83) + Screens (99.2%, lift 14.99) + Mega Charizard-Y (74.8%, lift 6.28) + Sun (100.0%, lift 6.60)
+  - Sun Mega Charizard-Y + Garchomp `Garchomp|sun|Charizard-Mega-Y`: 154 teams (5.3%), weighted 5.3%, 77 rosters, 45 in no other definition; recent 5.0% of 1456 teams vs. earlier 5.6% of 1459; origin pair + Mega Charizard-Y (100.0%, lift 8.40) + Sun (100.0%, lift 6.60)
+  - Sun Mega Charizard-Y + Farigiraf `Farigiraf|sun|Charizard-Mega-Y`: 116 teams (4.0%), weighted 4.0%, 36 rosters, 13 in no other definition; recent 5.3% of 1456 teams vs. earlier 2.7% of 1459; origin pair + Mega Charizard-Y (100.0%, lift 8.40) + Sun (100.0%, lift 6.60)
+  - Sun Rain Screens Mega Charizard-Y + Archaludon + Grimmsnarl `Archaludon+Grimmsnarl|sun+rain+screens|Charizard-Mega-Y`: 95 teams (3.3%), weighted 3.3%, 18 rosters, 0 in no other definition; recent 3.9% of 1456 teams vs. earlier 2.6% of 1459; origin pair + Rain (100.0%, lift 5.83) + Screens (99.2%, lift 14.99) + Mega Charizard-Y (74.8%, lift 6.28) + Sun (100.0%, lift 6.60)
 - Sample rosters:
   - Archaludon / Charizard / Farigiraf / Golisopod / Grimmsnarl / Politoed: 38 copies, best 2, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/i4SPzSax7gWzIckK52KU
   - Aerodactyl / Charizard / Farigiraf / Garchomp / Kingambit / Sylveon: 35 copies, best 16, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/0lbS1fGaeHdeq74HLZWq
@@ -7954,12 +7955,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
 #### 6. Rain Tailwind Archaludon + Pelipper
 - Key: `Archaludon+Pelipper|rain+tailwind|(none)`
 - Requires: Pokémon Archaludon, Pelipper; modes Rain, Tailwind; Megas none
-- 219 teams (7.5%), weighted 7.6%, 141 rosters, 71 in no other definition; recent 7.2% of 1456 teams vs. earlier 7.8% of 1459; 88.6% of its teams new at admission (in no related definition ranked above it)
+- 219 teams (7.5%), weighted 7.6%, 141 rosters, 64 in no other definition; recent 7.2% of 1456 teams vs. earlier 7.8% of 1459; 88.6% of its teams new at admission (in no related definition ranked above it)
 - Origin: pair seed `Archaludon+Pelipper|(none)|(none)`, then Rain (100.0%, lift 5.83), Tailwind (90.9%, lift 1.62)
-- Overlaps: Sun (Mega Charizard-Y) (61 teams); Rain Farigiraf + Pelipper (Mega Golisopod) (32 teams); Trick Room (25 teams)
+- Overlaps: Sun Mega Charizard-Y (61 teams); Rain Mega Golisopod + Farigiraf + Pelipper (32 teams); Rain Tailwind Mega Golisopod + Basculegion + Pelipper (28 teams)
 - Variants:
-  - Rain Tailwind Archaludon + Pelipper (Mega Golisopod) `Archaludon+Pelipper|rain+tailwind|Golisopod-Mega`: 105 teams (3.6%), weighted 3.6%, 59 rosters, 25 in no other definition; recent 2.5% of 1456 teams vs. earlier 4.7% of 1459; origin triple + Mega Golisopod (100.0%, lift 7.25) + Rain (100.0%, lift 5.83) + Tailwind (89.7%, lift 1.60)
-  - Rain Tailwind Archaludon + Pelipper (Mega Swampert) `Archaludon+Pelipper|rain+tailwind|Swampert-Mega`: 83 teams (2.8%), weighted 2.8%, 48 rosters, 31 in no other definition; recent 2.9% of 1456 teams vs. earlier 2.8% of 1459; origin triple + Mega Swampert (100.0%, lift 25.13) + Rain (100.0%, lift 5.83) + Tailwind (89.2%, lift 1.59)
+  - Rain Tailwind Mega Golisopod + Archaludon + Pelipper `Archaludon+Pelipper|rain+tailwind|Golisopod-Mega`: 105 teams (3.6%), weighted 3.6%, 59 rosters, 18 in no other definition; recent 2.5% of 1456 teams vs. earlier 4.7% of 1459; origin triple + Mega Golisopod (100.0%, lift 7.25) + Rain (100.0%, lift 5.83) + Tailwind (89.7%, lift 1.60)
+  - Rain Tailwind Mega Swampert + Archaludon + Pelipper `Archaludon+Pelipper|rain+tailwind|Swampert-Mega`: 83 teams (2.8%), weighted 2.8%, 48 rosters, 29 in no other definition; recent 2.9% of 1456 teams vs. earlier 2.8% of 1459; origin triple + Mega Swampert (100.0%, lift 25.13) + Rain (100.0%, lift 5.83) + Tailwind (89.2%, lift 1.59)
   - Sun Rain Tailwind Screens Archaludon + Pelipper + Grimmsnarl `Archaludon+Grimmsnarl+Pelipper|sun+rain+tailwind+screens|(none)`: 51 teams (1.7%), weighted 1.8%, 13 rosters, 0 in no other definition; recent 1.1% of 1456 teams vs. earlier 2.4% of 1459; origin triple + Rain (100.0%, lift 5.83) + Screens (98.8%, lift 14.92) + Tailwind (96.3%, lift 1.71) + Sun (66.2%, lift 4.37)
 - Sample rosters:
   - Archaludon / Charizard / Grimmsnarl / Pelipper / Swampert / Venusaur: 19 copies, best 8, first 2026-09-20, https://standings.limitlessvgc.com/0038/player/0137/teamlist
@@ -7968,12 +7969,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Archaludon / Charizard / Garchomp / Grimmsnarl / Pelipper / Venusaur: 6 copies, best 1, first 2026-09-27, https://standings.limitlessvgc.com/0038/player/0267/teamlist
   - Archaludon / Golisopod / Grimmsnarl / Pelipper / Sinistcha / Swampert: 6 copies, best 7, first 2026-09-10, https://pokepast.es/5cdc704aa8f08294
 
-#### 7. Setup Rillaboom + Incineroar (Mega Floette)
+#### 7. Setup Mega Floette + Rillaboom + Incineroar
 - Key: `Incineroar+Rillaboom|setup|Floette-Mega`
 - Requires: Pokémon Incineroar, Rillaboom, Mega Floette; modes Setup; Megas Mega Floette
 - 172 teams (5.9%), weighted 6.0%, 44 rosters, 59 in no other definition; recent 5.6% of 1456 teams vs. earlier 6.2% of 1459; 68.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: triple seed `Floette-Eternal+Incineroar+Rillaboom|(none)|(none)`, then Mega Floette (99.6%, lift 7.93), Setup (76.1%, lift 3.85)
-- Overlaps: Tailwind Rillaboom (Mega Salamence) (53 teams); Tailwind (Mega Dragonite) (20 teams); Rillaboom + Incineroar (Mega Garchomp-Z) (11 teams)
+- Overlaps: Tailwind Mega Salamence + Rillaboom (53 teams); Tailwind Mega Dragonite (20 teams); Mega Garchomp-Z + Rillaboom + Incineroar (11 teams)
 - Variants: none
 - Sample rosters:
   - Floette-Eternal / Gholdengo / Incineroar / Rillaboom / Salamence / Sneasler: 35 copies, best 1, first 2026-09-09, https://pokepast.es/6f1d5b2b15285f2b
@@ -7982,12 +7983,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Delphox / Floette-Eternal / Incineroar / Kingambit / Rillaboom / Sneasler: 8 copies, best 8, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/rD6PrJBrCfzicynLnRAI
   - Floette-Eternal / Incineroar / Kingambit / Rillaboom / Salamence / Sneasler: 8 copies, best 445, first 2026-09-09, https://standings.limitlessvgc.com/0037/player/0624/teamlist
 
-#### 8. Sand Excadrill (Mega Salamence, Mega Tyranitar)
+#### 8. Sand Mega Salamence + Mega Tyranitar + Excadrill
 - Key: `Excadrill|sand|Salamence-Mega+Tyranitar-Mega`
 - Requires: Pokémon Excadrill, Mega Salamence, Mega Tyranitar; modes Sand; Megas Mega Salamence, Mega Tyranitar
-- 164 teams (5.6%), weighted 5.6%, 33 rosters, 93 in no other definition; recent 6.1% of 1456 teams vs. earlier 5.1% of 1459; 70.7% of its teams new at admission (in no related definition ranked above it)
+- 164 teams (5.6%), weighted 5.6%, 33 rosters, 94 in no other definition; recent 6.1% of 1456 teams vs. earlier 5.1% of 1459; 70.7% of its teams new at admission (in no related definition ranked above it)
 - Origin: mode-mega seed `(none)|sand|Tyranitar-Mega`, then Excadrill (85.4%, lift 11.26), Mega Salamence (80.4%, lift 2.51)
-- Overlaps: Tailwind Rillaboom (Mega Salamence) (48 teams); Psyspam Sneasler + Milotic + Indeedee (16 teams); Psyspam Indeedee-F (5 teams)
+- Overlaps: Tailwind Mega Salamence + Rillaboom (48 teams); Psyspam Sneasler + Milotic + Indeedee (16 teams); Psyspam Indeedee-F (5 teams)
 - Variants: none
 - Sample rosters:
   - Corviknight / Excadrill / Indeedee / Salamence / Sneasler / Tyranitar: 44 copies, best 1, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/DqQtlduXE6DDLOKZXBHD
@@ -8001,9 +8002,9 @@ New counts a definition's teams in no related definition ranked above it (sharin
 - Requires: Pokémon Archaludon, Politoed; modes Rain; Megas none
 - 142 teams (4.9%), weighted 4.9%, 60 rosters, 67 in no other definition; recent 7.2% of 1456 teams vs. earlier 2.5% of 1459; 100.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: pair seed `Archaludon+Politoed|(none)|(none)`, then Rain (100.0%, lift 5.83)
-- Overlaps: Trick Room (52 teams); Sun (Mega Charizard-Y) (49 teams); Psyspam Indeedee-F (5 teams)
+- Overlaps: Trick Room (52 teams); Sun Mega Charizard-Y (49 teams); Psyspam Indeedee-F (5 teams)
 - Variants:
-  - Rain Perish Trap Archaludon + Politoed (Mega Gengar) `Archaludon+Politoed|rain+perish-trap|Gengar-Mega`: 61 teams (2.1%), weighted 2.1%, 20 rosters, 56 in no other definition; recent 2.5% of 1456 teams vs. earlier 1.6% of 1459; origin triple + Mega Gengar (100.0%, lift 18.81) + Rain (100.0%, lift 5.83) + Perish Trap (95.3%, lift 25.26)
+  - Rain Perish Trap Mega Gengar + Archaludon + Politoed `Archaludon+Politoed|rain+perish-trap|Gengar-Mega`: 61 teams (2.1%), weighted 2.1%, 20 rosters, 56 in no other definition; recent 2.5% of 1456 teams vs. earlier 1.6% of 1459; origin triple + Mega Gengar (100.0%, lift 18.81) + Rain (100.0%, lift 5.83) + Perish Trap (95.3%, lift 25.26)
   - Rain Perish Trap Incineroar + Archaludon + Politoed `Archaludon+Incineroar+Politoed|rain+perish-trap|(none)`: 58 teams (2.0%), weighted 2.0%, 17 rosters, 54 in no other definition; recent 2.4% of 1456 teams vs. earlier 1.6% of 1459; origin triple + Rain (100.0%, lift 5.83) + Perish Trap (90.6%, lift 24.02)
   - Sun Rain Screens Archaludon + Politoed + Grimmsnarl `Archaludon+Grimmsnarl+Politoed|sun+rain+screens|(none)`: 44 teams (1.5%), weighted 1.5%, 5 rosters, 0 in no other definition; recent 2.8% of 1456 teams vs. earlier 0.2% of 1459; origin triple + Screens (100.0%, lift 15.10) + Rain (100.0%, lift 5.83) + Sun (93.6%, lift 6.17)
 - Sample rosters:
@@ -8013,12 +8014,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Archaludon / Gengar / Golisopod / Incineroar / Politoed / Rillaboom: 8 copies, best 10, first 2026-09-20, https://pokepast.es/2f1c6631010c3644
   - Archaludon / Gengar / Incineroar / Politoed / Rillaboom / Swampert: 3 copies, best 79, first 2026-09-20, https://standings.limitlessvgc.com/0038/player/0188/teamlist
 
-#### 10. Snow Rillaboom + Sneasler (Mega Froslass)
+#### 10. Snow Mega Froslass + Rillaboom + Sneasler
 - Key: `Rillaboom+Sneasler|snow|Froslass-Mega`
 - Requires: Pokémon Rillaboom, Sneasler, Mega Froslass; modes Snow; Megas Mega Froslass
 - 97 teams (3.3%), weighted 3.3%, 28 rosters, 56 in no other definition; recent 3.4% of 1456 teams vs. earlier 3.3% of 1459; 63.9% of its teams new at admission (in no related definition ranked above it)
 - Origin: triple seed `Froslass+Rillaboom+Sneasler|(none)|(none)`, then Mega Froslass (100.0%, lift 17.05), Snow (100.0%, lift 11.80)
-- Overlaps: Tailwind Rillaboom (Mega Salamence) (34 teams); Sun (Mega Charizard-Y) (3 teams); Trick Room (1 teams)
+- Overlaps: Tailwind Mega Salamence + Rillaboom (34 teams); Sun Mega Charizard-Y (3 teams); Trick Room (1 teams)
 - Variants: none
 - Sample rosters:
   - Arcanine-Hisui / Froslass / Kingambit / Raichu / Rillaboom / Sneasler: 39 copies, best 8, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/xwGrkGvg8PXbgIxsRNlv
@@ -8027,12 +8028,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Basculegion / Froslass / Kingambit / Rillaboom / Salamence / Sneasler: 4 copies, best 179, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0003/teamlist
   - Charizard / Froslass / Garchomp / Kingambit / Rillaboom / Sneasler: 3 copies, best 26, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0381/teamlist
 
-#### 11. Rillaboom + Incineroar (Mega Garchomp-Z)
+#### 11. Mega Garchomp-Z + Rillaboom + Incineroar
 - Key: `Incineroar+Rillaboom|(none)|Garchomp-Mega-Z`
 - Requires: Pokémon Incineroar, Rillaboom, Mega Garchomp-Z; modes none; Megas Mega Garchomp-Z
 - 94 teams (3.2%), weighted 3.2%, 36 rosters, 31 in no other definition; recent 3.1% of 1456 teams vs. earlier 3.4% of 1459; 81.9% of its teams new at admission (in no related definition ranked above it)
 - Origin: pair seed `Garchomp+Incineroar|(none)|(none)`, then Mega Garchomp-Z (60.3%, lift 8.33), Rillaboom (82.5%, lift 1.50)
-- Overlaps: Sneasler (Mega Metagross) (15 teams); Rillaboom + Incineroar (Mega Lucario-Z) (12 teams); Setup Rillaboom + Incineroar (Mega Floette) (11 teams)
+- Overlaps: Mega Metagross + Sneasler (15 teams); Mega Lucario-Z + Rillaboom + Incineroar (12 teams); Setup Mega Floette + Rillaboom + Incineroar (11 teams)
 - Variants: none
 - Sample rosters:
   - Garchomp / Incineroar / Metagross / Rillaboom / Sneasler / Volcarona: 14 copies, best 10, first 2026-09-12, https://pokepast.es/e74e8282d41a3802
@@ -8041,12 +8042,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Garchomp / Gholdengo / Incineroar / Raichu / Rillaboom / Volcarona: 7 copies, best 1, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/1025/teamlist
   - Floette-Eternal / Garchomp / Incineroar / Kingambit / Rillaboom / Sneasler: 7 copies, best 21, first 2026-09-10, https://standings.limitlessvgc.com/0039/player/0546/teamlist
 
-#### 12. Sneasler (Mega Metagross)
+#### 12. Mega Metagross + Sneasler
 - Key: `Sneasler|(none)|Metagross-Mega`
 - Requires: Pokémon Sneasler, Mega Metagross; modes none; Megas Mega Metagross
-- 80 teams (2.7%), weighted 2.7%, 43 rosters, 18 in no other definition; recent 2.3% of 1456 teams vs. earlier 3.2% of 1459; 100.0% of its teams new at admission (in no related definition ranked above it)
+- 80 teams (2.7%), weighted 2.7%, 43 rosters, 23 in no other definition; recent 2.3% of 1456 teams vs. earlier 3.2% of 1459; 100.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: pair seed `Metagross+Sneasler|(none)|(none)`, then Mega Metagross (97.6%, lift 18.35)
-- Overlaps: Psyspam Sneasler + Milotic + Indeedee (26 teams); Arcanine-Hisui + Milotic (Mega Salamence) (25 teams); Rillaboom + Incineroar (Mega Garchomp-Z) (15 teams)
+- Overlaps: Psyspam Sneasler + Milotic + Indeedee (26 teams); Mega Garchomp-Z + Rillaboom + Incineroar (15 teams); Psyspam Indeedee-F (4 teams)
 - Variants: none
 - Sample rosters:
   - Arcanine-Hisui / Indeedee / Metagross / Milotic / Salamence / Sneasler: 20 copies, best 4, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/VW1m8TfHx0RIVs4aGHGl
@@ -8060,7 +8061,7 @@ New counts a definition's teams in no related definition ranked above it (sharin
 - Requires: Pokémon Basculegion, Whimsicott; modes Tailwind; Megas none
 - 66 teams (2.3%), weighted 2.3%, 35 rosters, 10 in no other definition; recent 2.7% of 1456 teams vs. earlier 1.8% of 1459; 97.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: pair seed `Basculegion+Whimsicott|(none)|(none)`, then Tailwind (100.0%, lift 1.78)
-- Overlaps: Sun (Mega Charizard-Y) (20 teams); Tailwind Garchomp + Whimsicott (20 teams); Psyspam Indeedee-F (19 teams)
+- Overlaps: Sun Mega Charizard-Y (20 teams); Tailwind Garchomp + Whimsicott (20 teams); Psyspam Indeedee-F (19 teams)
 - Variants: none
 - Sample rosters:
   - Basculegion / Gardevoir / Indeedee-F / Kommo-o / Pyroar / Whimsicott: 14 copies, best 18, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/1040/teamlist
@@ -8069,12 +8070,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Basculegion / Charizard / Floette-Eternal / Garchomp / Incineroar / Whimsicott: 3 copies, best 209, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/0653/teamlist
   - Basculegion / Glimmora / Indeedee / Kommo-o / Typhlosion-Hisui / Whimsicott: 3 copies, best 287, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/0589/teamlist
 
-#### 14. Tailwind (Mega Glimmora)
+#### 14. Tailwind Mega Glimmora
 - Key: `(none)|tailwind|Glimmora-Mega`
 - Requires: Pokémon Mega Glimmora; modes Tailwind; Megas Mega Glimmora
 - 65 teams (2.2%), weighted 2.3%, 42 rosters, 27 in no other definition; recent 2.1% of 1456 teams vs. earlier 2.4% of 1459; 60.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: mode-mega seed `(none)|tailwind|Glimmora-Mega`
-- Overlaps: Tailwind Rillaboom (Mega Salamence) (15 teams); Tailwind Basculegion + Whimsicott (11 teams); Sun (Mega Charizard-Y) (8 teams)
+- Overlaps: Tailwind Mega Salamence + Rillaboom (15 teams); Tailwind Basculegion + Whimsicott (11 teams); Sun Mega Charizard-Y (8 teams)
 - Variants: none
 - Sample rosters:
   - Archaludon / Garchomp / Glimmora / Klefki / Salamence / Volcarona: 7 copies, best 16, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/Dyf3yhlUQmb6KQ05E4RR
@@ -8083,12 +8084,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Garchomp / Glimmora / Kingambit / Rillaboom / Salamence / Volcarona: 4 copies, best 29, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/1013/teamlist
   - Basculegion / Glimmora / Indeedee / Kommo-o / Typhlosion-Hisui / Whimsicott: 3 copies, best 287, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/0589/teamlist
 
-#### 15. Setup Sneasler (Mega Delphox)
+#### 15. Setup Mega Delphox + Sneasler
 - Key: `Sneasler|setup|Delphox-Mega`
 - Requires: Pokémon Sneasler, Mega Delphox; modes Setup; Megas Mega Delphox
 - 60 teams (2.1%), weighted 2.1%, 22 rosters, 47 in no other definition; recent 3.0% of 1456 teams vs. earlier 1.1% of 1459; 85.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: mode-mega seed `(none)|setup|Delphox-Mega`, then Sneasler (76.9%, lift 1.80)
-- Overlaps: Setup Rillaboom + Incineroar (Mega Floette) (9 teams); Tailwind Rillaboom (Mega Salamence) (1 teams); Trick Room (1 teams)
+- Overlaps: Setup Mega Floette + Rillaboom + Incineroar (9 teams); Tailwind Mega Salamence + Rillaboom (1 teams); Trick Room (1 teams)
 - Variants: none
 - Sample rosters:
   - Delphox / Floette-Eternal / Incineroar / Kingambit / Sinistcha / Sneasler: 20 copies, best 10, first 2026-09-20, https://standings.limitlessvgc.com/0038/player/0118/teamlist
@@ -8097,12 +8098,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Blastoise / Delphox / Incineroar / Maushold / Sinistcha / Sneasler: 4 copies, best 17, first 2026-09-27, https://standings.limitlessvgc.com/0038/player/0288/teamlist
   - Delphox / Floette-Eternal / Incineroar / Maushold / Sinistcha / Sneasler: 2 copies, best 130, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/0339/teamlist
 
-#### 16. Tailwind (Mega Dragonite)
+#### 16. Tailwind Mega Dragonite
 - Key: `(none)|tailwind|Dragonite-Mega`
 - Requires: Pokémon Mega Dragonite; modes Tailwind; Megas Mega Dragonite
 - 57 teams (2.0%), weighted 2.0%, 31 rosters, 13 in no other definition; recent 2.7% of 1456 teams vs. earlier 1.2% of 1459; 77.2% of its teams new at admission (in no related definition ranked above it)
 - Origin: mode-mega seed `(none)|tailwind|Dragonite-Mega`
-- Overlaps: Setup Rillaboom + Incineroar (Mega Floette) (20 teams); Psyspam Indeedee-F (6 teams); Rain Tailwind Archaludon + Pelipper (6 teams)
+- Overlaps: Setup Mega Floette + Rillaboom + Incineroar (20 teams); Psyspam Indeedee-F (6 teams); Rain Tailwind Archaludon + Pelipper (6 teams)
 - Variants: none
 - Sample rosters:
   - Dragonite / Floette-Eternal / Gholdengo / Incineroar / Rillaboom / Sneasler: 20 copies, best 1, first 2026-09-20, https://pokepast.es/c06c65c34f56a094
@@ -8111,26 +8112,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Archaludon / Dragonite / Golisopod / Indeedee / Pelipper / Sneasler: 2 copies, best 26, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/0681/teamlist
   - Dragonite / Gholdengo / Incineroar / Raichu / Rillaboom / Sneasler: 2 copies, best 258, first 2026-09-20, https://standings.limitlessvgc.com/0039/player/0167/teamlist
 
-#### 17. Arcanine-Hisui + Milotic (Mega Salamence)
-- Key: `Arcanine-Hisui+Milotic|(none)|Salamence-Mega`
-- Requires: Pokémon Arcanine-Hisui, Milotic, Mega Salamence; modes none; Megas Mega Salamence
-- 58 teams (2.0%), weighted 2.0%, 14 rosters, 2 in no other definition; recent 2.0% of 1456 teams vs. earlier 2.0% of 1459; 50.0% of its teams new at admission (in no related definition ranked above it)
-- Origin: triple seed `Arcanine-Hisui+Milotic+Salamence|(none)|(none)`, then Mega Salamence (100.0%, lift 3.12)
-- Overlaps: Tailwind Rillaboom (Mega Salamence) (28 teams); Sneasler (Mega Metagross) (25 teams); Psyspam Sneasler + Milotic + Indeedee (21 teams)
-- Variants: none
-- Sample rosters:
-  - Arcanine-Hisui / Indeedee / Metagross / Milotic / Salamence / Sneasler: 20 copies, best 4, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/VW1m8TfHx0RIVs4aGHGl
-  - Arcanine-Hisui / Gholdengo / Milotic / Raichu / Rillaboom / Salamence: 20 copies, best 35, first 2026-09-20, https://standings.limitlessvgc.com/0038/player/0250/teamlist
-  - Arcanine-Hisui / Gholdengo / Milotic / Rillaboom / Salamence / Sneasler: 3 copies, best 100, first 2026-09-20, https://standings.limitlessvgc.com/0038/player/0177/teamlist
-  - Arcanine-Hisui / Metagross / Milotic / Rillaboom / Salamence / Sneasler: 3 copies, best 405, first 2026-09-20, https://standings.limitlessvgc.com/0039/player/0108/teamlist
-  - Arcanine-Hisui / Floette-Eternal / Gholdengo / Milotic / Rillaboom / Salamence: 2 copies, best 646, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/0117/teamlist
-
-#### 18. Tailwind Garchomp + Whimsicott
+#### 17. Tailwind Garchomp + Whimsicott
 - Key: `Garchomp+Whimsicott|tailwind|(none)`
 - Requires: Pokémon Garchomp, Whimsicott; modes Tailwind; Megas none
 - 56 teams (1.9%), weighted 1.9%, 37 rosters, 6 in no other definition; recent 2.1% of 1456 teams vs. earlier 1.8% of 1459; 55.4% of its teams new at admission (in no related definition ranked above it)
 - Origin: pair seed `Garchomp+Whimsicott|(none)|(none)`, then Tailwind (100.0%, lift 1.78)
-- Overlaps: Sun (Mega Charizard-Y) (37 teams); Tailwind Basculegion + Whimsicott (20 teams); Psyspam Indeedee-F (6 teams)
+- Overlaps: Sun Mega Charizard-Y (37 teams); Tailwind Basculegion + Whimsicott (20 teams); Psyspam Indeedee-F (6 teams)
 - Variants: none
 - Sample rosters:
   - Basculegion / Charizard / Floette-Eternal / Garchomp / Kingambit / Whimsicott: 8 copies, best 8, first 2026-09-20, https://pokepast.es/ffe1c04c186b2453
@@ -8139,12 +8126,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Charizard / Floette-Eternal / Garchomp / Gholdengo / Incineroar / Whimsicott: 3 copies, best 364, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0876/teamlist
   - Charizard / Garchomp / Gholdengo / Incineroar / Pawmot / Whimsicott: 2 copies, best 27, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0682/teamlist
 
-#### 19. Tailwind Kingambit + Farigiraf + Sylveon
+#### 18. Tailwind Kingambit + Farigiraf + Sylveon
 - Key: `Farigiraf+Kingambit+Sylveon|tailwind|(none)`
 - Requires: Pokémon Farigiraf, Kingambit, Sylveon; modes Tailwind; Megas none
 - 53 teams (1.8%), weighted 1.8%, 8 rosters, 5 in no other definition; recent 1.9% of 1456 teams vs. earlier 1.8% of 1459; 79.2% of its teams new at admission (in no related definition ranked above it)
 - Origin: triple seed `Farigiraf+Kingambit+Sylveon|(none)|(none)`, then Tailwind (86.9%, lift 1.55)
-- Overlaps: Sun (Mega Charizard-Y) (40 teams); Tailwind Rillaboom (Mega Salamence) (8 teams); Trick Room (7 teams)
+- Overlaps: Sun Mega Charizard-Y (40 teams); Tailwind Mega Salamence + Rillaboom (8 teams); Trick Room (7 teams)
 - Variants: none
 - Sample rosters:
   - Aerodactyl / Charizard / Farigiraf / Garchomp / Kingambit / Sylveon: 35 copies, best 16, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/0lbS1fGaeHdeq74HLZWq
@@ -8153,7 +8140,7 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Arcanine-Hisui / Farigiraf / Kingambit / Raichu / Staraptor / Sylveon: 3 copies, best 175, first 2026-09-20, https://standings.limitlessvgc.com/0039/player/0350/teamlist
   - Aerodactyl / Charizard / Farigiraf / Kingambit / Rillaboom / Sylveon: 1 copy, best 143, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/0765/teamlist
 
-#### 20. Indeedee-F + Milotic + Dragapult
+#### 19. Indeedee-F + Milotic + Dragapult
 - Key: `Dragapult+Indeedee-F+Milotic|(none)|(none)`
 - Requires: Pokémon Dragapult, Indeedee-F, Milotic; modes none; Megas none
 - 52 teams (1.8%), weighted 1.8%, 14 rosters, 17 in no other definition; recent 2.3% of 1456 teams vs. earlier 1.2% of 1459; 32.7% of its teams new at admission (in no related definition ranked above it)
@@ -8167,12 +8154,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Armarouge / Dragapult / Indeedee-F / Metagross / Milotic / Staraptor: 4 copies, best 186, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0903/teamlist
   - Armarouge / Dragapult / Indeedee-F / Milotic / Staraptor / Whimsicott: 3 copies, best 432, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0758/teamlist
 
-#### 21. Rillaboom + Volcarona (Mega Raichu-Y)
+#### 20. Mega Raichu-Y + Rillaboom + Volcarona
 - Key: `Rillaboom+Volcarona|(none)|Raichu-Mega-Y`
 - Requires: Pokémon Rillaboom, Volcarona, Mega Raichu-Y; modes none; Megas Mega Raichu-Y
 - 51 teams (1.7%), weighted 1.8%, 31 rosters, 23 in no other definition; recent 2.8% of 1456 teams vs. earlier 0.7% of 1459; 51.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: triple seed `Raichu+Rillaboom+Volcarona|(none)|(none)`, then Mega Raichu-Y (100.0%, lift 4.22)
-- Overlaps: Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) (11 teams); Rillaboom + Incineroar (Mega Garchomp-Z) (11 teams); Tailwind Rillaboom (Mega Salamence) (6 teams)
+- Overlaps: Tailwind Mega Raichu-Y + Rillaboom + Gholdengo (11 teams); Mega Garchomp-Z + Rillaboom + Incineroar (11 teams); Tailwind Mega Salamence + Rillaboom (6 teams)
 - Variants: none
 - Sample rosters:
   - Garchomp / Gholdengo / Incineroar / Raichu / Rillaboom / Volcarona: 7 copies, best 1, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/1025/teamlist
@@ -8181,12 +8168,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Basculegion / Garchomp / Incineroar / Raichu / Rillaboom / Volcarona: 4 copies, best 48, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/0676/teamlist
   - Basculegion / Floette-Eternal / Incineroar / Raichu / Rillaboom / Volcarona: 3 copies, best 22, first 2026-09-20, https://standings.limitlessvgc.com/0039/player/0733/teamlist
 
-#### 22. Rain Farigiraf + Pelipper (Mega Golisopod)
+#### 21. Rain Mega Golisopod + Farigiraf + Pelipper
 - Key: `Farigiraf+Pelipper|rain|Golisopod-Mega`
 - Requires: Pokémon Farigiraf, Pelipper, Mega Golisopod; modes Rain; Megas Mega Golisopod
-- 51 teams (1.7%), weighted 1.8%, 31 rosters, 10 in no other definition; recent 1.9% of 1456 teams vs. earlier 1.6% of 1459; 37.3% of its teams new at admission (in no related definition ranked above it)
+- 51 teams (1.7%), weighted 1.8%, 31 rosters, 9 in no other definition; recent 1.9% of 1456 teams vs. earlier 1.6% of 1459; 37.3% of its teams new at admission (in no related definition ranked above it)
 - Origin: pair seed `Farigiraf+Pelipper|(none)|(none)`, then Rain (100.0%, lift 5.83), Mega Golisopod (82.3%, lift 5.96)
-- Overlaps: Rain Tailwind Archaludon + Pelipper (32 teams); Trick Room (20 teams); Sun (Mega Charizard-Y) (4 teams)
+- Overlaps: Rain Tailwind Archaludon + Pelipper (32 teams); Trick Room (20 teams); Rain Tailwind Mega Golisopod + Basculegion + Pelipper (7 teams)
 - Variants: none
 - Sample rosters:
   - Archaludon / Farigiraf / Golisopod / Grimmsnarl / Pelipper / Swampert: 6 copies, best 136, first 2026-09-20, https://standings.limitlessvgc.com/0039/player/0399/teamlist
@@ -8195,12 +8182,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Archaludon / Farigiraf / Golisopod / Pelipper / Sableye / Swampert: 3 copies, best 290, first 2026-09-27, https://standings.limitlessvgc.com/0038/player/0148/teamlist
   - Archaludon / Farigiraf / Golisopod / Incineroar / Pelipper / Rillaboom: 3 copies, best 357, first 2026-09-27, https://standings.limitlessvgc.com/0039/player/1109/teamlist
 
-#### 23. Psyspam Sneasler + Milotic + Indeedee
+#### 22. Psyspam Sneasler + Milotic + Indeedee
 - Key: `Indeedee+Milotic+Sneasler|psyspam|(none)`
 - Requires: Pokémon Indeedee, Milotic, Sneasler; modes Psyspam; Megas none
-- 51 teams (1.7%), weighted 1.7%, 13 rosters, 8 in no other definition; recent 1.2% of 1456 teams vs. earlier 2.3% of 1459; 47.1% of its teams new at admission (in no related definition ranked above it)
+- 51 teams (1.7%), weighted 1.7%, 13 rosters, 9 in no other definition; recent 1.2% of 1456 teams vs. earlier 2.3% of 1459; 49.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: triple seed `Indeedee+Milotic+Sneasler|(none)|(none)`, then Psyspam (100.0%, lift 4.69)
-- Overlaps: Sneasler (Mega Metagross) (26 teams); Arcanine-Hisui + Milotic (Mega Salamence) (21 teams); Sand Excadrill (Mega Salamence, Mega Tyranitar) (16 teams)
+- Overlaps: Mega Metagross + Sneasler (26 teams); Sand Mega Salamence + Mega Tyranitar + Excadrill (16 teams); Sun Mega Charizard-Y (1 teams)
 - Variants: none
 - Sample rosters:
   - Arcanine-Hisui / Indeedee / Metagross / Milotic / Salamence / Sneasler: 20 copies, best 4, first 2026-09-20, https://rk9.gg/teamlist/public/BA002-JL3KVbvivVKNAc/VW1m8TfHx0RIVs4aGHGl
@@ -8209,12 +8196,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Excadrill / Froslass / Indeedee / Milotic / Sneasler / Tyranitar: 2 copies, best 262, first 2026-09-27, https://standings.limitlessvgc.com/0038/player/0100/teamlist
   - Arcanine-Hisui / Garchomp / Indeedee / Metagross / Milotic / Sneasler: 2 copies, best 833, first 2026-09-15, https://standings.limitlessvgc.com/0037/player/0013/teamlist
 
-#### 24. Kingambit (Mega Salamence, Mega Floette)
+#### 23. Mega Salamence + Mega Floette + Kingambit
 - Key: `Kingambit|(none)|Floette-Mega+Salamence-Mega`
 - Requires: Pokémon Kingambit, Mega Floette, Mega Salamence; modes none; Megas Mega Floette, Mega Salamence
 - 50 teams (1.7%), weighted 1.7%, 24 rosters, 10 in no other definition; recent 1.0% of 1456 teams vs. earlier 2.5% of 1459; 32.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: triple seed `Floette-Eternal+Kingambit+Salamence|(none)|(none)`, then Mega Floette (100.0%, lift 7.96), Mega Salamence (100.0%, lift 3.12)
-- Overlaps: Tailwind Rillaboom (Mega Salamence) (32 teams); Setup Rillaboom + Incineroar (Mega Floette) (11 teams); Tailwind Basculegion + Whimsicott (3 teams)
+- Overlaps: Tailwind Mega Salamence + Rillaboom (32 teams); Setup Mega Floette + Rillaboom + Incineroar (11 teams); Tailwind Basculegion + Whimsicott (3 teams)
 - Variants: none
 - Sample rosters:
   - Floette-Eternal / Incineroar / Kingambit / Rillaboom / Salamence / Sneasler: 15 copies, best 277, first 2026-09-09, https://standings.limitlessvgc.com/0038/player/0009/teamlist
@@ -8223,12 +8210,12 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Arcanine-Hisui / Floette-Eternal / Kingambit / Rillaboom / Salamence / Sneasler: 2 copies, best 293, first 2026-09-27, https://standings.limitlessvgc.com/0038/player/0054/teamlist
   - Basculegion / Floette-Eternal / Garchomp / Kingambit / Salamence / Sneasler: 2 copies, best 368, first 2026-09-09, https://standings.limitlessvgc.com/0039/player/0883/teamlist
 
-#### 25. Rillaboom + Incineroar (Mega Lucario-Z)
+#### 24. Mega Lucario-Z + Rillaboom + Incineroar
 - Key: `Incineroar+Rillaboom|(none)|Lucario-Mega-Z`
 - Requires: Pokémon Incineroar, Rillaboom, Mega Lucario-Z; modes none; Megas Mega Lucario-Z
 - 50 teams (1.7%), weighted 1.7%, 30 rosters, 15 in no other definition; recent 1.0% of 1456 teams vs. earlier 2.4% of 1459; 40.0% of its teams new at admission (in no related definition ranked above it)
 - Origin: triple seed `Incineroar+Lucario+Rillaboom|(none)|(none)`, then Mega Lucario-Z (100.0%, lift 35.12)
-- Overlaps: Tailwind Rillaboom (Mega Salamence) (15 teams); Rillaboom + Incineroar (Mega Garchomp-Z) (12 teams); Trick Room (3 teams)
+- Overlaps: Tailwind Mega Salamence + Rillaboom (15 teams); Mega Garchomp-Z + Rillaboom + Incineroar (12 teams); Trick Room (3 teams)
 - Variants: none
 - Sample rosters:
   - Basculegion / Garchomp / Incineroar / Lucario / Rillaboom / Sneasler: 10 copies, best 28, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0029/teamlist
@@ -8237,20 +8224,39 @@ New counts a definition's teams in no related definition ranked above it (sharin
   - Archaludon / Gengar / Incineroar / Lucario / Politoed / Rillaboom: 3 copies, best 1002, first 2026-09-19, https://standings.limitlessvgc.com/0039/player/0511/teamlist
   - Aerodactyl / Basculegion / Floette-Eternal / Incineroar / Lucario / Rillaboom: 2 copies, best 232, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0166/teamlist
 
+#### 25. Rain Tailwind Mega Golisopod + Basculegion + Pelipper
+- Key: `Basculegion+Pelipper|rain+tailwind|Golisopod-Mega`
+- Requires: Pokémon Basculegion, Pelipper, Mega Golisopod; modes Rain, Tailwind; Megas Mega Golisopod
+- 49 teams (1.7%), weighted 1.7%, 19 rosters, 2 in no other definition; recent 1.0% of 1456 teams vs. earlier 2.4% of 1459; 36.7% of its teams new at admission (in no related definition ranked above it)
+- Origin: triple seed `Basculegion+Golisopod+Pelipper|(none)|(none)`, then Mega Golisopod (100.0%, lift 7.25), Rain (100.0%, lift 5.83), Tailwind (89.1%, lift 1.58)
+- Overlaps: Rain Tailwind Archaludon + Pelipper (28 teams); Psyspam Indeedee-F (17 teams); Tailwind Mega Salamence + Rillaboom (14 teams)
+- Variants: none
+- Sample rosters:
+  - Basculegion / Gardevoir / Golisopod / Indeedee-F / Pelipper / Sneasler: 14 copies, best 6, first 2026-09-12, https://pokepast.es/1f4da9800a6ad851
+  - Archaludon / Basculegion / Golisopod / Pelipper / Rillaboom / Salamence: 12 copies, best 21, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0950/teamlist
+  - Archaludon / Basculegion / Farigiraf / Garchomp / Golisopod / Pelipper: 4 copies, best 246, first 2026-09-20, https://standings.limitlessvgc.com/0039/player/1023/teamlist
+  - Archaludon / Basculegion / Golisopod / Pelipper / Salamence / Sneasler: 2 copies, best 267, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0637/teamlist
+  - Basculegion / Golisopod / Indeedee-F / Pelipper / Salamence / Sneasler: 2 copies, best 456, first 2026-09-20, https://standings.limitlessvgc.com/0037/player/0987/teamlist
+
 ### 13.3 Refused candidates
-Refused: 9 with fewer than definitionMinRosters distinct rosters (rosters), 1 on at least definitionMaxCoverage of the window (ceiling), 11 of Pokémon alone below definitionBareMinLift (staple), 116 with less than definitionMinOwnShare of their teams new against related definitions and refining no definition (overlap), 36 refining a definition that already has definitionVariants variants (variant-cap), 1 past definitionMax definitions (cap). The first by rank:
+Refused: 9 with fewer than definitionMinRosters distinct rosters (rosters), 1 on at least definitionMaxCoverage of the window (ceiling), 11 of Pokémon alone below definitionBareMinLift (staple), 116 with less than definitionMinOwnShare of their teams new against related definitions and refining no definition (overlap), 36 refining a definition that already has definitionVariants variants (variant-cap), 0 past definitionMax definitions (cap), 1 admitted but with less than definitionMinOwnShare of their teams outside the other related definitions once the set was complete (absorbed). The first by rank:
 | Name | Key | Teams | Share | Weighted | Rosters | New | Reason |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Tailwind | `(none)\|tailwind\|(none)` | 1639 | 56.2% | 56.3% | 797 | — | ceiling |
 | Rillaboom + Incineroar | `Incineroar+Rillaboom\|(none)\|(none)` | 603 | 20.7% | 20.8% | 281 | — | staple (lift 1.27) |
 | Sneasler + Kingambit | `Kingambit+Sneasler\|(none)\|(none)` | 408 | 14.0% | 14.1% | 178 | — | staple (lift 1.32) |
-| Tailwind Rillaboom + Gholdengo + Arcanine-Hisui | `Arcanine-Hisui+Gholdengo+Rillaboom\|tailwind\|(none)` | 311 | 10.7% | 10.6% | 41 | 1.6% | overlap (would rank 6; shares teams with Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) 268, Tailwind Rillaboom (Mega Salamence) 149) |
-| Tailwind Rillaboom + Arcanine-Hisui (Mega Raichu-Y) | `Arcanine-Hisui+Rillaboom\|tailwind\|Raichu-Mega-Y` | 290 | 9.9% | 10.0% | 37 | 1.0% | overlap (would rank 6; shares teams with Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) 268, Tailwind Rillaboom (Mega Salamence) 130) |
-| Tailwind Gholdengo + Arcanine-Hisui (Mega Raichu-Y) | `Arcanine-Hisui+Gholdengo\|tailwind\|Raichu-Mega-Y` | 270 | 9.3% | 9.3% | 29 | 0.7% | overlap (would rank 6; shares teams with Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) 268, Tailwind Rillaboom (Mega Salamence) 111) |
-| Tailwind Rillaboom + Gholdengo (Mega Staraptor) | `Gholdengo+Rillaboom\|tailwind\|Staraptor-Mega` | 222 | 7.6% | 7.7% | 29 | 3.6% | overlap (would rank 6; shares teams with Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) 214) |
-| Tailwind Rillaboom (Mega Raichu-Y, Mega Staraptor) | `Rillaboom\|tailwind\|Raichu-Mega-Y+Staraptor-Mega` | 219 | 7.5% | 7.6% | 28 | 2.3% | overlap (would rank 7; shares teams with Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) 214, Rain Tailwind Archaludon + Pelipper 1) |
-| Tailwind Gholdengo (Mega Raichu-Y, Mega Staraptor) | `Gholdengo\|tailwind\|Raichu-Mega-Y+Staraptor-Mega` | 218 | 7.5% | 7.5% | 27 | 1.8% | overlap (would rank 7; shares teams with Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) 214, Rain Tailwind Archaludon + Pelipper 1) |
-| Tailwind Setup Rillaboom + Gholdengo | `Gholdengo+Rillaboom\|tailwind+setup\|(none)` | 201 | 6.9% | 7.0% | 49 | 17.9% | overlap (would rank 7; shares teams with Tailwind Rillaboom + Gholdengo (Mega Raichu-Y) 108, Tailwind Rillaboom (Mega Salamence) 84) |
+| Tailwind Rillaboom + Gholdengo + Arcanine-Hisui | `Arcanine-Hisui+Gholdengo+Rillaboom\|tailwind\|(none)` | 311 | 10.7% | 10.6% | 41 | 1.6% | overlap (would rank 6; shares teams with Tailwind Mega Raichu-Y + Rillaboom + Gholdengo 268, Tailwind Mega Salamence + Rillaboom 149) |
+| Tailwind Mega Raichu-Y + Rillaboom + Arcanine-Hisui | `Arcanine-Hisui+Rillaboom\|tailwind\|Raichu-Mega-Y` | 290 | 9.9% | 10.0% | 37 | 1.0% | overlap (would rank 6; shares teams with Tailwind Mega Raichu-Y + Rillaboom + Gholdengo 268, Tailwind Mega Salamence + Rillaboom 130) |
+| Tailwind Mega Raichu-Y + Gholdengo + Arcanine-Hisui | `Arcanine-Hisui+Gholdengo\|tailwind\|Raichu-Mega-Y` | 270 | 9.3% | 9.3% | 29 | 0.7% | overlap (would rank 6; shares teams with Tailwind Mega Raichu-Y + Rillaboom + Gholdengo 268, Tailwind Mega Salamence + Rillaboom 111) |
+| Tailwind Mega Staraptor + Rillaboom + Gholdengo | `Gholdengo+Rillaboom\|tailwind\|Staraptor-Mega` | 222 | 7.6% | 7.7% | 29 | 3.6% | overlap (would rank 6; shares teams with Tailwind Mega Raichu-Y + Rillaboom + Gholdengo 214) |
+| Tailwind Mega Raichu-Y + Mega Staraptor + Rillaboom | `Rillaboom\|tailwind\|Raichu-Mega-Y+Staraptor-Mega` | 219 | 7.5% | 7.6% | 28 | 2.3% | overlap (would rank 7; shares teams with Tailwind Mega Raichu-Y + Rillaboom + Gholdengo 214, Rain Tailwind Archaludon + Pelipper 1) |
+| Tailwind Mega Raichu-Y + Mega Staraptor + Gholdengo | `Gholdengo\|tailwind\|Raichu-Mega-Y+Staraptor-Mega` | 218 | 7.5% | 7.5% | 27 | 1.8% | overlap (would rank 7; shares teams with Tailwind Mega Raichu-Y + Rillaboom + Gholdengo 214, Rain Tailwind Archaludon + Pelipper 1) |
+| Tailwind Setup Rillaboom + Gholdengo | `Gholdengo+Rillaboom\|tailwind+setup\|(none)` | 201 | 6.9% | 7.0% | 49 | 17.9% | overlap (would rank 7; shares teams with Tailwind Mega Raichu-Y + Rillaboom + Gholdengo 108, Tailwind Mega Salamence + Rillaboom 84) |
+
+Absorbed, by round (New: the share of its teams outside every other related definition, above or below it):
+| Round | Name | Key | Teams | Share | Weighted | Rosters | New | Reason |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | Mega Salamence + Arcanine-Hisui + Milotic | `Arcanine-Hisui+Milotic\|(none)\|Salamence-Mega` | 58 | 2.0% | 2.0% | 14 | 13.8% | absorbed (by Tailwind Mega Salamence + Rillaboom 28, Psyspam Sneasler + Milotic + Indeedee 21, Sand Mega Salamence + Mega Tyranitar + Excadrill 1) |
 
 ### 13.4 Mode extension
 Per mode tag, over the extension of every seed: how many seeds' extensions it reached definitionExtendShare of the teams of, how many it joined, and how many its lift (below coreMinLift) kept it out of.
@@ -8284,13 +8290,13 @@ Per mode tag, over the extension of every seed: how many seeds' extensions it re
 Their most common species (share of the uncovered teams; lift over the window):
 | Species | Teams | Share | Lift |
 | :--- | :--- | :--- | :--- |
-| Rillaboom | 245 | 55.1% | 1.00 |
-| Sneasler | 167 | 37.5% | 0.88 |
+| Rillaboom | 246 | 55.3% | 1.01 |
+| Sneasler | 165 | 37.1% | 0.87 |
 | Incineroar | 164 | 36.9% | 1.24 |
 | Kingambit | 120 | 27.0% | 1.09 |
-| Raichu | 97 | 21.8% | 0.90 |
-| Gholdengo | 97 | 21.8% | 0.76 |
-| Milotic | 94 | 21.1% | 1.31 |
+| Raichu | 98 | 22.0% | 0.91 |
+| Gholdengo | 98 | 22.0% | 0.76 |
+| Milotic | 96 | 21.6% | 1.34 |
 | Salamence | 81 | 18.2% | 0.57 |
-| Basculegion | 77 | 17.3% | 1.04 |
+| Basculegion | 75 | 16.9% | 1.02 |
 | Garchomp | 73 | 16.4% | 1.07 |
